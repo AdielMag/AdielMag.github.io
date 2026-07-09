@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>devlog. — Adiel Magenheim, game dev</title>
+  <meta name="description" content="Game dev, mostly mobile, increasingly AI. Projects, experiments, and notes on client, server, and AI-assisted development.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+<div class="page">
+
+  <!-- fixed full-page tiled parallax layers -->
+  <div class="bg-dots"></div>
+  <div class="blob-a" id="blobA"></div>
+  <div class="blob-b" id="blobB"></div>
+
+  <div class="content">
+
+    <!-- NAV -->
+    <div class="nav" id="nav">
+      <div class="nav-inner">
+        <a href="#top" class="brand">
+          <span class="emoji">🕹️</span> devlog<span class="dot">.</span>
+        </a>
+        <div class="nav-links">
+          <a href="#projects">Projects</a>
+          <a href="#articles">Articles</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- HERO -->
+    <div id="top" class="hero">
+
+      <!-- floating pixel props -->
+      <div class="hero-props">
+        <div style="position:absolute; top:6%; right:6%;">
+          <div class="float" style="animation:floatBob 5.5s ease-in-out infinite; --rot:-8deg;">
+            <svg width="46" height="34" viewBox="0 0 46 34"><rect x="4" y="8" width="38" height="18" rx="8" fill="#ff6b4a"/><rect x="10" y="14" width="4" height="4" fill="#151318"/><rect x="6" y="18" width="4" height="4" fill="#151318"/><rect x="14" y="18" width="4" height="4" fill="#151318"/><circle cx="32" cy="14" r="2.5" fill="#151318"/><circle cx="37" cy="18" r="2.5" fill="#151318"/></svg>
+          </div>
+        </div>
+        <div style="position:absolute; top:88%; right:10%;">
+          <div class="float" style="animation:floatBob 4.5s ease-in-out infinite 0.4s; --rot:10deg;">
+            <svg width="34" height="34" viewBox="0 0 34 34"><circle cx="17" cy="17" r="14" fill="#ffd23f"/><circle cx="17" cy="17" r="9" fill="none" stroke="#151318" stroke-width="2"/><rect x="14" y="10" width="6" height="3" fill="#151318"/></svg>
+          </div>
+        </div>
+        <div style="position:absolute; top:26%; right:5%;">
+          <div class="float" style="animation:floatBob 6s ease-in-out infinite 0.8s; --rot:6deg;">
+            <svg width="40" height="40" viewBox="0 0 40 40"><polygon points="20,3 37,12 37,28 20,37 3,28 3,12" fill="#7cf29c"/><polygon points="20,3 37,12 20,20 3,12" fill="#a9f7c2"/><polygon points="20,20 37,12 37,28 20,37" fill="#54c67d"/></svg>
+          </div>
+        </div>
+        <div style="position:absolute; top:56%; right:14%;">
+          <div class="float" style="animation:floatBob 5s ease-in-out infinite 0.2s; --rot:-6deg;">
+            <svg width="30" height="42" viewBox="0 0 30 42"><rect x="10" y="26" width="10" height="14" rx="2" fill="#3a3348"/><rect x="6" y="18" width="18" height="10" rx="4" fill="#ff6b4a"/><circle cx="15" cy="10" r="9" fill="#ffd23f"/></svg>
+          </div>
+        </div>
+        <div style="position:absolute; top:6%; left:3%;">
+          <div class="float" style="animation:floatBob 4.8s ease-in-out infinite 0.6s; --rot:14deg;">
+            <svg width="26" height="26" viewBox="0 0 26 26"><path d="M13 22 L4 13 Q0 8 5 4 Q9 1 13 6 Q17 1 21 4 Q26 8 22 13 Z" fill="#ff6b4a"/></svg>
+          </div>
+        </div>
+        <div style="position:absolute; top:92%; left:6%;">
+          <div class="float" style="animation:floatBob 6.5s ease-in-out infinite 1s; --rot:-10deg;">
+            <svg width="24" height="24" viewBox="0 0 24 24"><polygon points="12,1 15,9 23,9 16,14 19,22 12,17 5,22 8,14 1,9 9,9" fill="#ffd23f"/></svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- goofy mouse-following smiley -->
+      <div class="smiley" id="smiley">
+        <div class="smiley-inner">
+          <svg width="40" height="40" viewBox="0 0 40 40">
+            <circle cx="20" cy="20" r="18" fill="#ffd23f"/>
+            <circle cx="13" cy="16" r="3" fill="#151318"/>
+            <circle cx="27" cy="16" r="3" fill="#151318"/>
+            <path d="M10 24 Q20 36 30 24" stroke="#151318" stroke-width="3" fill="none" stroke-linecap="round"/>
+          </svg>
+        </div>
+      </div>
+
+      <!-- hero content -->
+      <div class="hero-content">
+        <div class="hero-badge">⚡ building with AI, out loud</div>
+        <h1 class="hero-title">
+          Hey, I'm Adiel.<br>
+          <span class="coral">I make games</span><br>
+          — and lately, <span class="green">a lot of AI.</span>
+        </h1>
+        <p class="hero-sub">
+          Six years deep in mobile game dev. These days I'm obsessed with using AI to move faster, prototype weirder ideas, and build things solo that used to take a whole team — client, server, physics, all of it.
+        </p>
+        <div class="hero-cta">
+          <a href="#projects" class="btn btn-primary">See what I've built →</a>
+          <a href="#articles" class="btn btn-ghost">Read the blog</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROJECTS -->
+    <div id="projects" class="section section-projects">
+      <div class="eyebrow-row">
+        <span class="eyebrow coral">01 · Projects</span>
+      </div>
+      <h2 class="section-title">Shipped &amp; shipping</h2>
+
+      <div class="section-blob" id="projBlobA" style="top:10%; right:-4%; width:300px; height:300px; background:radial-gradient(circle, rgba(255,210,63,0.10), transparent 70%);"></div>
+
+      <!-- WIP spotlight: ClashUp -->
+      <div class="spotlight">
+        <div class="spotlight-glow"></div>
+        <div class="spotlight-row">
+          <div class="spotlight-main">
+            <div class="spotlight-badge">🔧 currently building</div>
+            <h3 class="spotlight-title">ClashUp</h3>
+            <p class="spotlight-desc">
+              A Brawl Stars–style portrait multiplayer brawler. Authoritative server, and my own deterministic physics implementation — <strong>AetherNet</strong> — built to keep every client perfectly in sync.
+            </p>
+            <div class="chip-row">
+              <span class="chip chip-coral">Client</span>
+              <span class="chip chip-gold">Server</span>
+              <span class="chip chip-green">Deterministic physics</span>
+              <span class="chip chip-muted">Multiplayer</span>
+            </div>
+          </div>
+          <div class="spotlight-media">
+            <img alt="ClashUp preview (WIP)" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' %76iewBox='0 0 320 190'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%233a1f1a'/%3E%3Cstop offset='1' stop-color='%231c1216'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='320' height='190' fill='url(%23g)'/%3E%3Ccircle cx='250' cy='40' r='90' fill='none' stroke='%23ff6b4a' stroke-width='2' opacity='0.35'/%3E%3Ccircle cx='250' cy='40' r='60' fill='none' stroke='%23ff6b4a' stroke-width='2' opacity='0.25'/%3E%3Cpolygon points='170,60 140,110 158,110 148,150 195,95 175,95' fill='%23ff6b4a' opacity='0.9'/%3E%3Ctext x='18' y='168' font-family='sans-serif' font-size='20' font-weight='700' fill='%23f4f1ea'%3EClashUp%3C/text%3E%3Ctext x='18' y='30' font-family='sans-serif' font-size='11' font-weight='600' fill='%237cf29c'%3EPREVIEW · WIP%3C/text%3E%3C/svg%3E">
+          </div>
+        </div>
+      </div>
+
+      <!-- shipped project cards -->
+      <div class="project-grid">
+
+        <div class="project-card hover-coral">
+          <img class="project-shot" alt="Pokerface preview" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' %76iewBox='0 0 320 170'%3E%3Cdefs%3E%3ClinearGradient id='g1' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%232a4a3f'/%3E%3Cstop offset='1' stop-color='%23162622'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='320' height='170' fill='url(%23g1)'/%3E%3Ctext x='250' y='70' font-family='sans-serif' font-size='60' fill='%23f4f1ea' opacity='0.15'%3E♠%3C/text%3E%3Ctext x='280' y='130' font-family='sans-serif' font-size='60' fill='%23f4f1ea' opacity='0.12'%3E♥%3C/text%3E%3Ctext x='18' y='148' font-family='sans-serif' font-size='20' font-weight='700' fill='%23f4f1ea'%3EPokerface%3C/text%3E%3Ctext x='18' y='26' font-family='sans-serif' font-size='11' font-weight='600' fill='%23a89fb0'%3EPREVIEW%3C/text%3E%3C/svg%3E">
+          <div class="project-head">
+            <img class="project-icon" alt="Pokerface icon" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' %76iewBox='0 0 60 60'%3E%3Crect width='60' height='60' rx='14' fill='%23234a3f'/%3E%3Ctext x='30' y='40' font-family='sans-serif' font-size='28' text-anchor='middle' fill='%23f4f1ea'%3E♠%3C/text%3E%3C/svg%3E">
+            <h3 class="project-name">Pokerface</h3>
+          </div>
+          <p class="project-desc">Mobile poker with social tables and a bit of bluff-reading charm.</p>
+        </div>
+
+        <div class="project-card hover-gold">
+          <img class="project-shot" alt="Royal Bingo preview" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' %76iewBox='0 0 320 170'%3E%3Cdefs%3E%3ClinearGradient id='g2' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%233a2a52'/%3E%3Cstop offset='1' stop-color='%23201830'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='320' height='170' fill='url(%23g2)'/%3E%3Cg stroke='%23ffffff' stroke-opacity='0.12'%3E%3Cline x1='0' y1='34' x2='320' y2='34'/%3E%3Cline x1='0' y1='68' x2='320' y2='68'/%3E%3Cline x1='0' y1='102' x2='320' y2='102'/%3E%3Cline x1='64' y1='0' x2='64' y2='170'/%3E%3Cline x1='128' y1='0' x2='128' y2='170'/%3E%3Cline x1='192' y1='0' x2='192' y2='170'/%3E%3Cline x1='256' y1='0' x2='256' y2='170'/%3E%3C/g%3E%3Ccircle cx='270' cy='50' r='22' fill='%23ffd23f'/%3E%3Ctext x='270' y='57' font-family='sans-serif' font-size='16' font-weight='700' text-anchor='middle' fill='%23151318'%3EB7%3C/text%3E%3Ctext x='18' y='148' font-family='sans-serif' font-size='20' font-weight='700' fill='%23f4f1ea'%3ERoyal Bingo%3C/text%3E%3Ctext x='18' y='26' font-family='sans-serif' font-size='11' font-weight='600' fill='%23a89fb0'%3EPREVIEW%3C/text%3E%3C/svg%3E">
+          <div class="project-head">
+            <img class="project-icon" alt="Royal Bingo icon" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' %76iewBox='0 0 60 60'%3E%3Crect width='60' height='60' rx='14' fill='%233a2a52'/%3E%3Ccircle cx='30' cy='30' r='16' fill='%23ffd23f'/%3E%3Ctext x='30' y='36' font-family='sans-serif' font-size='15' font-weight='700' text-anchor='middle' fill='%23151318'%3EB7%3C/text%3E%3C/svg%3E">
+            <h3 class="project-name">Royal Bingo</h3>
+          </div>
+          <p class="project-desc">Casual mobile bingo, built for quick rounds and big daubs.</p>
+        </div>
+
+        <div class="project-card hover-green">
+          <img class="project-shot" alt="Solaria: Dawn of Heroes preview" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' %76iewBox='0 0 320 170'%3E%3Cdefs%3E%3ClinearGradient id='g3' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23402a1a'/%3E%3Cstop offset='1' stop-color='%23241610'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='320' height='170' fill='url(%23g3)'/%3E%3Ccircle cx='260' cy='60' r='34' fill='%23ffd23f' opacity='0.85'/%3E%3Cg stroke='%23ff6b4a' stroke-width='3' opacity='0.7'%3E%3Cline x1='260' y1='6' x2='260' y2='20'/%3E%3Cline x1='260' y1='100' x2='260' y2='114'/%3E%3Cline x1='206' y1='60' x2='220' y2='60'/%3E%3Cline x1='300' y1='60' x2='314' y2='60'/%3E%3C/g%3E%3Ctext x='18' y='148' font-family='sans-serif' font-size='19' font-weight='700' fill='%23f4f1ea'%3ESolaria: Dawn of Heroes%3C/text%3E%3Ctext x='18' y='26' font-family='sans-serif' font-size='11' font-weight='600' fill='%23a89fb0'%3EPREVIEW%3C/text%3E%3C/svg%3E">
+          <div class="project-head">
+            <img class="project-icon" alt="Solaria icon" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' %76iewBox='0 0 60 60'%3E%3Crect width='60' height='60' rx='14' fill='%23402a1a'/%3E%3Ccircle cx='30' cy='30' r='14' fill='%23ffd23f'/%3E%3Cg stroke='%23ff6b4a' stroke-width='3'%3E%3Cline x1='30' y1='6' x2='30' y2='12'/%3E%3Cline x1='30' y1='48' x2='30' y2='54'/%3E%3Cline x1='6' y1='30' x2='12' y2='30'/%3E%3Cline x1='48' y1='30' x2='54' y2='30'/%3E%3C/g%3E%3C/svg%3E">
+            <h3 class="project-name">Solaria: Dawn of Heroes</h3>
+          </div>
+          <p class="project-desc">A hero-collector RPG about rebuilding the light, one team at a time.</p>
+        </div>
+
+        <div class="project-card hover-coral">
+          <img class="project-shot" alt="Swap Heroes preview" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' %76iewBox='0 0 320 170'%3E%3Cdefs%3E%3ClinearGradient id='g4' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%2318324a'/%3E%3Cstop offset='1' stop-color='%230f1e2c'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='320' height='170' fill='url(%23g4)'/%3E%3Cpolygon points='250,20 280,50 250,80 220,50' fill='%237cf29c' opacity='0.5'/%3E%3Cpolygon points='280,60 310,90 280,120 250,90' fill='%23ffd23f' opacity='0.5'/%3E%3Ctext x='18' y='148' font-family='sans-serif' font-size='19' font-weight='700' fill='%23f4f1ea'%3ESwap Heroes%3C/text%3E%3Ctext x='18' y='26' font-family='sans-serif' font-size='11' font-weight='600' fill='%23a89fb0'%3EPREVIEW%3C/text%3E%3C/svg%3E">
+          <div class="project-head">
+            <img class="project-icon" alt="Swap Heroes icon" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' %76iewBox='0 0 60 60'%3E%3Crect width='60' height='60' rx='14' fill='%2318324a'/%3E%3Cpath d='M18 22 H42 M42 22 L36 16 M42 22 L36 28' stroke='%237cf29c' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M42 38 H18 M18 38 L24 32 M18 38 L24 44' stroke='%23ffd23f' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+            <h3 class="project-name">Swap Heroes: Eternal Legends</h3>
+          </div>
+          <p class="project-desc">A hero-swapping match battler where your bench is half your strategy.</p>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ARTICLES -->
+    <div id="articles" class="section section-articles">
+      <div class="eyebrow-row">
+        <span class="eyebrow green">02 · Articles</span>
+      </div>
+      <h2 class="section-title tight">Writing (in progress)</h2>
+      <p class="section-lead">Notes on client, server, and AI-assisted dev. Full posts coming soon — these are placeholders for now. Click a card for a peek.</p>
+
+      <div class="section-blob" id="projBlobB" style="top:20%; left:-6%; width:280px; height:280px; background:radial-gradient(circle, rgba(124,242,156,0.09), transparent 70%);"></div>
+
+      <div class="article-grid" id="articleGrid"></div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+      <p>Adiel Magenheim · game dev, mostly mobile, increasingly AI · 🕹️</p>
+    </div>
+
+  </div>
+
+  <!-- section progress indicator -->
+  <div class="indicator" id="indicator">
+    <a href="#top" class="dot" id="dotHero"></a>
+    <a href="#projects" class="dot" id="dotProjects"></a>
+    <a href="#articles" class="dot" id="dotArticles"></a>
+  </div>
+
+</div>
+
+<script src="assets/js/articles.js"></script>
+<script src="assets/js/main.js"></script>
+</body>
+</html>
