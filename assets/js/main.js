@@ -125,8 +125,8 @@
   var ICONS = {
     pokerface: 'assets/img/pokerface.png',
     swapheroes: 'assets/img/swapheroes.png',
-    royalbingo: 'assets/img/comunix.png',
-    solaria: 'assets/img/glaive.png',
+    royalbingo: 'assets/img/royalbingo.png',
+    solaria: 'assets/img/solaria.png',
     clashup: null,
   };
   var CHIPS = ['chip-coral', 'chip-gold', 'chip-green', 'chip-muted'];
