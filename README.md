@@ -1,76 +1,97 @@
-# devlog. — Game Dev Blog
+<h1 align="center">🕹️ devlog.</h1>
+<p align="center"><strong>Adiel Magenheim — game dev, mostly mobile, increasingly AI.</strong></p>
+<p align="center">
+  <a href="https://adielmag.github.io/"><strong>▶ View the live site →</strong></a>
+</p>
 
-A personal game-development blog for Adiel Magenheim. Static site (plain
-HTML/CSS/JS, no build step, no dependencies) built from a Claude Design mockup.
-Articles are Markdown files rendered in the browser.
+---
 
-## Structure
+A personal game-development blog. Six years deep in mobile game dev, now building
+solo with AI — client, server, physics, all of it. The site showcases shipped
+games, a work-in-progress flagship (**ClashUp**), and short devlog articles.
+
+Built as a **static site** — plain HTML/CSS/JS, **zero dependencies, no build
+step** — and hosted free on **GitHub Pages**. Articles are Markdown files rendered
+in the browser.
+
+## ✨ Highlights
+
+- **Animated hero** — floating pixel props, parallax glow, a mouse-following smiley.
+- **Projects** — a "currently building" spotlight plus a grid of shipped games.
+- **Expandable project cards** — click any project for a modal with a **scrollable
+  screenshot gallery**, extra data (publisher, genre, rating, installs), and links
+  to the App Store / Google Play (or archive mirrors for delisted titles).
+- **Real writable articles** — drop in a Markdown file, flip it to `published`.
+- **Responsive + themed** — clamped type, auto-fit grids, no horizontal scroll.
+
+## 🎮 Projects featured
+
+| Game | Publisher | Status | Links |
+|---|---|---|---|
+| <img src="assets/img/pokerface.png" width="20"/> **Pokerface** | Comunix | ✅ Live · ★4.7 · 5M+ | [App&nbsp;Store](https://apps.apple.com/us/app/poker-face-texas-holdem-live/id1364570884) · [Google&nbsp;Play](https://play.google.com/store/apps/details?id=com.comunix.pokerface) |
+| <img src="assets/img/swapheroes.png" width="20"/> **Swap Heroes: Eternal Legends** | Glaive Games | ✅ Live · active dev | [App&nbsp;Store](https://apps.apple.com/us/app/swap-heroes-eternal-legends/id6755378713) · [Google&nbsp;Play](https://play.google.com/store/apps/details?id=com.glaivegames.swapheroes) |
+| <img src="assets/img/comunix.png" width="20"/> **Royal Bingo** | Comunix | ⚠ Delisted | archived on [APKPure](https://apkpure.com/royal-bingo-live-bingo-game/com.communix.royalbingo) · [Softonic](https://royal-bingo-live-bingo-game.en.softonic.com/android) |
+| <img src="assets/img/glaive.png" width="20"/> **Solaria: Dawn of Heroes** | Glaive Games | ⚠ Delisted | archived on [APKPure](https://apkpure.com/solaria-dawn-of-heroes/com.glaivegames.solaria) · [Softonic](https://solaria-dawn-of-heroes.en.softonic.com/android) |
+| 🔒 **ClashUp** | Adiel (solo) | 🔧 In development | private repo |
+
+### Screens
+
+<p>
+  <img src="assets/img/shots/swapheroes_1.jpg" height="220" alt="Swap Heroes"/>
+  <img src="assets/img/shots/solaria_1.jpg" height="220" alt="Solaria: Dawn of Heroes"/>
+  <img src="assets/img/shots/royalbingo_1.jpg" height="220" alt="Royal Bingo"/>
+  <img src="assets/img/shots/pokerface_1.png" height="220" alt="Pokerface"/>
+</p>
+
+## 🗂 Structure
 
 ```
 index.html                 Landing page (hero, projects, articles)
 article.html               Article template — reads ?slug=, renders a post
 assets/
-  css/styles.css           Theme, animations, component styles
-  js/articles.js           Article manifest (the list + metadata)
+  css/styles.css           Theme, animations, component + modal styles
+  js/articles.js           Article manifest
+  js/projects.js           Project data (facts, screenshots, store links)
   js/markdown.js           Tiny Markdown -> HTML renderer (no dependencies)
-  js/main.js               Landing-page interactions + article cards
+  js/main.js               Landing interactions, article cards, project modal
   js/article.js            Article-page rendering
+  img/                     App icons, studio logos, screenshots
 content/articles/*.md      One Markdown file per post
 .nojekyll                  Serve files as-is on GitHub Pages
 ```
 
-## Run it locally
+## 🚀 Run locally
 
 The article page uses `fetch()` to load Markdown, which browsers block on
-`file://`. So open it through a local web server, not by double-clicking the file:
+`file://` — so serve it over a local web server:
 
 ```bash
-# from this folder (C:\Users\Adiel\Blog)
 python -m http.server 8000
 # then open http://localhost:8000/
 ```
 
-No Python? `npx serve` or any static server works too.
+(No Python? `npx serve` works too.)
 
-## Add a new article
+## ✍️ Add an article
 
-1. Create `content/articles/<slug>.md` — plain Markdown, start with a `# Title`.
-2. Add an entry to `assets/js/articles.js` with a matching `slug`:
+1. Create `content/articles/<slug>.md` — Markdown, starting with a `# Title`.
+2. Add an entry to `assets/js/articles.js` with a matching `slug`.
+3. Set `status: 'published'` when it's ready (drafts show a placeholder).
 
-   ```js
-   {
-     slug: 'my-post',
-     tag: 'Client',                 // Client | Server | AI | Engine
-     tagColor: '#ff6b4a',
-     tagBg: 'rgba(255,107,74,0.14)',
-     accent: 'coral',               // coral | gold | green | white (card hover)
-     title: 'My post title',
-     excerpt: 'One-line teaser for the card.',
-     date: 'Jul 2026',
-     status: 'draft',               // 'draft' shows a placeholder
-   }
-   ```
+## 🕹 Add or edit a project
 
-3. When it's ready to go live, set `status: 'published'`. Drafts show the
-   "coming soon" placeholder; published posts render the Markdown file.
+Everything about a project — description, facts, screenshots, and store links —
+lives in `assets/js/projects.js`. Add screenshots to `assets/img/shots/` and
+reference them in the project's `shots` array; the modal builds the gallery
+automatically.
 
-The Markdown renderer supports headings, paragraphs, **bold**/*italic*, inline
-`code`, fenced code blocks, ordered/unordered lists, links, images, blockquotes,
-and `---` rules.
+## 🌐 Deploy
 
-## Swap the placeholder art
+Hosted on GitHub Pages from the `main` branch root at
+**https://adielmag.github.io/**. Push to `main` and Pages redeploys
+automatically — the Markdown `fetch()` works in production because Pages serves
+over HTTPS.
 
-Project cards and the ClashUp spotlight use inline SVG placeholder images
-(`data:image/svg+xml,...`) in `index.html`. Replace a card's `<img ... src="...">`
-with a real screenshot — either a path like `assets/img/pokerface.png` (drop the
-file in a new `assets/img/` folder) or your own data URI.
+---
 
-## Deploy to GitHub Pages
-
-Once pushed to a GitHub repo, enable Pages:
-**Settings → Pages → Source: Deploy from a branch → `main` / `(root)`**.
-
-The site goes live at `https://<your-user>.github.io/<repo>/`. Because Pages
-serves over HTTPS, the Markdown `fetch()` works in production exactly as it does
-behind the local server. Update the site by committing and pushing — Pages
-redeploys automatically.
+<p align="center"><sub>Store data & screenshots sourced from the App Store, Google Play, and third-party archives (APKPure, Softonic) for delisted titles.</sub></p>
