@@ -13,11 +13,13 @@
   var nav       = document.getElementById('nav');
   var blobA     = document.getElementById('blobA');
   var blobB     = document.getElementById('blobB');
+  var blobC     = document.getElementById('blobC');
+  var blobD     = document.getElementById('blobD');
   var projBlobA = document.getElementById('projBlobA');
   var projBlobB = document.getElementById('projBlobB');
-  var smiley    = document.getElementById('smiley');
-  var hero      = document.getElementById('top');
   var indicator = document.getElementById('indicator');
+  var iconField = document.getElementById('iconField');
+  var iconEls   = [];
 
   var dots = {
     top:      { el: document.getElementById('dotHero'),     color: '#ff6b4a' },
@@ -51,8 +53,15 @@
     if (nav) nav.style.background = scrollY > 8 ? 'rgba(21,19,24,0.85)' : 'rgba(21,19,24,0)';
     if (blobA) blobA.style.transform = mk(0.08, scrollY);
     if (blobB) blobB.style.transform = mk(-0.06, scrollY);
+    if (blobC) blobC.style.transform = mk(0.05, scrollY);
+    if (blobD) blobD.style.transform = mk(-0.09, scrollY);
     if (projBlobA) projBlobA.style.transform = mk(-0.04, scrollY);
     if (projBlobB) projBlobB.style.transform = mk(0.05, scrollY);
+
+    for (var gi = 0; gi < iconEls.length; gi++) {
+      var el = iconEls[gi];
+      el.style.transform = 'translate3d(0, ' + (scrollY * el._rate * INTENSITY).toFixed(1) + 'px, 0)';
+    }
 
     if (indicator) {
       var op = Math.max(0, Math.min(1, (scrollY - 60) / 160));
@@ -65,13 +74,59 @@
     setDot('articles', active);
   }
 
-  if (hero && smiley) {
-    hero.addEventListener('mousemove', function (e) {
-      var rect = hero.getBoundingClientRect();
-      smiley.style.left = (e.clientX - rect.left) + 'px';
-      smiley.style.top = (e.clientY - rect.top) + 'px';
-      smiley.style.opacity = 1;
-    });
+  // ---- full-page floating game-icon field --------------------------------
+  var GICONS = [
+    '<svg width="46" height="34" viewBox="0 0 46 34"><rect x="4" y="8" width="38" height="18" rx="8" fill="#ff6b4a"/><rect x="10" y="14" width="4" height="4" fill="#151318"/><rect x="6" y="18" width="4" height="4" fill="#151318"/><rect x="14" y="18" width="4" height="4" fill="#151318"/><circle cx="32" cy="14" r="2.5" fill="#151318"/><circle cx="37" cy="18" r="2.5" fill="#151318"/></svg>',
+    '<svg width="34" height="34" viewBox="0 0 34 34"><circle cx="17" cy="17" r="14" fill="#ffd23f"/><circle cx="17" cy="17" r="9" fill="none" stroke="#151318" stroke-width="2"/><rect x="14" y="10" width="6" height="3" fill="#151318"/></svg>',
+    '<svg width="40" height="40" viewBox="0 0 40 40"><polygon points="20,3 37,12 37,28 20,37 3,28 3,12" fill="#7cf29c"/><polygon points="20,3 37,12 20,20 3,12" fill="#a9f7c2"/><polygon points="20,20 37,12 37,28 20,37" fill="#54c67d"/></svg>',
+    '<svg width="30" height="42" viewBox="0 0 30 42"><rect x="10" y="26" width="10" height="14" rx="2" fill="#3a3348"/><rect x="6" y="18" width="18" height="10" rx="4" fill="#ff6b4a"/><circle cx="15" cy="10" r="9" fill="#ffd23f"/></svg>',
+    '<svg width="26" height="26" viewBox="0 0 26 26"><path d="M13 22 L4 13 Q0 8 5 4 Q9 1 13 6 Q17 1 21 4 Q26 8 22 13 Z" fill="#ff6b4a"/></svg>',
+    '<svg width="24" height="24" viewBox="0 0 24 24"><polygon points="12,1 15,9 23,9 16,14 19,22 12,17 5,22 8,14 1,9 9,9" fill="#ffd23f"/></svg>',
+    '<svg width="30" height="30" viewBox="0 0 32 32"><polygon points="16,3 27,13 16,29 5,13" fill="#7cf29c"/><polygon points="16,3 27,13 16,13" fill="#b6f7cd"/><polygon points="5,13 16,13 16,29" fill="#54c67d"/></svg>',
+    '<svg width="24" height="30" viewBox="0 0 24 32"><polygon points="13,1 3,18 11,18 9,31 21,12 13,12" fill="#ffd23f"/></svg>',
+    '<svg width="32" height="32" viewBox="0 0 34 34"><path d="M13 3 h8 v10 h10 v8 h-10 v10 h-8 v-10 h-10 v-8 h10 z" fill="#9d7bff"/></svg>',
+    '<svg width="28" height="30" viewBox="0 0 30 32"><path d="M4 15 a11 11 0 0 1 22 0 v15 l-4 -3 l-3.5 3 l-3.5 -3 l-3.5 3 l-3.5 -3 z" fill="#f4f1ea"/><circle cx="11" cy="15" r="2.4" fill="#151318"/><circle cx="19" cy="15" r="2.4" fill="#151318"/></svg>'
+  ];
+  // [iconIndex, left%, top%, scale, opacity, parallaxRate, bobDur, bobDelay, rotDeg]
+  var PLACE = [
+    [0,  6, 12, 1.0, 0.45,  0.07, 5.5, 0.0,  -8],
+    [5, 90,  8, 0.9, 0.40,  0.11, 6.0, 0.5,  10],
+    [2, 84, 24, 1.1, 0.35,  0.05, 6.5, 0.8,   6],
+    [3, 14, 32, 0.8, 0.30,  0.09, 5.0, 0.2,  -6],
+    [4,  3,  7, 0.7, 0.35,  0.13, 4.8, 0.6,  14],
+    [7, 95, 40, 0.8, 0.28, -0.06, 6.2, 0.3, -10],
+    [8, 72, 15, 0.7, 0.22,  0.10, 5.6, 1.0,   8],
+    [6, 42,  5, 0.7, 0.20,  0.08, 5.2, 0.4,  -4],
+    [1, 22, 70, 0.9, 0.30, -0.08, 6.0, 0.7,  12],
+    [9, 88, 62, 0.9, 0.25,  0.06, 6.8, 0.2,  -8],
+    [5, 10, 54, 0.7, 0.22,  0.12, 4.6, 0.9,   6],
+    [2, 60, 46, 0.6, 0.15, -0.05, 6.4, 0.1,  10],
+    [3, 80, 82, 0.8, 0.28,  0.09, 5.4, 0.5, -12],
+    [0, 34, 88, 0.8, 0.26, -0.07, 5.8, 0.8,   8],
+    [4, 52, 92, 0.7, 0.24,  0.11, 5.0, 0.3, -14],
+    [8,  6, 84, 0.7, 0.22,  0.07, 6.0, 0.6,  10],
+    [6, 94, 90, 0.7, 0.20, -0.06, 6.6, 0.4,  -6],
+    [7, 46, 62, 0.6, 0.15,  0.10, 5.2, 1.1,   6],
+    [1, 68, 30, 0.6, 0.18,  0.08, 5.6, 0.2,  -8],
+    [9, 30, 18, 0.6, 0.18, -0.09, 6.2, 0.7,  12]
+  ];
+
+  function buildIconField() {
+    if (!iconField) return;
+    var html = '';
+    for (var i = 0; i < PLACE.length; i++) {
+      var p = PLACE[i];
+      html += '<div class="gicon" data-rate="' + p[5] + '" style="left:' + p[1] + '%; top:' + p[2] + '%; opacity:' + p[4] + ';">' +
+                '<div style="transform:scale(' + p[3] + ');">' +
+                  '<div style="animation:floatBob ' + p[6] + 's ease-in-out infinite ' + p[7] + 's; --rot:' + p[8] + 'deg;">' +
+                    GICONS[p[0]] +
+                  '</div></div></div>';
+    }
+    iconField.innerHTML = html;
+    iconEls = Array.prototype.slice.call(iconField.querySelectorAll('.gicon'));
+    for (var j = 0; j < iconEls.length; j++) {
+      iconEls[j]._rate = parseFloat(iconEls[j].getAttribute('data-rate')) || 0;
+    }
   }
 
   // ---- article cards from the manifest -----------------------------------
@@ -233,6 +288,7 @@
 
   renderArticles();
   initProjects();
+  buildIconField();
   window.addEventListener('scroll', onScroll, { passive: true });
   window.addEventListener('resize', onScroll);
   onScroll();
