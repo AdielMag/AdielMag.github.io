@@ -182,7 +182,7 @@
     swapheroes: 'assets/img/swapheroes.png',
     royalbingo: 'assets/img/royalbingo.png',
     solaria: 'assets/img/solaria.png',
-    clashup: null,
+    clashup: 'assets/img/clashup-icon.svg',
   };
   var CHIPS = ['chip-coral', 'chip-gold', 'chip-green', 'chip-muted'];
 

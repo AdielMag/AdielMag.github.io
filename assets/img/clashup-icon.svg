@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="cuBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ff9a3c"/>
+      <stop offset="0.42" stop-color="#ff4d6d"/>
+      <stop offset="1" stop-color="#3d1a63"/>
+    </linearGradient>
+    <radialGradient id="cuGlow" cx="50%" cy="40%" r="62%">
+      <stop offset="0" stop-color="#fff3c4" stop-opacity="0.95"/>
+      <stop offset="0.42" stop-color="#ffd23f" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#ffd23f" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="cuBolt" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff7d6"/>
+      <stop offset="0.5" stop-color="#ffd23f"/>
+      <stop offset="1" stop-color="#ff8a3c"/>
+    </linearGradient>
+    <clipPath id="cuRound"><rect width="512" height="512" rx="115"/></clipPath>
+  </defs>
+
+  <g clip-path="url(#cuRound)">
+    <rect width="512" height="512" fill="url(#cuBg)"/>
+
+    <!-- radiating impact rays -->
+    <g fill="#ffffff" opacity="0.09">
+      <polygon points="256,236 150,-40 210,-40"/>
+      <polygon points="256,236 302,-40 362,-40"/>
+      <polygon points="256,236 470,120 500,180"/>
+      <polygon points="256,236 40,120 12,180"/>
+      <polygon points="256,236 120,470 60,440"/>
+      <polygon points="256,236 392,470 452,440"/>
+    </g>
+
+    <!-- arena floor arcs -->
+    <g stroke="#ffffff" stroke-opacity="0.12" fill="none" stroke-width="3">
+      <ellipse cx="256" cy="452" rx="235" ry="72"/>
+      <ellipse cx="256" cy="452" rx="150" ry="46"/>
+    </g>
+
+    <!-- central glow -->
+    <circle cx="256" cy="222" r="188" fill="url(#cuGlow)"/>
+
+    <!-- lightning bolt (AetherNet energy) -->
+    <path d="M300 58 L146 276 L236 276 L206 456 L378 224 L280 224 Z"
+          fill="url(#cuBolt)" stroke="#37164f" stroke-width="12" stroke-linejoin="round"/>
+    <path d="M300 58 L146 276 L236 276 L206 456 L378 224 L280 224 Z"
+          fill="none" stroke="#ffffff" stroke-opacity="0.55" stroke-width="3" stroke-linejoin="round"/>
+
+    <!-- spark dots (players / netcode) -->
+    <circle cx="118" cy="150" r="10" fill="#7cf29c"/>
+    <circle cx="404" cy="172" r="9" fill="#69d1ff"/>
+    <circle cx="388" cy="356" r="8" fill="#ffffff" opacity="0.85"/>
+    <circle cx="132" cy="360" r="8" fill="#ffd23f"/>
+
+    <!-- top gloss -->
+    <path d="M0 0 H512 V140 Q256 210 0 140 Z" fill="#ffffff" opacity="0.10"/>
+    <!-- inner rim -->
+    <rect x="6" y="6" width="500" height="500" rx="110" fill="none" stroke="#ffffff" stroke-opacity="0.18" stroke-width="4"/>
+  </g>
+</svg>

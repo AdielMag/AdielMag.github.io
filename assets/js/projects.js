@@ -8,26 +8,26 @@
 window.PROJECTS = {
   clashup: {
     name: 'ClashUp',
-    publisher: 'Adiel (solo)',
+    publisher: 'Adiel',
     publisherLogo: null,
     status: 'wip',
-    statusLabel: '🔧 In development',
-    tagline: 'A Brawl Stars–style portrait multiplayer brawler.',
+    statusLabel: '🚀 In development · coming soon',
+    tagline: 'A fast portrait-mode multiplayer brawler.',
     description:
-      "ClashUp is a Brawl Stars–style portrait multiplayer brawler I'm building solo. " +
-      "It runs on an authoritative server with my own deterministic physics engine — AetherNet — " +
-      "that keeps every client perfectly in sync. Client, server, and physics, all of it. " +
-      "Currently in development in a private repo, so there's no public build or store page yet.",
+      "ClashUp is a fast, portrait-mode multiplayer brawler — Brawl Stars energy in one hand. " +
+      "Jump into real-time 1v1 and team clashes on an authoritative server, powered by my own " +
+      "deterministic physics engine, AetherNet, so every player sees exactly the same fight, frame " +
+      "for frame. I'm building the whole thing solo — client, server, and physics. Coming soon.",
     facts: [
       ['Genre', 'Real-time multiplayer brawler'],
-      ['Status', 'In active development'],
-      ['Platforms', 'Mobile (planned)'],
-      ['Tech', 'Authoritative server · deterministic physics (AetherNet)'],
+      ['Modes', '1v1 · team clashes'],
+      ['Platforms', 'iOS · Android (planned)'],
+      ['Netcode', 'Authoritative server · deterministic physics (AetherNet)'],
+      ['Status', 'In development — coming soon'],
     ],
-    tags: ['Client', 'Server', 'Deterministic physics', 'Multiplayer'],
+    tags: ['Multiplayer', 'Real-time', 'Deterministic physics', 'Solo-built'],
     links: [],
-    shots: [],
-    shotNote: "No public screenshots yet — ClashUp lives in a private repo while it's being built.",
+    shots: ['assets/img/clashup-splash.svg'],
   },
 
   pokerface: {
