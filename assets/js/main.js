@@ -132,44 +132,179 @@
   // ---- article cards from the manifest -----------------------------------
   var HOVER = { coral: 'hover-coral', gold: 'hover-gold', green: 'hover-green', white: 'hover-white' };
 
+  function articleTop(a) {
+    return '<div class="article-card-top">' +
+      '<span class="article-tag" style="background:' + a.tagBg + ';color:' + a.tagColor + '">' + esc(a.tag) + '</span>' +
+      '<span class="article-status">' + esc(a.status === 'published' ? (a.date || 'published') : 'draft') + '</span>' +
+      '</div>';
+  }
+
+  // The lead post gets a big two-column card with its hero diagram.
+  function buildFeaturedArticle(a) {
+    var card = document.createElement('a');
+    card.className = 'article-feat ' + (HOVER[a.accent] || 'hover-coral');
+    card.href = 'article.html?slug=' + encodeURIComponent(a.slug);
+    card.innerHTML =
+      (a.hero ? '<div class="article-feat-media"><img src="' + a.hero + '" alt=""></div>' : '') +
+      '<div class="article-feat-body">' +
+        articleTop(a) +
+        '<h3 class="article-feat-title">' + esc(a.title) + '</h3>' +
+        '<p class="article-excerpt">' + esc(a.excerpt || '') + '</p>' +
+        '<span class="article-read">Read the post →</span>' +
+      '</div>';
+    return card;
+  }
+
+  function buildArticleCard(a) {
+    var card = document.createElement('a');
+    card.className = 'article-card ' + (HOVER[a.accent] || 'hover-coral');
+    card.href = 'article.html?slug=' + encodeURIComponent(a.slug);
+    card.innerHTML =
+      articleTop(a) +
+      '<h3 class="article-title">' + esc(a.title) + '</h3>' +
+      '<p class="article-excerpt">' + esc(a.excerpt || 'Full writeup coming soon.') + '</p>';
+    return card;
+  }
+
   function renderArticles() {
     var grid = document.getElementById('articleGrid');
     if (!grid || !window.ARTICLES) return;
-
-    window.ARTICLES.forEach(function (a) {
-      var card = document.createElement('a');
-      card.className = 'article-card ' + (HOVER[a.accent] || 'hover-coral');
-      card.href = 'article.html?slug=' + encodeURIComponent(a.slug);
-
-      var top = document.createElement('div');
-      top.className = 'article-card-top';
-
-      var tag = document.createElement('span');
-      tag.className = 'article-tag';
-      tag.style.background = a.tagBg;
-      tag.style.color = a.tagColor;
-      tag.textContent = a.tag;
-
-      var status = document.createElement('span');
-      status.className = 'article-status';
-      status.textContent = a.status === 'published' ? (a.date || 'published') : 'draft';
-
-      top.appendChild(tag);
-      top.appendChild(status);
-
-      var h3 = document.createElement('h3');
-      h3.className = 'article-title';
-      h3.textContent = a.title;
-
-      var p = document.createElement('p');
-      p.className = 'article-excerpt';
-      p.textContent = a.excerpt || 'Full writeup coming soon.';
-
-      card.appendChild(top);
-      card.appendChild(h3);
-      card.appendChild(p);
-      grid.appendChild(card);
+    grid.innerHTML = '';
+    window.ARTICLES.forEach(function (a, i) {
+      grid.appendChild(
+        (i === 0 && a.status === 'published') ? buildFeaturedArticle(a) : buildArticleCard(a)
+      );
     });
+  }
+
+  // ---- projects: horizontal rail + background that follows the active one ---
+  var PROJ_ORDER  = ['clashup', 'pokerface', 'royalbingo', 'solaria', 'swapheroes'];
+  var PROJ_ACCENT = {
+    clashup: '#ff6b4a', pokerface: '#ffd23f', royalbingo: '#9d7bff',
+    solaria: '#7cf29c', swapheroes: '#4da3ff',
+  };
+
+  function renderProjects() {
+    var rail = document.getElementById('projRail');
+    if (!rail || !window.PROJECTS) return;
+    var html = '';
+    PROJ_ORDER.forEach(function (id) {
+      var p = window.PROJECTS[id];
+      if (!p) return;
+      var accent = PROJ_ACCENT[id] || '#ff6b4a';
+      var icon = ICONS[id] || '';
+      var shot = (p.shots && p.shots[0]) || '';
+      var statusCls = p.status === 'wip' ? 'wip' : (p.status === 'unavailable' ? 'gone' : 'live');
+      html +=
+        '<article class="proj-card" data-project="' + id + '" style="--accent:' + accent + '">' +
+          '<div class="proj-shot">' +
+            (shot ? '<img src="' + shot + '" alt="' + esc(p.name) + '" loading="lazy">' : '') +
+            '<span class="proj-badge ' + statusCls + '">' + esc(p.statusLabel) + '</span>' +
+          '</div>' +
+          '<div class="proj-body">' +
+            '<div class="proj-head">' +
+              (icon ? '<img class="proj-icon" src="' + icon + '" alt="' + esc(p.name) + ' icon">' : '') +
+              '<div class="proj-head-txt">' +
+                '<h3 class="proj-name">' + esc(p.name) + '</h3>' +
+                (p.publisher ? '<span class="proj-pub">by ' + esc(p.publisher) + '</span>' : '') +
+              '</div>' +
+            '</div>' +
+            '<p class="proj-tag">' + esc(p.tagline || '') + '</p>' +
+            '<div class="proj-foot"><span class="proj-more">View details →</span></div>' +
+          '</div>' +
+        '</article>';
+    });
+    rail.innerHTML = html;
+  }
+
+  // Light the section with the accent of whichever card is centered / hovered.
+  function initProjectTheme() {
+    var rail = document.getElementById('projRail');
+    var section = document.getElementById('projects');
+    if (!rail || !section) return;
+    var cards = Array.prototype.slice.call(rail.querySelectorAll('.proj-card'));
+    if (!cards.length) return;
+
+    function setActive(card) {
+      cards.forEach(function (c) { c.classList.toggle('is-active', c === card); });
+      var accent = (card.style.getPropertyValue('--accent') || '#ff6b4a').trim();
+      section.style.setProperty('--active-accent', accent);
+    }
+
+    // pick the card whose center sits closest to a "reading point" ~half a card
+    // in from the rail's left edge, so the leftmost visible card stays active.
+    function updateFromScroll() {
+      var railRect = rail.getBoundingClientRect();
+      var refX = railRect.left + (cards[0].getBoundingClientRect().width / 2);
+      var best = null, bestDist = Infinity;
+      cards.forEach(function (c) {
+        var r = c.getBoundingClientRect();
+        var d = Math.abs((r.left + r.width / 2) - refX);
+        if (d < bestDist) { bestDist = d; best = c; }
+      });
+      if (best) setActive(best);
+    }
+
+    var ticking = false;
+    rail.addEventListener('scroll', function () {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(function () { updateFromScroll(); ticking = false; });
+    }, { passive: true });
+
+    // hovering a card is the most direct "the one you're on"
+    cards.forEach(function (c) {
+      c.addEventListener('mouseenter', function () { setActive(c); });
+    });
+
+    window.addEventListener('resize', updateFromScroll);
+    updateFromScroll();
+  }
+
+  // ---- ambient particle drift (canvas) -----------------------------------
+  function initParticles() {
+    var canvas = document.getElementById('particles');
+    if (!canvas || !canvas.getContext) return;
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    var ctx = canvas.getContext('2d');
+    var COLORS = ['#ff6b4a', '#ffd23f', '#7cf29c', '#9d7bff', '#4da3ff'];
+    var w = 0, h = 0, parts = [];
+
+    function resize() { w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; }
+    function seed() {
+      var n = Math.min(64, Math.round(window.innerWidth / 22));
+      parts = [];
+      for (var i = 0; i < n; i++) {
+        parts.push({
+          x: Math.random() * w, y: Math.random() * h,
+          r: Math.random() * 1.7 + 0.5,
+          vx: (Math.random() - 0.5) * 0.14,
+          vy: -(Math.random() * 0.24 + 0.05),
+          base: Math.random() * 0.35 + 0.08,
+          tw: Math.random() * Math.PI * 2,
+          c: COLORS[(Math.random() * COLORS.length) | 0],
+        });
+      }
+    }
+    function frame() {
+      ctx.clearRect(0, 0, w, h);
+      for (var i = 0; i < parts.length; i++) {
+        var p = parts[i];
+        p.x += p.vx; p.y += p.vy; p.tw += 0.02;
+        if (p.y < -12) { p.y = h + 12; p.x = Math.random() * w; }
+        if (p.x < -12) p.x = w + 12; else if (p.x > w + 12) p.x = -12;
+        ctx.globalAlpha = p.base * (0.55 + 0.45 * Math.sin(p.tw));
+        ctx.fillStyle = p.c;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+      requestAnimationFrame(frame);
+    }
+    resize(); seed(); frame();
+    window.addEventListener('resize', function () { resize(); seed(); });
   }
 
   // ---- project details modal --------------------------------------------
@@ -286,8 +421,11 @@
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeModal(); });
   }
 
+  renderProjects();
   renderArticles();
   initProjects();
+  initProjectTheme();
+  initParticles();
   buildIconField();
   window.addEventListener('scroll', onScroll, { passive: true });
   window.addEventListener('resize', onScroll);

@@ -22,6 +22,7 @@ window.ARTICLES = [
     accent: 'gold',
     title: 'Reaching $0 idle cost: serverless-style game servers on GCP',
     excerpt: 'A game with zero players should cost zero dollars. How a serverless controller sleeps the whole fleet — machines and networking — down to nothing, and wakes it on demand.',
+    hero: 'assets/img/zeroidle-cost-ladder.svg',
     date: 'Jul 2026',
     status: 'published',
   },

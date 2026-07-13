@@ -34,6 +34,7 @@
   <div class="blob-c" id="blobC"></div>
   <div class="blob-d" id="blobD"></div>
   <div class="aurora" id="aurora"></div>
+  <canvas class="particles" id="particles"></canvas>
   <div class="icon-field" id="iconField"></div>
   <div class="bg-vignette"></div>
 
@@ -75,118 +76,16 @@
 
     <!-- PROJECTS -->
     <div id="projects" class="section section-projects">
+      <div class="proj-bg" id="projBg"></div>
       <div class="eyebrow-row">
         <span class="eyebrow coral">01 · Projects</span>
       </div>
-      <h2 class="section-title">Shipped &amp; shipping</h2>
+      <h2 class="section-title tight">Shipped &amp; shipping</h2>
+      <p class="section-lead">Six years of mobile games, solo and with teams. Scroll across — the room lights up for whatever you land on. Tap any card for the full story.</p>
 
-      <div class="section-blob" id="projBlobA" style="top:10%; right:-4%; width:300px; height:300px; background:radial-gradient(circle, rgba(255,210,63,0.10), transparent 70%);"></div>
-
-      <!-- WIP spotlight: ClashUp -->
-      <div class="spotlight" data-project="clashup">
-        <div class="spotlight-glow"></div>
-        <div class="spotlight-row">
-          <div class="spotlight-main">
-            <div class="spotlight-head">
-              <img class="spotlight-icon" src="assets/img/clashup-icon.svg" alt="ClashUp app icon">
-              <div>
-                <div class="spotlight-badge">🚀 In development · coming soon</div>
-                <h3 class="spotlight-title">ClashUp</h3>
-              </div>
-            </div>
-            <p class="spotlight-desc">
-              A fast, portrait-mode multiplayer brawler — Brawl Stars energy in one hand. Real-time 1v1 and team clashes on an authoritative server, powered by my own deterministic physics engine, <strong>AetherNet</strong>, so every player sees exactly the same fight — frame for frame. Built solo, client to server.
-            </p>
-            <div class="chip-row">
-              <span class="chip chip-coral">Real-time</span>
-              <span class="chip chip-gold">Authoritative server</span>
-              <span class="chip chip-green">Deterministic physics</span>
-              <span class="chip chip-muted">Solo-built</span>
-            </div>
-            <div class="store-row">
-              <span class="store-note">🚀 Coming soon</span>
-            </div>
-          </div>
-          <div class="spotlight-media">
-            <img alt="ClashUp key art" src="assets/img/clashup-splash.svg">
-          </div>
-        </div>
-      </div>
-
-      <!-- shipped project cards -->
-      <div class="project-grid">
-
-        <div class="project-card hover-coral" data-project="pokerface">
-          <img class="project-shot" alt="Pokerface screenshot" src="assets/img/shots/pokerface_1.png" loading="lazy">
-          <div class="project-head">
-            <img class="project-icon" alt="Poker Face app icon" src="assets/img/pokerface.png">
-            <h3 class="project-name">Pokerface</h3>
-          </div>
-          <p class="project-desc">Live group video-chat poker with social tables and a bit of bluff-reading charm.</p>
-          <div class="project-meta">
-            <span class="publisher"><img src="assets/img/comunix.png" alt="Comunix logo"> by <strong>Comunix</strong></span>
-          </div>
-          <div class="project-stats">
-            <span><span class="star">★ 4.7</span> · 62K ratings</span>
-            <span>5M+ installs</span>
-          </div>
-          <div class="store-row">
-            <a class="store-btn" href="https://apps.apple.com/us/app/poker-face-texas-holdem-live/id1364570884" target="_blank" rel="noopener"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M16.365 1.43c0 1.14-.42 2.2-1.13 3-.77.88-2.02 1.56-3.06 1.48-.13-1.1.42-2.26 1.1-3 .77-.84 2.1-1.46 3.09-1.48zM20.5 17.2c-.55 1.27-.82 1.84-1.53 2.96-.98 1.56-2.37 3.5-4.08 3.51-1.52.02-1.91-.99-3.97-.98-2.06.01-2.49 1-4.01.97-1.71-.03-3.02-1.78-4-3.34-2.74-4.35-3.03-9.46-1.34-12.17 1.2-1.93 3.1-3.06 4.88-3.06 1.82 0 2.96 1 4.46 1 1.46 0 2.35-1 4.46-1 1.6 0 3.29.87 4.5 2.37-3.95 2.16-3.31 7.79.71 8.75z"/></svg> App Store</a>
-            <a class="store-btn" href="https://play.google.com/store/apps/details?id=com.comunix.pokerface" target="_blank" rel="noopener"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M5 3l16 9-16 9z"/></svg> Google Play</a>
-          </div>
-        </div>
-
-        <div class="project-card hover-gold" data-project="royalbingo">
-          <img class="project-shot" alt="Royal Bingo screenshot" src="assets/img/shots/royalbingo_1.jpg" loading="lazy">
-          <div class="project-head">
-            <img class="project-icon" alt="Royal Bingo app icon" src="assets/img/royalbingo.png">
-            <h3 class="project-name">Royal Bingo</h3>
-          </div>
-          <p class="project-desc">Casual mobile bingo, built for quick rounds and big daubs.</p>
-          <div class="project-meta">
-            <span class="publisher"><img src="assets/img/comunix.png" alt="Comunix logo"> by <strong>Comunix</strong></span>
-          </div>
-          <div class="store-row">
-            <span class="store-note">⚠ No longer available</span>
-          </div>
-        </div>
-
-        <div class="project-card hover-green" data-project="solaria">
-          <img class="project-shot" alt="Solaria: Dawn of Heroes screenshot" src="assets/img/shots/solaria_1.jpg" loading="lazy">
-          <div class="project-head">
-            <img class="project-icon" alt="Solaria: Dawn of Heroes app icon" src="assets/img/solaria.png">
-            <h3 class="project-name">Solaria: Dawn of Heroes</h3>
-          </div>
-          <p class="project-desc">A hero-collector RPG about rebuilding the light, one team at a time.</p>
-          <div class="project-meta">
-            <span class="publisher"><img src="assets/img/glaive.png" alt="Glaive Games logo"> by <strong>Glaive Games</strong></span>
-          </div>
-          <div class="store-row">
-            <span class="store-note">⚠ No longer available</span>
-          </div>
-        </div>
-
-        <div class="project-card hover-coral" data-project="swapheroes">
-          <img class="project-shot" alt="Swap Heroes screenshot" src="assets/img/shots/swapheroes_1.jpg" loading="lazy">
-          <div class="project-head">
-            <img class="project-icon" alt="Swap Heroes: Eternal Legends app icon" src="assets/img/swapheroes.png">
-            <h3 class="project-name">Swap Heroes: Eternal Legends</h3>
-          </div>
-          <p class="project-desc">A real-time squad ARPG where you swap heroes mid-fight — your bench is half your strategy. Still in active development.</p>
-          <div class="project-meta">
-            <span class="publisher"><img src="assets/img/glaive.png" alt="Glaive Games logo"> by <strong>Glaive Games</strong></span>
-          </div>
-          <div class="project-stats">
-            <span><span class="star">★ 4.0</span> · new release</span>
-            <span>🔧 actively updated</span>
-          </div>
-          <div class="store-row">
-            <a class="store-btn" href="https://apps.apple.com/us/app/swap-heroes-eternal-legends/id6755378713" target="_blank" rel="noopener"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M16.365 1.43c0 1.14-.42 2.2-1.13 3-.77.88-2.02 1.56-3.06 1.48-.13-1.1.42-2.26 1.1-3 .77-.84 2.1-1.46 3.09-1.48zM20.5 17.2c-.55 1.27-.82 1.84-1.53 2.96-.98 1.56-2.37 3.5-4.08 3.51-1.52.02-1.91-.99-3.97-.98-2.06.01-2.49 1-4.01.97-1.71-.03-3.02-1.78-4-3.34-2.74-4.35-3.03-9.46-1.34-12.17 1.2-1.93 3.1-3.06 4.88-3.06 1.82 0 2.96 1 4.46 1 1.46 0 2.35-1 4.46-1 1.6 0 3.29.87 4.5 2.37-3.95 2.16-3.31 7.79.71 8.75z"/></svg> App Store</a>
-            <a class="store-btn" href="https://play.google.com/store/apps/details?id=com.glaivegames.swapheroes" target="_blank" rel="noopener"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M5 3l16 9-16 9z"/></svg> Google Play</a>
-          </div>
-        </div>
-
-      </div>
+      <!-- horizontal project rail (built from window.PROJECTS by main.js) -->
+      <div class="proj-rail" id="projRail"></div>
+      <div class="proj-hint" id="projHint">Drag, scroll, or tap a card <span class="proj-hint-arrow">→</span></div>
     </div>
 
     <!-- ARTICLES -->
@@ -194,8 +93,8 @@
       <div class="eyebrow-row">
         <span class="eyebrow green">02 · Articles</span>
       </div>
-      <h2 class="section-title tight">Writing (in progress)</h2>
-      <p class="section-lead">Notes on client, server, and AI-assisted dev. Full posts coming soon — these are placeholders for now. Click a card for a peek.</p>
+      <h2 class="section-title tight">From the devlog</h2>
+      <p class="section-lead">Deep dives on client, server, and AI-assisted game dev — pulled straight from building ClashUp.</p>
 
       <div class="section-blob" id="projBlobB" style="top:20%; left:-6%; width:280px; height:280px; background:radial-gradient(circle, rgba(124,242,156,0.09), transparent 70%);"></div>
 
