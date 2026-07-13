@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 560" font-family="Segoe UI, system-ui, -apple-system, Roboto, sans-serif">
+  <defs>
+    <marker id="lAmber" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#d29922"/></marker>
+    <marker id="lBlue" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#4da3ff"/></marker>
+    <marker id="lGreen" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#3fb950"/></marker>
+    <style>
+      text { fill: #e6edf3; }
+      .ttl  { font-size: 21px; font-weight: 700; }
+      .sub  { font-size: 12.5px; fill: #8b98a5; }
+      .state{ font-size: 20px; font-weight: 700; }
+      .li   { font-size: 12.5px; fill: #c9d4df; }
+      .cap  { font-size: 12px; fill: #8b98a5; }
+      .trig { font-size: 13px; font-weight: 600; }
+      .act  { font-size: 11.5px; }
+    </style>
+  </defs>
+
+  <rect width="920" height="560" fill="#0f1419"/>
+  <text x="40" y="46" class="ttl">One controller, two states</text>
+  <text x="40" y="70" class="sub">A serverless controller — itself scaled to zero — flips the whole fleet between awake and asleep.</text>
+
+  <!-- ===== AWAKE state ===== -->
+  <rect x="70" y="185" width="300" height="190" rx="14" fill="#16231a" stroke="#3fb950" stroke-width="1.5"/>
+  <text x="96" y="223" class="state" fill="#56c96a">● AWAKE</text>
+  <line x1="96" y1="238" x2="344" y2="238" stroke="#234a2b"/>
+  <text x="96" y="266" class="li">Instances running</text>
+  <text x="96" y="292" class="li">Networking provisioned</text>
+  <text x="96" y="318" class="li">Players connect &amp; matchmake</text>
+  <text x="96" y="352" class="cap">costs money while it runs</text>
+
+  <!-- ===== ASLEEP state ===== -->
+  <rect x="550" y="185" width="300" height="190" rx="14" fill="#171b21" stroke="#8b98a5" stroke-width="1.5" stroke-dasharray="7 5"/>
+  <text x="576" y="223" class="state" fill="#b7c0cc">💤 ASLEEP</text>
+  <line x1="576" y1="238" x2="824" y2="238" stroke="#2d3744"/>
+  <text x="576" y="266" class="li">Instances scaled to 0</text>
+  <text x="576" y="292" class="li">Networking released</text>
+  <text x="576" y="318" class="li">Nothing left to bill</text>
+  <text x="576" y="352" class="cap" fill="#56c96a">$0 / month</text>
+
+  <!-- ===== SLEEP transition (top) ===== -->
+  <path d="M370,225 C 445,225 445,120 545,120 L640,120" stroke="#d29922" stroke-width="2" fill="none" marker-end="url(#lAmber)"/>
+  <path d="M640,120 C 720,120 720,183 760,183" stroke="#d29922" stroke-width="2" fill="none" marker-end="url(#lAmber)"/>
+  <text x="460" y="104" class="trig" fill="#e3b341" text-anchor="middle">⏰ idle check fires every 30 min</text>
+  <text x="460" y="150" class="act" fill="#c9d4df" text-anchor="middle">no players for 35 min → autoscalers off · scale to 0 · release networking</text>
+
+  <!-- ===== WAKE transition (bottom) ===== -->
+  <path d="M550,340 C 475,340 475,455 375,455 L280,455" stroke="#4da3ff" stroke-width="2" fill="none" marker-end="url(#lBlue)"/>
+  <path d="M280,455 C 200,455 200,377 160,377" stroke="#4da3ff" stroke-width="2" fill="none" marker-end="url(#lBlue)"/>
+  <text x="460" y="447" class="trig" fill="#79c0ff" text-anchor="middle">🎮 a player returns — "where do I connect?"</text>
+  <text x="460" y="493" class="act" fill="#c9d4df" text-anchor="middle">autoscalers on · rebuild networking · re-allowlist the database · hand back the address</text>
+
+  <!-- ===== stay-awake self loop ===== -->
+  <path d="M150,185 C 150,140 250,140 250,185" stroke="#3fb950" stroke-width="1.6" fill="none" stroke-dasharray="4 4" marker-end="url(#lGreen)"/>
+  <text x="200" y="130" class="cap" fill="#56c96a" text-anchor="middle">players online → stay awake</text>
+
+  <text x="40" y="540" class="cap">The cold start on wake (~a couple of minutes) is the price of paying nothing while idle.</text>
+</svg>
