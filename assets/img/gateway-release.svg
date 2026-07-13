@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 470" font-family="Segoe UI, system-ui, -apple-system, Roboto, sans-serif">
+  <defs>
+    <marker id="rlMut" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#8b98a5"/></marker>
+    <style>
+      text { fill: #e6edf3; }
+      .ttl  { font-size: 21px; font-weight: 700; }
+      .sub  { font-size: 12.5px; fill: #8b98a5; }
+      .step { font-size: 12px; font-weight: 700; letter-spacing: 0.5px; }
+      .t    { font-size: 13px; font-weight: 600; }
+      .s    { font-size: 11px; fill: #8b98a5; }
+      .mono { font-family: ui-monospace, Consolas, monospace; font-size: 11px; }
+    </style>
+  </defs>
+
+  <rect width="940" height="470" fill="#0f1419"/>
+  <text x="40" y="44" class="ttl">Shipping a new version without kicking anyone off</text>
+  <text x="40" y="68" class="sub">No maintenance window, no forced update — old and new builds simply run side-by-side.</text>
+
+  <!-- three stacked stages -->
+  <!-- Stage 1 -->
+  <text x="40" y="112" class="step" fill="#4da3ff">① BEFORE</text>
+  <rect x="150" y="92" width="220" height="46" rx="9" fill="#1a212b" stroke="#a371f7"/>
+  <text x="168" y="112" class="t">📱 players on 1.0.1</text>
+  <text x="168" y="128" class="s">happily connected</text>
+  <path d="M370,115 L470,115" stroke="#8b98a5" stroke-width="1.6" fill="none" marker-end="url(#rlMut)"/>
+  <rect x="472" y="92" width="220" height="46" rx="9" fill="#16231a" stroke="#3fb950"/>
+  <text x="490" y="112" class="mono" fill="#56c96a">backend :1.0.1  (warm)</text>
+  <text x="490" y="128" class="s">the only version running</text>
+
+  <!-- Stage 2 -->
+  <text x="40" y="212" class="step" fill="#e3b341">② PUSH 1.0.2</text>
+  <rect x="150" y="176" width="542" height="66" rx="10" fill="#191a12" stroke="#d29922" stroke-opacity="0.6"/>
+  <text x="168" y="202" class="t" fill="#e3b341">A new image lands in the registry</text>
+  <text x="168" y="222" class="s">No machines change. Nothing restarts. The 1.0.1 backend keeps serving its players, untouched.</text>
+
+  <!-- Stage 3 -->
+  <text x="40" y="322" class="step" fill="#3fb950">③ AFTER</text>
+  <rect x="150" y="286" width="220" height="46" rx="9" fill="#1a212b" stroke="#a371f7"/>
+  <text x="168" y="306" class="t">📱 still on 1.0.1</text>
+  <text x="168" y="322" class="s">never interrupted</text>
+  <rect x="150" y="344" width="220" height="46" rx="9" fill="#1a212b" stroke="#a371f7"/>
+  <text x="168" y="364" class="t">📱 updated to 1.0.2</text>
+  <text x="168" y="380" class="s">first to ask for the new build</text>
+
+  <path d="M370,309 L470,309" stroke="#8b98a5" stroke-width="1.6" fill="none" marker-end="url(#rlMut)"/>
+  <path d="M370,367 L470,367" stroke="#8b98a5" stroke-width="1.6" fill="none" marker-end="url(#rlMut)"/>
+
+  <rect x="472" y="286" width="220" height="46" rx="9" fill="#141a16" stroke="#3fb950" stroke-opacity="0.5" stroke-dasharray="5 4"/>
+  <text x="490" y="306" class="mono" fill="#8b98a5">backend :1.0.1  (idle)</text>
+  <text x="490" y="322" class="s">evicts itself after ~30 min unused</text>
+  <rect x="472" y="344" width="220" height="46" rx="9" fill="#16231a" stroke="#3fb950"/>
+  <text x="490" y="364" class="mono" fill="#56c96a">backend :1.0.2  (new)</text>
+  <text x="490" y="380" class="s">spawned on demand, side-by-side</text>
+
+  <!-- rollback note -->
+  <rect x="716" y="286" width="188" height="104" rx="10" fill="#15212e" stroke="#4da3ff" stroke-opacity="0.5"/>
+  <text x="734" y="312" class="t" fill="#79c0ff">Rollback = free</text>
+  <text x="734" y="334" class="s">A bad build? Clients on</text>
+  <text x="734" y="350" class="s">the old version were</text>
+  <text x="734" y="366" class="s">never migrated — nothing</text>
+  <text x="734" y="382" class="s">to roll back.</text>
+
+  <text x="40" y="450" class="s">The registry is the deploy. Old players ride out their session on the old backend; new players get the new one — no downtime either way.</text>
+</svg>

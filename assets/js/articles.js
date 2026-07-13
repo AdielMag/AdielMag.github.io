@@ -39,6 +39,18 @@ window.ARTICLES = [
     status: 'published',
   },
   {
+    slug: 'version-aware-gateway',
+    tag: 'Server',
+    tagColor: '#ffd23f',
+    tagBg: 'rgba(255,210,63,0.14)',
+    accent: 'gold',
+    title: 'The version-aware gateway: shipping without kicking anyone off',
+    excerpt: 'Updating a live multiplayer game usually means downtime or a forced update. How treating each game version as a container behind one router lets old and new builds run side-by-side.',
+    hero: 'assets/img/gateway-router.svg',
+    date: 'Jul 2026',
+    status: 'published',
+  },
+  {
     slug: 'claude-memory-vault',
     tag: 'AI',
     tagColor: '#7cf29c',
