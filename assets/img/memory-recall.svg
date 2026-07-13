@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 470" font-family="Segoe UI, system-ui, -apple-system, Roboto, sans-serif">
+  <defs>
+    <marker id="mrGreen" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#3fb950"/></marker>
+    <marker id="mrMut" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#8b98a5"/></marker>
+    <style>
+      text { fill: #e6edf3; }
+      .ttl  { font-size: 21px; font-weight: 700; }
+      .sub  { font-size: 12.5px; fill: #8b98a5; }
+      .t    { font-size: 14px; font-weight: 600; }
+      .s    { font-size: 11px; fill: #8b98a5; }
+      .mono { font-family: ui-monospace, Consolas, monospace; font-size: 12px; fill: #56c96a; }
+      .lbl  { font-size: 11.5px; fill: #c9d4df; }
+    </style>
+  </defs>
+
+  <rect width="900" height="470" fill="#0f1419"/>
+  <text x="40" y="46" class="ttl">Index-driven recall, not a folder scan</text>
+  <text x="40" y="70" class="sub">Only the index loads every session. Everything else is pulled in on demand, by following links.</text>
+
+  <!-- session start -->
+  <rect x="40" y="110" width="150" height="70" rx="12" fill="#1a212b" stroke="#a371f7"/>
+  <text x="115" y="140" class="t" text-anchor="middle" fill="#c4b1ee">Session</text>
+  <text x="115" y="160" class="t" text-anchor="middle" fill="#c4b1ee">starts</text>
+
+  <!-- index -->
+  <rect x="250" y="96" width="230" height="150" rx="12" fill="#16231a" stroke="#3fb950" stroke-width="1.5"/>
+  <text x="270" y="124" class="t" fill="#56c96a">📇 MEMORY.md</text>
+  <text x="270" y="146" class="s">the index — auto-loads at start</text>
+  <text x="270" y="164" class="s">(first ~200 lines only)</text>
+  <rect x="270" y="176" width="190" height="20" rx="5" fill="#12261a"/>
+  <text x="278" y="190" class="mono" font-size="10.5">- netcode → netcode.md</text>
+  <rect x="270" y="200" width="190" height="20" rx="5" fill="#12261a"/>
+  <text x="278" y="214" class="mono" font-size="10.5">- physics → aethernet.md</text>
+  <rect x="270" y="224" width="190" height="14" rx="5" fill="#12261a"/>
+  <text x="278" y="235" class="mono" font-size="9.5">- … one line per memory</text>
+
+  <path d="M190,145 L246,150" stroke="#a371f7" stroke-width="2" fill="none" marker-end="url(#mrGreen)"/>
+
+  <!-- topic files pulled on demand -->
+  <text x="560" y="112" class="s">read ONLY when the task needs them:</text>
+  <g>
+    <rect x="560" y="126" width="300" height="34" rx="8" fill="#15212e" stroke="#2d6cad"/>
+    <text x="576" y="148" class="lbl">🔗 netcode.md</text>
+    <text x="700" y="148" class="s">prediction · reconciliation</text>
+  </g>
+  <g>
+    <rect x="560" y="170" width="300" height="34" rx="8" fill="#15212e" stroke="#2d6cad"/>
+    <text x="576" y="192" class="lbl">🔗 aethernet.md</text>
+    <text x="700" y="192" class="s">fixed-point physics</text>
+  </g>
+  <g opacity="0.55">
+    <rect x="560" y="214" width="300" height="34" rx="8" fill="#15212e" stroke="#26405e" stroke-dasharray="5 4"/>
+    <text x="576" y="236" class="lbl">🔗 ability-system.md</text>
+    <text x="700" y="236" class="s">not touched this session</text>
+  </g>
+
+  <path d="M480,186 C 520,150 528,143 556,143" stroke="#3fb950" stroke-width="1.6" fill="none" marker-end="url(#mrGreen)"/>
+  <path d="M480,196 C 520,188 528,187 556,187" stroke="#3fb950" stroke-width="1.6" fill="none" marker-end="url(#mrGreen)"/>
+  <path d="M480,214 C 520,224 528,228 556,230" stroke="#8b98a5" stroke-width="1.4" stroke-dasharray="5 4" fill="none" marker-end="url(#mrMut)"/>
+
+  <!-- why box -->
+  <rect x="40" y="290" width="820" height="140" rx="12" fill="#141b12" stroke="#d29922" stroke-opacity="0.5"/>
+  <text x="60" y="318" class="t" fill="#e3b341">Why it scales</text>
+  <text x="60" y="346" class="lbl">• The index stays tiny, so it costs almost nothing to load every session.</text>
+  <text x="60" y="372" class="lbl">• Hundreds of topic notes can exist without bloating context — they load only when relevant.</text>
+  <text x="60" y="398" class="lbl">• Folders are free: recall follows the links in the index, so organising by topic never breaks it.</text>
+</svg>

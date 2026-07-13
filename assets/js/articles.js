@@ -15,6 +15,18 @@
    =========================================================================== */
 window.ARTICLES = [
   {
+    slug: 'dumb-client-manifesto',
+    tag: 'Client',
+    tagColor: '#ff6b4a',
+    tagBg: 'rgba(255,107,74,0.14)',
+    accent: 'coral',
+    title: 'The dumb client manifesto: zero game logic on the phone',
+    excerpt: "ClashUp's phone decides nothing — the server owns the whole game. Here's why, and how prediction, reconciliation, and interpolation make it feel instant anyway.",
+    hero: 'assets/img/dumbclient-authority.svg',
+    date: 'Jul 2026',
+    status: 'published',
+  },
+  {
     slug: 'zero-idle-game-servers',
     tag: 'Server',
     tagColor: '#ffd23f',
@@ -23,6 +35,18 @@ window.ARTICLES = [
     title: 'Reaching $0 idle cost: serverless-style game servers on GCP',
     excerpt: 'A game with zero players should cost zero dollars. How a serverless controller sleeps the whole fleet — machines and networking — down to nothing, and wakes it on demand.',
     hero: 'assets/img/zeroidle-cost-ladder.svg',
+    date: 'Jul 2026',
+    status: 'published',
+  },
+  {
+    slug: 'claude-memory-vault',
+    tag: 'AI',
+    tagColor: '#7cf29c',
+    tagBg: 'rgba(124,242,156,0.14)',
+    accent: 'green',
+    title: 'Giving Claude a memory: a git-tracked knowledge vault',
+    excerpt: 'AI pair-programming falls apart when every session starts cold. How an index-driven, git-tracked memory vault makes the assistant accumulate knowledge about your project instead.',
+    hero: 'assets/img/memory-recall.svg',
     date: 'Jul 2026',
     status: 'published',
   },
