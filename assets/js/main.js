@@ -217,7 +217,7 @@
     rail.innerHTML = html;
   }
 
-  // Light the section with the accent of whichever card is centered / hovered.
+  // Light the section with the accent of whichever card you're hovering.
   function initProjectTheme() {
     var rail = document.getElementById('projRail');
     var section = document.getElementById('projects');
@@ -227,38 +227,17 @@
 
     function setActive(card) {
       cards.forEach(function (c) { c.classList.toggle('is-active', c === card); });
-      var accent = (card.style.getPropertyValue('--accent') || '#ff6b4a').trim();
-      section.style.setProperty('--active-accent', accent);
+      section.style.setProperty('--active-accent',
+        (card.style.getPropertyValue('--accent') || '#ff6b4a').trim());
     }
 
-    // pick the card whose center sits closest to a "reading point" ~half a card
-    // in from the rail's left edge, so the leftmost visible card stays active.
-    function updateFromScroll() {
-      var railRect = rail.getBoundingClientRect();
-      var refX = railRect.left + (cards[0].getBoundingClientRect().width / 2);
-      var best = null, bestDist = Infinity;
-      cards.forEach(function (c) {
-        var r = c.getBoundingClientRect();
-        var d = Math.abs((r.left + r.width / 2) - refX);
-        if (d < bestDist) { bestDist = d; best = c; }
-      });
-      if (best) setActive(best);
-    }
-
-    var ticking = false;
-    rail.addEventListener('scroll', function () {
-      if (ticking) return;
-      ticking = true;
-      requestAnimationFrame(function () { updateFromScroll(); ticking = false; });
-    }, { passive: true });
-
-    // hovering a card is the most direct "the one you're on"
     cards.forEach(function (c) {
       c.addEventListener('mouseenter', function () { setActive(c); });
     });
 
-    window.addEventListener('resize', updateFromScroll);
-    updateFromScroll();
+    // pre-tint the glow before anyone hovers, without lifting a card yet
+    section.style.setProperty('--active-accent',
+      (cards[0].style.getPropertyValue('--accent') || '#ff6b4a').trim());
   }
 
   // ---- ambient particle drift (canvas) -----------------------------------
