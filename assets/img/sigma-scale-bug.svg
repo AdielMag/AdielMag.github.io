@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 480" font-family="Segoe UI, system-ui, -apple-system, Roboto, sans-serif">
+  <defs>
+    <style>
+      text { fill: #e6edf3; }
+      .ttl  { font-size: 21px; font-weight: 700; }
+      .sub  { font-size: 12.5px; fill: #8b98a5; }
+      .t    { font-size: 14px; font-weight: 600; }
+      .s    { font-size: 11px; fill: #8b98a5; }
+      .mono { font-family: ui-monospace, Consolas, monospace; font-size: 12px; }
+    </style>
+  </defs>
+
+  <rect width="940" height="480" fill="#0f1419"/>
+  <text x="40" y="44" class="ttl">The same $5 floor, at two different scales</text>
+  <text x="40" y="68" class="sub">A volatility clamp hand-tuned in dollars for BTC quietly became a wall for SOL — the fix is a percentage of price.</text>
+
+  <!-- BTC panel -->
+  <rect x="40" y="96" width="420" height="230" rx="12" fill="#131a22" stroke="#20344a"/>
+  <text x="64" y="128" class="t" fill="#ffd23f">BTC at $80,000</text>
+  <text x="64" y="150" class="mono" fill="#8b98a5" font-size="11">$5 floor = 0.006% of price</text>
+
+  <!-- BTC price bar -->
+  <rect x="64" y="170" width="360" height="26" rx="6" fill="#1a212b" stroke="#2b3947"/>
+  <rect x="64" y="170" width="2" height="26" rx="1" fill="#ffd23f"/>
+  <text x="76" y="188" class="s">the floor is that sliver — a harmless backstop</text>
+
+  <text x="64" y="232" class="mono" fill="#56c96a" font-size="12">z-score gate: passes on a routine drift</text>
+  <rect x="64" y="248" width="360" height="48" rx="10" fill="#16231a" stroke="#3fb950"/>
+  <text x="84" y="277" class="mono" fill="#56c96a" font-size="12">✓ trades normally, profitably, for weeks</text>
+
+  <!-- SOL panel -->
+  <rect x="486" y="96" width="420" height="230" rx="12" fill="#131a22" stroke="#20344a"/>
+  <text x="510" y="128" class="t" fill="#a78bfa">SOL at $100</text>
+  <text x="510" y="150" class="mono" fill="#8b98a5" font-size="11">$5 floor = 5% of price, per √second</text>
+
+  <!-- SOL price bar with huge floor -->
+  <rect x="510" y="170" width="360" height="26" rx="6" fill="#1a212b" stroke="#2b3947"/>
+  <rect x="510" y="170" width="180" height="26" rx="6" fill="#f85149" opacity="0.8"/>
+  <text x="700" y="188" class="s">the floor swallows the estimate</text>
+
+  <text x="510" y="232" class="mono" fill="#ff7b72" font-size="12">z-score gate: mathematically impossible</text>
+  <rect x="510" y="248" width="360" height="48" rx="10" fill="#231616" stroke="#f85149"/>
+  <text x="530" y="277" class="mono" fill="#ff7b72" font-size="12">✗ zero trades, zero errors, for days</text>
+
+  <!-- fix strip -->
+  <rect x="40" y="356" width="866" height="96" rx="12" fill="#15212e" stroke="#4da3ff" stroke-width="2"/>
+  <text x="64" y="388" class="t" fill="#79c0ff">The fix: constants that scale with the asset</text>
+  <text x="64" y="414" class="mono" fill="#79c0ff" font-size="12">sigmaFloor = openPrice × 0.00006   (≈ $5 at BTC $80k, ≈ $0.006 at SOL $100)</text>
+  <text x="64" y="436" class="s">identical behavior for the profitable BTC bot — and the SOL bot made its first trade within the hour</text>
+</svg>

@@ -130,7 +130,7 @@
   }
 
   // ---- article cards from the manifest -----------------------------------
-  var HOVER = { coral: 'hover-coral', gold: 'hover-gold', green: 'hover-green', white: 'hover-white' };
+  var HOVER = { coral: 'hover-coral', gold: 'hover-gold', green: 'hover-green', white: 'hover-white', violet: 'hover-violet' };
 
   function articleTop(a) {
     return '<div class="article-card-top">' +

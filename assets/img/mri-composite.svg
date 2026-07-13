@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 480" font-family="Segoe UI, system-ui, -apple-system, Roboto, sans-serif">
+  <defs>
+    <style>
+      text { fill: #e6edf3; }
+      .ttl  { font-size: 21px; font-weight: 700; }
+      .sub  { font-size: 12.5px; fill: #8b98a5; }
+      .t    { font-size: 14px; font-weight: 600; }
+      .s    { font-size: 11px; fill: #8b98a5; }
+      .mono { font-family: ui-monospace, Consolas, monospace; font-size: 12px; }
+    </style>
+    <marker id="mriA" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#4da3ff"/></marker>
+  </defs>
+
+  <rect width="940" height="480" fill="#0f1419"/>
+  <text x="40" y="44" class="ttl">Four ways to push a market, one resistance score</text>
+  <text x="40" y="68" class="sub">Each component estimates the cost of a different lie — the blend shifts with the volatility regime.</text>
+
+  <!-- component cards -->
+  <rect x="40" y="100" width="300" height="74" rx="10" fill="#1a212b" stroke="#ffd23f"/>
+  <text x="58" y="126" class="t" fill="#ffd23f">DVR — depth vs volatility</text>
+  <text x="58" y="146" class="s">real volume within ±1% of mid, scaled</text>
+  <text x="58" y="161" class="s">by how fast the price is already moving</text>
+
+  <rect x="40" y="186" width="300" height="74" rx="10" fill="#1a212b" stroke="#3fb950"/>
+  <text x="58" y="212" class="t" fill="#56c96a">OBI — book balance</text>
+  <text x="58" y="232" class="s">1/L-weighted imbalance of the top 10</text>
+  <text x="58" y="247" class="s">levels; a lopsided book is pre-tipped</text>
+
+  <rect x="40" y="272" width="300" height="74" rx="10" fill="#1a212b" stroke="#a78bfa"/>
+  <text x="58" y="298" class="t" fill="#c4b1ee">λ — Kyle's lambda</text>
+  <text x="58" y="318" class="s">price change ~ signed volume over 100</text>
+  <text x="58" y="333" class="s">trades: the exchange rate of manipulation</text>
+
+  <rect x="40" y="358" width="300" height="74" rx="10" fill="#1a212b" stroke="#f85149"/>
+  <text x="58" y="384" class="t" fill="#ff7b72">P — quote persistence</text>
+  <text x="58" y="404" class="s">did vanished levels trade or cancel?</text>
+  <text x="58" y="419" class="s">depth that evaporates is scenery</text>
+
+  <!-- arrows with weights -->
+  <line x1="340" y1="137" x2="470" y2="220" stroke="#4da3ff" marker-end="url(#mriA)"/>
+  <line x1="340" y1="223" x2="470" y2="248" stroke="#4da3ff" marker-end="url(#mriA)"/>
+  <line x1="340" y1="309" x2="470" y2="286" stroke="#4da3ff" marker-end="url(#mriA)"/>
+  <line x1="340" y1="395" x2="470" y2="312" stroke="#4da3ff" marker-end="url(#mriA)"/>
+
+  <!-- blend box -->
+  <rect x="478" y="192" width="180" height="150" rx="12" fill="#15212e" stroke="#4da3ff" stroke-width="2"/>
+  <text x="568" y="222" class="t" text-anchor="middle" fill="#79c0ff">weighted blend</text>
+  <text x="568" y="248" class="mono" text-anchor="middle" fill="#8b98a5" font-size="11">calm:      .40 .20 .20 .20</text>
+  <text x="568" y="268" class="mono" text-anchor="middle" fill="#8b98a5" font-size="11">volatile:  .20 .30 .40 .10</text>
+  <text x="568" y="296" class="s" text-anchor="middle">when the market's moving,</text>
+  <text x="568" y="311" class="s" text-anchor="middle">measured impact (λ) is the truth;</text>
+  <text x="568" y="326" class="s" text-anchor="middle">resting depth is stale scenery</text>
+
+  <line x1="658" y1="267" x2="700" y2="267" stroke="#4da3ff" stroke-width="2" marker-end="url(#mriA)"/>
+
+  <!-- gauge -->
+  <g transform="translate(710,150)">
+    <rect x="0" y="0" width="196" height="234" rx="12" fill="#131a22" stroke="#20344a"/>
+    <text x="98" y="32" class="t" text-anchor="middle">MRI</text>
+    <path d="M38,150 A60,60 0 0 1 158,150" fill="none" stroke="#2b3947" stroke-width="14" stroke-linecap="round"/>
+    <path d="M38,150 A60,60 0 0 1 122,97" fill="none" stroke="#3fb950" stroke-width="14" stroke-linecap="round"/>
+    <text x="98" y="150" class="ttl" text-anchor="middle" fill="#56c96a">68</text>
+    <text x="98" y="176" class="s" text-anchor="middle">0 = pushable · 100 = firm</text>
+    <text x="98" y="208" class="mono" text-anchor="middle" fill="#8b98a5" font-size="11">below the bar? don't bet</text>
+  </g>
+</svg>

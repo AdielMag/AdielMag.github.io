@@ -247,6 +247,7 @@ a:hover { color: #ffd23f; }
 .hover-gold:hover  { border-color: rgba(255,210,63,0.35); }
 .hover-green:hover { border-color: rgba(124,242,156,0.35); }
 .hover-white:hover { border-color: rgba(255,255,255,0.22); }
+.hover-violet:hover { border-color: rgba(167,139,250,0.35); }
 
 /* publisher badge + store links (used in the project modal) -------------- */
 .publisher { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 500; color: #8b8397; }

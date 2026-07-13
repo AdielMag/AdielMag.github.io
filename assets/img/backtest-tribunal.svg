@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 480" font-family="Segoe UI, system-ui, -apple-system, Roboto, sans-serif">
+  <defs>
+    <style>
+      text { fill: #e6edf3; }
+      .ttl  { font-size: 21px; font-weight: 700; }
+      .sub  { font-size: 12.5px; fill: #8b98a5; }
+      .t    { font-size: 14px; font-weight: 600; }
+      .s    { font-size: 11px; fill: #8b98a5; }
+      .mono { font-family: ui-monospace, Consolas, monospace; font-size: 12px; }
+    </style>
+    <marker id="btA" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#4da3ff"/></marker>
+  </defs>
+
+  <rect width="940" height="480" fill="#0f1419"/>
+  <text x="40" y="44" class="ttl">The replay tribunal: record everything, re-fight everything</text>
+  <text x="40" y="68" class="sub">Six observer bots feed the flight recorder; every strategy idea is replayed against hundreds of real markets.</text>
+
+  <!-- recorder -->
+  <rect x="40" y="110" width="250" height="180" rx="12" fill="#1a212b" stroke="#ffd23f"/>
+  <text x="60" y="140" class="t" fill="#ffd23f">☁ The flight recorder</text>
+  <text x="60" y="164" class="mono" fill="#8b98a5" font-size="11">events/{market}/</text>
+  <text x="76" y="182" class="mono" fill="#79c0ff" font-size="11">meta.json</text>
+  <text x="160" y="182" class="s">fast listings</text>
+  <text x="76" y="200" class="mono" fill="#79c0ff" font-size="11">ticks.jsonl.gz</text>
+  <text x="184" y="200" class="s">every tick</text>
+  <text x="60" y="228" class="s">6 observer bots on unfunded wallets</text>
+  <text x="60" y="243" class="s">record markets nobody trades yet —</text>
+  <text x="60" y="258" class="s">BTC · SOL · ETH × 5m · 15m</text>
+  <text x="60" y="278" class="mono" fill="#ffd23f" font-size="11">data first, dollars later</text>
+
+  <line x1="290" y1="200" x2="340" y2="200" stroke="#4da3ff" stroke-width="2" marker-end="url(#btA)"/>
+
+  <!-- replay engine -->
+  <rect x="348" y="110" width="250" height="180" rx="12" fill="#15212e" stroke="#4da3ff" stroke-width="2"/>
+  <text x="368" y="140" class="t" fill="#79c0ff">⚖ The tribunal</text>
+  <text x="368" y="164" class="s">replays the exact entry, stop-loss</text>
+  <text x="368" y="179" class="s">and exit code over each recorded</text>
+  <text x="368" y="194" class="s">market — thousands of parameter</text>
+  <text x="368" y="209" class="s">combos per sweep</text>
+  <text x="368" y="236" class="mono" fill="#79c0ff" font-size="11">2,592 combos × 163 trades</text>
+  <text x="368" y="254" class="mono" fill="#79c0ff" font-size="11">448 combos × entry grid</text>
+  <text x="368" y="278" class="mono" fill="#4da3ff" font-size="11">verdicts in dollars, not vibes</text>
+
+  <line x1="598" y1="200" x2="648" y2="200" stroke="#4da3ff" stroke-width="2" marker-end="url(#btA)"/>
+
+  <!-- verdicts -->
+  <rect x="656" y="110" width="250" height="180" rx="12" fill="#16231a" stroke="#3fb950"/>
+  <text x="676" y="140" class="t" fill="#56c96a">The verdicts</text>
+  <text x="676" y="166" class="s">· entries above 85¢ lose money</text>
+  <text x="676" y="186" class="s">· 5m and 15m want opposite settings</text>
+  <text x="676" y="206" class="s">· zero volatility = broken feed,</text>
+  <text x="690" y="221" class="s">not a calm market</text>
+  <text x="676" y="241" class="s">· the exit signal nets +$13.66 — keep</text>
+  <text x="676" y="261" class="s">· the clever index loses to a z-score</text>
+  <text x="676" y="281" class="s">· the scoreboard flattered me — fixed</text>
+
+  <!-- intuition strip -->
+  <rect x="40" y="322" width="866" height="64" rx="12" fill="#231616" stroke="#f85149"/>
+  <text x="64" y="349" class="t" fill="#ff7b72">What I believed going in</text>
+  <text x="64" y="371" class="s">"safer prices are safer" · "a timeframe is just a parameter" · "no movement means no risk" · "elegant signals deserve to stay"</text>
+
+  <rect x="40" y="398" width="866" height="56" rx="12" fill="#131a22" stroke="#20344a"/>
+  <text x="64" y="424" class="s">Every row above lost to the recordings. The replay has the losses memorized —</text>
+  <text x="64" y="441" class="mono" fill="#79c0ff" font-size="12">when intuition and the tape disagree, update the intuition.</text>
+</svg>

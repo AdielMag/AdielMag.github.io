@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 480" font-family="Segoe UI, system-ui, -apple-system, Roboto, sans-serif">
+  <defs>
+    <style>
+      text { fill: #e6edf3; }
+      .ttl  { font-size: 21px; font-weight: 700; }
+      .sub  { font-size: 12.5px; fill: #8b98a5; }
+      .t    { font-size: 14px; font-weight: 600; }
+      .s    { font-size: 11px; fill: #8b98a5; }
+      .mono { font-family: ui-monospace, Consolas, monospace; font-size: 12px; }
+    </style>
+    <linearGradient id="cone" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#a78bfa" stop-opacity="0.28"/>
+      <stop offset="1" stop-color="#a78bfa" stop-opacity="0.06"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="940" height="480" fill="#0f1419"/>
+  <text x="40" y="44" class="ttl">z = lead ÷ (σ√T): distance to disaster, in units of plausible movement</text>
+  <text x="40" y="68" class="sub">The volatility cone is everywhere normal randomness could still take the price. The strike sits outside it.</text>
+
+  <!-- chart frame -->
+  <rect x="40" y="96" width="600" height="330" rx="12" fill="#131a22" stroke="#20344a"/>
+
+  <!-- axes -->
+  <line x1="80" y1="386" x2="610" y2="386" stroke="#2b3947"/>
+  <text x="80"  y="406" class="mono" fill="#8b98a5" font-size="11">now</text>
+  <text x="540" y="406" class="mono" fill="#8b98a5" font-size="11">resolution</text>
+
+  <!-- strike line -->
+  <line x1="80" y1="330" x2="610" y2="330" stroke="#f85149" stroke-dasharray="6 4"/>
+  <text x="88" y="348" class="mono" fill="#ff7b72" font-size="11">strike — the window's open price</text>
+
+  <!-- volatility cone from current price -->
+  <path d="M180,200 L560,148 L560,252 Z" fill="url(#cone)" stroke="#a78bfa" stroke-opacity="0.5"/>
+  <text x="370" y="176" class="mono" fill="#a78bfa" font-size="11">σ√T — expected wander</text>
+  <text x="370" y="191" class="mono" fill="#a78bfa" font-size="11">in the time remaining</text>
+
+  <!-- BTC path so far -->
+  <path d="M80,300 L110,290 L130,296 L160,240 L180,200"
+        fill="none" stroke="#ffd23f" stroke-width="2.5"/>
+  <circle cx="180" cy="200" r="5" fill="#ffd23f"/>
+  <text x="96" y="270" class="mono" fill="#ffd23f" font-size="11">BTC</text>
+
+  <!-- lead bracket -->
+  <line x1="180" y1="200" x2="180" y2="330" stroke="#3fb950" stroke-width="2"/>
+  <line x1="172" y1="200" x2="188" y2="200" stroke="#3fb950" stroke-width="2"/>
+  <line x1="172" y1="330" x2="188" y2="330" stroke="#3fb950" stroke-width="2"/>
+  <text x="196" y="272" class="mono" fill="#56c96a" font-size="12">lead</text>
+
+  <!-- gap note -->
+  <text x="330" y="300" class="s">the cone never reaches the strike →</text>
+  <text x="330" y="316" class="s">normal volatility can't flip this outcome</text>
+
+  <!-- z table card -->
+  <rect x="668" y="96" width="238" height="204" rx="12" fill="#1a212b" stroke="#a78bfa"/>
+  <text x="688" y="126" class="t" fill="#c4b1ee">z → probability it holds</text>
+  <text x="688" y="156" class="mono" fill="#8b98a5" font-size="12">z = 1.28   →  90%</text>
+  <text x="688" y="180" class="mono" fill="#e6edf3" font-size="12">z = 1.64   →  95%  ← a 95¢ price</text>
+  <text x="688" y="204" class="mono" fill="#56c96a" font-size="12">z = 2.00   →  97.7%  ← the gate</text>
+  <text x="688" y="228" class="mono" fill="#8b98a5" font-size="12">z = 2.50   →  99.4%</text>
+  <text x="688" y="252" class="mono" fill="#8b98a5" font-size="12">z ≥ 3.00   →  near certain</text>
+  <text x="688" y="284" class="s">buy only when measured z beats</text>
+  <text x="688" y="298" class="s">what the price already implies</text>
+
+  <!-- armor card -->
+  <rect x="668" y="318" width="238" height="108" rx="12" fill="#15212e" stroke="#4da3ff"/>
+  <text x="688" y="344" class="t" fill="#79c0ff">The armor</text>
+  <text x="688" y="366" class="s">σ from the last 90s of real ticks,</text>
+  <text x="688" y="381" class="s">outliers winsorized · price EMA-</text>
+  <text x="688" y="396" class="s">smoothed · √T floored · fresh</text>
+  <text x="688" y="411" class="s">highs distrusted until they age</text>
+
+  <!-- verdict strip -->
+  <rect x="40" y="440" width="866" height="0" fill="none"/>
+</svg>
