@@ -57,6 +57,7 @@
       content.innerHTML = '';
       content.appendChild(body);
       setupLightbox(body);
+      mountDemos(body);
     })
     .catch(function () {
       // couldn't load the file — degrade to the placeholder
@@ -66,6 +67,20 @@
   // Remove a leading level-1 heading (and any BOM/blank lines before it).
   function stripLeadingH1(src) {
     return String(src).replace(/^\uFEFF?\s*#(?!#)\s+[^\n]*\n+/, '');
+  }
+
+  // Swap a standalone "[demo:<id>]" paragraph for an interactive widget.
+  function mountDemos(scope) {
+    if (!window.NetcodeDemos) return;
+    Array.prototype.forEach.call(scope.querySelectorAll('p'), function (p) {
+      var m = /^\[demo:([a-z]+)\]$/.exec((p.textContent || '').trim());
+      if (!m) return;
+      var build = window.NetcodeDemos[m[1]];
+      if (!build) return;
+      var holder = document.createElement('div');
+      p.parentNode.replaceChild(holder, p);
+      try { build(holder); } catch (e) { holder.remove(); }
+    });
   }
 
   // Wrap each article image in a figure with a "click to enlarge" caption and
