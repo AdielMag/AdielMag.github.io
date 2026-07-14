@@ -18,13 +18,6 @@
     if (nav) nav.style.background = y > 8 ? 'rgba(21,19,24,0.92)' : 'rgba(21,19,24,0.82)';
   }
 
-  // ---- status label + pill class per project -----------------------------
-  function statusMeta(status) {
-    if (status === 'wip') return { cls: 'wip', label: 'IN DEVELOPMENT' };
-    if (status === 'unavailable') return { cls: 'gone', label: 'DELISTED' };
-    return { cls: 'live', label: 'LIVE' };
-  }
-
   var ICONS = {
     pokerface: 'assets/img/pokerface.png',
     swapheroes: 'assets/img/swapheroes.png',
@@ -69,14 +62,15 @@
     GRID_ORDER.forEach(function (id) {
       var p = window.PROJECTS[id];
       if (!p) return;
-      var sm = statusMeta(p.status);
       var shot = (p.shots && p.shots[0]) || '';
+      // only surface the LIVE badge; leave delisted/archived titles unlabelled
+      var pill = p.status === 'live' ? '<span class="pill-status mini live">LIVE</span>' : '<span></span>';
       html +=
         '<article class="proj-card" data-project="' + id + '">' +
           '<div class="proj-card-shot" style="background-image:url(\'' + esc(shot) + '\')"></div>' +
           '<div class="proj-card-body">' +
             '<div class="proj-card-top">' +
-              '<span class="pill-status mini ' + sm.cls + '">' + sm.label + '</span>' +
+              pill +
               '<span class="proj-card-pub">' + esc(p.publisher || '') + '</span>' +
             '</div>' +
             '<div class="proj-card-name">' + esc(p.name) + '</div>' +
