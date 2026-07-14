@@ -6,12 +6,12 @@
 (function () {
   'use strict';
 
+  // Slug comes from ?slug= (article.html) or from a data-slug attribute
+  // stamped on <body> by the static per-post pages in posts/.
   var params = new URLSearchParams(window.location.search);
-  var slug = params.get('slug') || '';
+  var slug = params.get('slug') || document.body.getAttribute('data-slug') || '';
 
   var article = (window.getArticle && window.getArticle(slug)) || null;
-  // fall back to the first post if the slug is missing/unknown
-  if (!article && window.ARTICLES && window.ARTICLES.length) article = window.ARTICLES[0];
 
   var tagEl   = document.getElementById('aTag');
   var titleEl = document.getElementById('aTitle');
@@ -19,9 +19,11 @@
   var content = document.getElementById('aContent');
 
   if (!article) {
-    titleEl.textContent = 'Article not found';
+    document.title = 'Post not found — devlog.';
+    titleEl.textContent = 'Post not found';
     tagEl.style.display = 'none';
-    content.innerHTML = placeholderHtml();
+    metaEl.textContent = 'that link doesn’t match any post';
+    content.innerHTML = notFoundHtml();
     return;
   }
 
@@ -134,6 +136,14 @@
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape') close();
     });
+  }
+
+  function notFoundHtml() {
+    return '' +
+      '<div class="a-placeholder">' +
+        '<p>There\'s no post at this address — the link may be mistyped or the post may have moved.</p>' +
+        '<p>Head back to the <a href="index.html#articles">article list</a> to find what you were after.</p>' +
+      '</div>';
   }
 
   function placeholderHtml() {

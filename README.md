@@ -48,6 +48,9 @@ in the browser.
 ```
 index.html                 Landing page (hero, projects, articles)
 article.html               Article template — reads ?slug=, renders a post
+posts/<slug>.html          Generated static page per post (real share metadata)
+feed.xml / sitemap.xml     Generated RSS feed + sitemap
+tools/build-posts.mjs      Generator for posts/, feed.xml, sitemap.xml
 assets/
   css/styles.css           Theme, animations, component + modal styles
   js/articles.js           Article manifest
@@ -55,7 +58,7 @@ assets/
   js/markdown.js           Tiny Markdown -> HTML renderer (no dependencies)
   js/main.js               Landing interactions, article cards, project modal
   js/article.js            Article-page rendering
-  img/                     App icons, studio logos, screenshots
+  img/                     App icons, studio logos, screenshots, og-card share image
 content/articles/*.md      One Markdown file per post
 .nojekyll                  Serve files as-is on GitHub Pages
 ```
@@ -75,8 +78,12 @@ python -m http.server 8000
 ## ✍️ Add an article
 
 1. Create `content/articles/<slug>.md` — Markdown, starting with a `# Title`.
-2. Add an entry to `assets/js/articles.js` with a matching `slug`.
+2. Add an entry to `assets/js/articles.js` with a matching `slug` (set both
+   `date` and `dateISO`).
 3. Set `status: 'published'` when it's ready (drafts show a placeholder).
+4. Run `node tools/build-posts.mjs` — regenerates the static pages in `posts/`
+   (these carry the Open Graph tags that make shared links unfurl properly),
+   plus `feed.xml` and `sitemap.xml`. Commit the output.
 
 ## 🕹 Add or edit a project
 

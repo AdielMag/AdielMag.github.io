@@ -1,0 +1,75 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+  <!-- Social share card (1200x630). Rasterized to og-card.png for og:image —
+       most scrapers won't render SVG. -->
+  <defs>
+    <radialGradient id="glowA" cx="0.18" cy="0.2" r="0.55">
+      <stop offset="0" stop-color="#ff6b4a" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#ff6b4a" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowB" cx="0.85" cy="0.85" r="0.6">
+      <stop offset="0" stop-color="#7cf29c" stop-opacity="0.16"/>
+      <stop offset="1" stop-color="#7cf29c" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowC" cx="0.9" cy="0.1" r="0.45">
+      <stop offset="0" stop-color="#ffd23f" stop-opacity="0.14"/>
+      <stop offset="1" stop-color="#ffd23f" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="dots" width="34" height="34" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1.4" fill="#ffffff" opacity="0.05"/>
+    </pattern>
+  </defs>
+
+  <rect width="1200" height="630" fill="#151318"/>
+  <rect width="1200" height="630" fill="url(#dots)"/>
+  <rect width="1200" height="630" fill="url(#glowA)"/>
+  <rect width="1200" height="630" fill="url(#glowB)"/>
+  <rect width="1200" height="630" fill="url(#glowC)"/>
+
+  <!-- floating game glyphs -->
+  <g opacity="0.55">
+    <g transform="translate(950 120) rotate(-8)">
+      <rect x="0" y="0" width="152" height="72" rx="32" fill="#ff6b4a"/>
+      <rect x="24" y="24" width="14" height="14" fill="#151318"/>
+      <rect x="10" y="38" width="14" height="14" fill="#151318"/>
+      <rect x="38" y="38" width="14" height="14" fill="#151318"/>
+      <circle cx="112" cy="28" r="9" fill="#151318"/>
+      <circle cx="130" cy="46" r="9" fill="#151318"/>
+    </g>
+    <g transform="translate(1000 400) rotate(10)">
+      <polygon points="40,0 74,20 74,58 40,78 6,58 6,20" fill="#7cf29c"/>
+      <polygon points="40,0 74,20 40,39 6,20" fill="#a9f7c2"/>
+      <polygon points="40,39 74,20 74,58 40,78" fill="#54c67d"/>
+    </g>
+    <g transform="translate(860 480) rotate(-12)">
+      <polygon points="26,0 32,18 50,18 36,29 42,47 26,36 10,47 16,29 2,18 20,18" fill="#ffd23f"/>
+    </g>
+    <g transform="translate(1090 300) rotate(6)">
+      <path d="M22 3 h14 v16 h16 v14 h-16 v16 h-14 v-16 h-16 v-14 h16 z" fill="#9d7bff"/>
+    </g>
+  </g>
+
+  <!-- text -->
+  <text x="92" y="205" font-family="Arial, Helvetica, sans-serif" font-weight="bold" font-size="128" fill="#f4f1ea" letter-spacing="-3">devlog<tspan fill="#ff6b4a">.</tspan></text>
+  <text x="96" y="278" font-family="Arial, Helvetica, sans-serif" font-size="34" fill="#c9c2d6">Adiel Magenheim — game dev, mostly mobile, increasingly AI</text>
+
+  <!-- tag chips -->
+  <g font-family="Arial, Helvetica, sans-serif" font-size="26" font-weight="bold">
+    <rect x="92" y="356" width="126" height="56" rx="16" fill="#ff6b4a" opacity="0.16"/>
+    <text x="155" y="393" fill="#ff6b4a" text-anchor="middle">Client</text>
+    <rect x="234" y="356" width="132" height="56" rx="16" fill="#ffd23f" opacity="0.16"/>
+    <text x="300" y="393" fill="#ffd23f" text-anchor="middle">Server</text>
+    <rect x="382" y="356" width="86" height="56" rx="16" fill="#7cf29c" opacity="0.16"/>
+    <text x="425" y="393" fill="#7cf29c" text-anchor="middle">AI</text>
+    <rect x="484" y="356" width="146" height="56" rx="16" fill="#a78bfa" opacity="0.16"/>
+    <text x="557" y="393" fill="#a78bfa" text-anchor="middle">Trading</text>
+    <rect x="646" y="356" width="128" height="56" rx="16" fill="#6cb6ff" opacity="0.16"/>
+    <text x="710" y="393" fill="#6cb6ff" text-anchor="middle">Quant</text>
+  </g>
+
+  <text x="92" y="540" font-family="Arial, Helvetica, sans-serif" font-size="28" fill="#6f6780">⚡ building with AI, out loud · adielmag.github.io</text>
+
+  <!-- accent baseline -->
+  <rect x="0" y="622" width="1200" height="8" fill="#ff6b4a"/>
+  <rect x="400" y="622" width="400" height="8" fill="#ffd23f"/>
+  <rect x="800" y="622" width="400" height="8" fill="#7cf29c"/>
+</svg>
