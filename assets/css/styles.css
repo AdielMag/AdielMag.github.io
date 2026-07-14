@@ -86,6 +86,7 @@ a:hover { color: var(--gold); }
   font-family: var(--mono); font-size: 13px; font-weight: 600;
 }
 .brand-dot { color: var(--coral); }
+.brand-by { font-weight: 400; font-size: 13px; color: var(--ink-45); margin-left: 8px; letter-spacing: 0; }
 
 .nav-right { display: flex; align-items: center; gap: 28px; }
 .nav-link {
@@ -574,5 +575,5 @@ a:hover { color: var(--gold); }
   .art-hero-wrap, .art-body-wrap, .reactions, .art-foot, .comments, .readnext { padding-left: 22px; padding-right: 22px; }
   .art-hero { height: 220px; }
   .nav-right { gap: 16px; }
-  .nav-links-hideable { display: none; }
+  .nav-links-hideable, .brand-by { display: none; }
 }

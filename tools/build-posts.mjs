@@ -82,6 +82,7 @@ const page = (a) => `<!DOCTYPE html>
   <a href="index.html" class="brand">
     <span class="brand-mark">&gt;_</span>
     devlog<span class="brand-dot">.</span>
+    <span class="brand-by">by Adiel Magenheim</span>
   </a>
   <a href="index.html#articles" class="nav-back">← Back to the blog</a>
 </nav>
@@ -122,7 +123,7 @@ const page = (a) => `<!DOCTYPE html>
 <div class="art-foot">
   <div class="art-foot-inner">
     <div class="art-tags" id="aTags"></div>
-    <a class="art-share" href="feed.xml" target="_blank" rel="noopener">Subscribe via RSS →</a>
+    <a class="art-share" href="feed.xml" target="_blank" rel="noopener">RSS feed →</a>
   </div>
 </div>
 
