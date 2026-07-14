@@ -12,16 +12,22 @@ games, a work-in-progress flagship (**ClashUp**), and short devlog articles.
 
 Built as a **static site** — plain HTML/CSS/JS, **zero dependencies, no build
 step** — and hosted free on **GitHub Pages**. Articles are Markdown files rendered
-in the browser.
+in the browser. Type is **Space Grotesk** (UI/body) + **JetBrains Mono** (labels,
+tags, code).
 
 ## ✨ Highlights
 
-- **Animated hero** — floating pixel props, parallax glow, a mouse-following smiley.
-- **Projects** — a "currently building" spotlight plus a grid of shipped games.
+- **Clean hero** — badge, headline, two CTAs, soft radial glows (no heavy motion).
+- **Projects** — a featured "in development" spotlight (ClashUp) plus a grid of
+  shipped games.
 - **Expandable project cards** — click any project for a modal with a **scrollable
   screenshot gallery**, extra data (publisher, genre, rating, installs), and links
   to the App Store / Google Play (or archive mirrors for delisted titles).
 - **Real writable articles** — drop in a Markdown file, flip it to `published`.
+- **Rich article pages** — hero art, reading time, like/dislike reactions
+  (remembered per device), post tags, "read next" cards, and **comments**.
+- **Free comments via [Giscus](https://giscus.app)** — backed by GitHub
+  Discussions, no server, no database. See _Comments_ below.
 - **Responsive + themed** — clamped type, auto-fit grids, no horizontal scroll.
 
 ## 🎮 Projects featured
@@ -52,16 +58,34 @@ posts/<slug>.html          Generated static page per post (real share metadata)
 feed.xml / sitemap.xml     Generated RSS feed + sitemap
 tools/build-posts.mjs      Generator for posts/, feed.xml, sitemap.xml
 assets/
-  css/styles.css           Theme, animations, component + modal styles
+  css/styles.css           Theme, component, modal + article-page styles
   js/articles.js           Article manifest
   js/projects.js           Project data (facts, screenshots, store links)
   js/markdown.js           Tiny Markdown -> HTML renderer (no dependencies)
-  js/main.js               Landing interactions, article cards, project modal
-  js/article.js            Article-page rendering
+  js/main.js               Landing: projects (featured + grid + modal), article cards
+  js/article.js            Article page: body, reactions, tags, read-next, Giscus
   img/                     App icons, studio logos, screenshots, og-card share image
 content/articles/*.md      One Markdown file per post
 .nojekyll                  Serve files as-is on GitHub Pages
 ```
+
+## 💬 Comments (Giscus)
+
+Comments are powered by **[Giscus](https://giscus.app)** — free, backed by this
+repo's **GitHub Discussions**, no backend. Each post maps to one discussion by
+its slug (`data-mapping="specific"`, `data-term=<slug>`). Config lives in
+`assets/js/article.js` (`GISCUS`): repo `AdielMag/AdielMag.github.io`, category
+**Announcements**.
+
+**One-time setup (required for comments to load):**
+
+1. **Install the Giscus app** on the repo → <https://github.com/apps/giscus>
+   (grant it access to `AdielMag.github.io`). Until this is done the widget shows
+   _"giscus is not installed on this repository."_
+2. **Discussions** must be enabled (Settings → Features → Discussions) — already on.
+
+Moderate comments from the repo's **Discussions** tab. To restyle the widget,
+change `GISCUS.theme` in `assets/js/article.js` (a preset name or a full CSS URL).
 
 ## 🚀 Run locally
 

@@ -21,116 +21,85 @@
   <meta name="twitter:image" content="https://adielmag.github.io/assets/img/og-card.jpg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 <body>
-<div class="page">
 
-  <!-- fixed full-page background: parallax glow, drifting dots, floating game icons -->
-  <div class="bg-dots"></div>
-  <div class="bg-dots2"></div>
-  <div class="blob-a" id="blobA"></div>
-  <div class="blob-b" id="blobB"></div>
-  <div class="blob-c" id="blobC"></div>
-  <div class="blob-d" id="blobD"></div>
-  <div class="aurora" id="aurora"></div>
-  <canvas class="particles" id="particles"></canvas>
-  <div class="icon-field" id="iconField"></div>
-  <div class="bg-vignette"></div>
-
-  <div class="content">
-
-    <!-- NAV -->
-    <div class="nav" id="nav">
-      <div class="nav-inner">
-        <a href="#top" class="brand">
-          <span class="emoji">🕹️</span> devlog<span class="dot">.</span>
-        </a>
-        <div class="nav-links">
-          <a href="#projects">Projects</a>
-          <a href="#articles">Articles</a>
-        </div>
-      </div>
-    </div>
-
-    <!-- HERO -->
-    <div id="top" class="hero">
-
-      <!-- hero content -->
-      <div class="hero-content">
-        <div class="hero-badge">⚡ building with AI, out loud</div>
-        <h1 class="hero-title">
-          Hey, I'm Adiel.<br>
-          <span class="coral">I make games</span><br>
-          — and lately, <span class="green">a lot of AI.</span>
-        </h1>
-        <p class="hero-sub">
-          Six years deep in mobile game dev. These days I'm obsessed with using AI to move faster, prototype weirder ideas, and build things solo that used to take a whole team — game clients, servers, physics, even a prediction-market trading bot. All of it written up here.
-        </p>
-        <div class="hero-cta">
-          <a href="#projects" class="btn btn-primary">See what I've built →</a>
-          <a href="#articles" class="btn btn-ghost">Read the blog</a>
-        </div>
-      </div>
-    </div>
-
-    <!-- PROJECTS -->
-    <div id="projects" class="section section-projects">
-      <div class="proj-bg" id="projBg"></div>
-      <div class="eyebrow-row">
-        <span class="eyebrow coral">01 · Projects</span>
-      </div>
-      <h2 class="section-title">Shipped &amp; shipping</h2>
-
-      <!-- project grid (built from window.PROJECTS by main.js) -->
-      <div class="proj-rail" id="projRail"></div>
-    </div>
-
-    <!-- ARTICLES -->
-    <div id="articles" class="section section-articles">
-      <div class="eyebrow-row">
-        <span class="eyebrow green">02 · Articles</span>
-      </div>
-      <h2 class="section-title tight">From the devlog</h2>
-      <p class="section-lead">Deep dives from the devlog — multiplayer game tech, AI-assisted workflows, and the trading-bot lab.</p>
-
-      <div class="section-blob" id="projBlobB" style="top:20%; left:-6%; width:280px; height:280px; background:radial-gradient(circle, rgba(124,242,156,0.09), transparent 70%);"></div>
-
-      <div class="article-filters" id="articleFilters"></div>
-      <div class="article-grid" id="articleGrid"></div>
-      <div class="article-more" id="articleMore"></div>
-    </div>
-
-    <!-- FOOTER -->
-    <div class="footer">
-      <div class="footer-links">
-        <a class="footer-link" href="https://github.com/AdielMag" target="_blank" rel="noopener">
-          <svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
-          GitHub
-        </a>
-        <a class="footer-link" href="mailto:adiel12430@gmail.com">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>
-          Email
-        </a>
-        <a class="footer-link" href="feed.xml">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="19" r="2.4"/><path d="M3 10.5A10.5 10.5 0 0 1 13.5 21h3A13.5 13.5 0 0 0 3 7.5zM3 3.5A17.5 17.5 0 0 1 20.5 21h3A20.5 20.5 0 0 0 3 .5z"/></svg>
-          RSS
-        </a>
-      </div>
-      <p>Adiel Magenheim · game dev, mostly mobile, increasingly AI · 🕹️</p>
-    </div>
-
+<!-- NAV -->
+<nav class="nav" id="nav">
+  <a href="#top" class="brand">
+    <span class="brand-mark">&gt;_</span>
+    devlog<span class="brand-dot">.</span>
+  </a>
+  <div class="nav-right">
+    <a href="#projects" class="nav-link nav-links-hideable">Projects</a>
+    <a href="#articles" class="nav-link nav-links-hideable">Articles</a>
+    <a href="https://github.com/AdielMag" target="_blank" rel="noopener" class="nav-github">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+      GitHub
+    </a>
   </div>
+</nav>
 
-  <!-- section progress indicator -->
-  <div class="indicator" id="indicator">
-    <a href="#top" class="dot" id="dotHero"></a>
-    <a href="#projects" class="dot" id="dotProjects"></a>
-    <a href="#articles" class="dot" id="dotArticles"></a>
+<!-- HERO -->
+<header id="top" class="hero">
+  <div class="hero-glow a"></div>
+  <div class="hero-glow b"></div>
+  <div class="hero-inner">
+    <div class="badge"><span class="badge-dot"></span> building with AI, out loud</div>
+    <h1 class="hero-title">
+      Hey, I'm Adiel.<br>
+      I make games — <span class="accent">and lately, a lot of AI.</span>
+    </h1>
+    <p class="hero-sub">
+      Mobile game developer building multiplayer experiences end to end — game clients, authoritative servers, deterministic physics, and AI-driven tooling. I use AI to move faster, prototype ambitious ideas, and ship solo what used to take a team. All of it written up here.
+    </p>
+    <div class="hero-cta">
+      <a href="#projects" class="btn btn-primary">See what I've built <span class="arrow">→</span></a>
+      <a href="#articles" class="btn btn-ghost">Read the blog</a>
+    </div>
   </div>
+</header>
 
-</div>
+<!-- PROJECTS -->
+<section id="projects" class="section section-alt">
+  <div class="section-inner">
+    <div class="eyebrow coral">01 · PROJECTS</div>
+    <h2 class="section-title">Shipped &amp; shipping</h2>
+    <!-- featured card + grid built by main.js from window.PROJECTS -->
+    <div id="projFeatured"></div>
+    <div class="proj-grid" id="projGrid"></div>
+  </div>
+</section>
+
+<!-- ARTICLES -->
+<section id="articles" class="section">
+  <div class="section-inner">
+    <div class="eyebrow violet">02 · ARTICLES</div>
+    <h2 class="section-title tight">From the devlog</h2>
+    <p class="section-lead">Deep dives from the devlog — multiplayer game tech, AI-assisted workflows, and the trading-bot lab.</p>
+    <div class="article-filters" id="articleFilters"></div>
+    <div class="article-grid" id="articleGrid"></div>
+    <div class="article-more" id="articleMore"></div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <span class="footer-mark">&gt;_</span>
+      devlog<span class="brand-dot">.</span>
+      <span class="footer-tagline">Adiel Magenheim · game dev, mostly mobile, increasingly AI</span>
+    </div>
+    <div class="footer-links">
+      <a href="https://github.com/AdielMag" target="_blank" rel="noopener">GitHub</a>
+      <a href="mailto:adiel12430@gmail.com">Email</a>
+      <a href="feed.xml">RSS</a>
+    </div>
+  </div>
+</footer>
 
 <!-- project details modal -->
 <div class="modal-overlay" id="projectModal" aria-hidden="true">

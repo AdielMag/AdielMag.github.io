@@ -24,51 +24,90 @@
   <meta name="twitter:image" content="https://adielmag.github.io/assets/img/og-card.jpg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 <body data-slug="the-bug-was-a-dollar-sign">
-<div class="page">
 
-  <div class="bg-dots" style="animation:none;"></div>
+<nav class="nav">
+  <a href="index.html" class="brand">
+    <span class="brand-mark">&gt;_</span>
+    devlog<span class="brand-dot">.</span>
+  </a>
+  <a href="index.html#articles" class="nav-back">← Back to the blog</a>
+</nav>
 
-  <div class="article-page">
-
-    <a href="index.html#articles" class="back-link">← Back to the blog</a>
-
-    <div class="article-head">
-      <span class="a-tag" id="aTag"></span>
-      <h1 class="a-title" id="aTitle"></h1>
-      <div class="a-byline">
-        <span>Adiel Magenheim</span>
-        <span>·</span>
-        <span id="aMeta">draft — not published yet</span>
-      </div>
-
-      <div id="aContent"></div>
+<header class="art-header">
+  <div class="art-header-glow"></div>
+  <div class="art-header-inner">
+    <div class="art-meta">
+      <span class="tag-cat" id="aTag"></span>
+      <span class="art-meta-time" id="aMeta">draft — not published yet</span>
     </div>
-
-    <div class="footer">
-      <div class="footer-links">
-        <a class="footer-link" href="https://github.com/AdielMag" target="_blank" rel="noopener">
-          <svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
-          GitHub
-        </a>
-        <a class="footer-link" href="mailto:adiel12430@gmail.com">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>
-          Email
-        </a>
-        <a class="footer-link" href="feed.xml">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="19" r="2.4"/><path d="M3 10.5A10.5 10.5 0 0 1 13.5 21h3A13.5 13.5 0 0 0 3 7.5zM3 3.5A17.5 17.5 0 0 1 20.5 21h3A20.5 20.5 0 0 0 3 .5z"/></svg>
-          RSS
-        </a>
+    <h1 class="art-title" id="aTitle"></h1>
+    <p class="art-sub" id="aSub"></p>
+    <div class="art-byline">
+      <span class="art-avatar">AM</span>
+      <div>
+        <div class="art-author">Adiel Magenheim</div>
+        <div class="art-role">game dev, mostly mobile, increasingly AI</div>
       </div>
-      <p>Adiel Magenheim · game dev, mostly mobile, increasingly AI · 🕹️</p>
     </div>
-
   </div>
+</header>
 
+<div class="art-hero-wrap">
+  <div class="art-hero" id="aHero"></div>
 </div>
+
+<article class="art-body-wrap">
+  <div class="art-body-inner">
+    <div id="aContent"></div>
+  </div>
+</article>
+
+<div class="reactions">
+  <div class="reactions-inner" id="aReactions"></div>
+</div>
+
+<div class="art-foot">
+  <div class="art-foot-inner">
+    <div class="art-tags" id="aTags"></div>
+    <a class="art-share" href="feed.xml" target="_blank" rel="noopener">Subscribe via RSS →</a>
+  </div>
+</div>
+
+<section class="comments">
+  <div class="comments-inner">
+    <div class="comments-head">
+      <h2>Comments</h2>
+      <span class="comments-note">via GitHub</span>
+    </div>
+    <div id="aComments"></div>
+  </div>
+</section>
+
+<section class="readnext">
+  <div class="readnext-inner">
+    <div class="readnext-eyebrow">READ NEXT</div>
+    <div class="readnext-grid" id="aReadNext"></div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <span class="footer-mark">&gt;_</span>
+      devlog<span class="brand-dot">.</span>
+      <span class="footer-tagline">Adiel Magenheim · game dev, mostly mobile, increasingly AI</span>
+    </div>
+    <div class="footer-links">
+      <a href="https://github.com/AdielMag" target="_blank" rel="noopener">GitHub</a>
+      <a href="mailto:adiel12430@gmail.com">Email</a>
+      <a href="feed.xml">RSS</a>
+    </div>
+  </div>
+</footer>
 
 <script src="assets/js/articles.js"></script>
 <script src="assets/js/markdown.js"></script>
