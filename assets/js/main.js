@@ -130,7 +130,7 @@
   }
 
   // ---- article cards from the manifest -----------------------------------
-  var HOVER = { coral: 'hover-coral', gold: 'hover-gold', green: 'hover-green', white: 'hover-white', violet: 'hover-violet' };
+  var HOVER = { coral: 'hover-coral', gold: 'hover-gold', green: 'hover-green', white: 'hover-white', violet: 'hover-violet', blue: 'hover-blue' };
 
   function articleTop(a) {
     return '<div class="article-card-top">' +
@@ -166,15 +166,96 @@
     return card;
   }
 
+  // ---- articles: tag filter + "show more" pagination ---------------------
+  var ART_PAGE = 6;              // posts visible per "page"
+  var artFilter = 'All';         // active tag filter
+  var artVisible = ART_PAGE;     // how many of the filtered list are shown
+
+  function filteredArticles() {
+    return (window.ARTICLES || []).filter(function (a) {
+      return artFilter === 'All' || a.tag === artFilter;
+    });
+  }
+
+  function renderArticleFilters() {
+    var bar = document.getElementById('articleFilters');
+    if (!bar || !window.ARTICLES) return;
+    var tags = ['All'];
+    window.ARTICLES.forEach(function (a) {
+      if (tags.indexOf(a.tag) === -1) tags.push(a.tag);
+    });
+    bar.innerHTML = '';
+    tags.forEach(function (tag) {
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'article-filter-pill' + (artFilter === tag ? ' is-active' : '');
+      btn.textContent = tag;
+      if (artFilter === tag && tag !== 'All') {
+        // light the active pill with its tag colour
+        var ref = null;
+        window.ARTICLES.some(function (a) { if (a.tag === tag) { ref = a; return true; } return false; });
+        if (ref) {
+          btn.style.background = ref.tagBg;
+          btn.style.color = ref.tagColor;
+          btn.style.borderColor = 'transparent';
+        }
+      }
+      btn.addEventListener('click', function () {
+        if (artFilter === tag) return;
+        artFilter = tag;
+        artVisible = ART_PAGE;
+        renderArticleFilters();
+        renderArticles();
+      });
+      bar.appendChild(btn);
+    });
+  }
+
   function renderArticles() {
     var grid = document.getElementById('articleGrid');
     if (!grid || !window.ARTICLES) return;
+    var list = filteredArticles();
+    var shown = list.slice(0, artVisible);
     grid.innerHTML = '';
-    window.ARTICLES.forEach(function (a, i) {
+    shown.forEach(function (a, i) {
       grid.appendChild(
         (i === 0 && a.status === 'published') ? buildFeaturedArticle(a) : buildArticleCard(a)
       );
     });
+    renderArticleMore(list, shown);
+  }
+
+  function renderArticleMore(list, shown) {
+    var foot = document.getElementById('articleMore');
+    if (!foot) return;
+    foot.innerHTML = '';
+    if (list.length <= ART_PAGE) return; // everything fits on one page
+
+    var count = document.createElement('span');
+    count.className = 'article-more-count';
+    count.textContent = 'Showing ' + shown.length + ' of ' + list.length;
+
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'article-more-btn';
+    var remaining = list.length - shown.length;
+    btn.textContent = remaining > 0
+      ? 'Show more (' + remaining + ')'
+      : 'Show less';
+    btn.addEventListener('click', function () {
+      if (remaining > 0) {
+        artVisible += ART_PAGE;
+        renderArticles();
+      } else {
+        artVisible = ART_PAGE;
+        renderArticles();
+        var section = document.getElementById('articles');
+        if (section) section.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+
+    foot.appendChild(count);
+    foot.appendChild(btn);
   }
 
   // ---- projects: horizontal rail + background that follows the active one ---
@@ -401,6 +482,7 @@
   }
 
   renderProjects();
+  renderArticleFilters();
   renderArticles();
   initProjects();
   initProjectTheme();

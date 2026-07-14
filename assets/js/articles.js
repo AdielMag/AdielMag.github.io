@@ -12,6 +12,8 @@
      Server  -> gold   #ffd23f
      AI      -> green  #7cf29c
      Engine  -> muted  #c9c2d6
+     Trading -> violet #a78bfa   (MoneyMaker bot — live-market behavior & defenses)
+     Quant   -> blue   #6cb6ff   (MoneyMaker bot — models, math, backtests)
    =========================================================================== */
 window.ARTICLES = [
   {
@@ -64,7 +66,7 @@ window.ARTICLES = [
   },
   {
     slug: 'time-vegas',
-    tag: 'Markets',
+    tag: 'Trading',
     tagColor: '#a78bfa',
     tagBg: 'rgba(167,139,250,0.14)',
     accent: 'violet',
@@ -76,7 +78,7 @@ window.ARTICLES = [
   },
   {
     slug: 'stop-loss-depth-check',
-    tag: 'Markets',
+    tag: 'Trading',
     tagColor: '#a78bfa',
     tagBg: 'rgba(167,139,250,0.14)',
     accent: 'violet',
@@ -88,10 +90,10 @@ window.ARTICLES = [
   },
   {
     slug: 'the-bug-was-a-dollar-sign',
-    tag: 'Markets',
-    tagColor: '#a78bfa',
-    tagBg: 'rgba(167,139,250,0.14)',
-    accent: 'violet',
+    tag: 'Quant',
+    tagColor: '#6cb6ff',
+    tagBg: 'rgba(108,182,255,0.14)',
+    accent: 'blue',
     title: 'My bot couldn’t trade SOL, and the bug was a dollar sign',
     excerpt: 'A volatility floor hand-tuned in dollars for BTC made the entry gate mathematically impossible for SOL — with no errors and no losses. A postmortem on constants that don’t scale.',
     hero: 'assets/img/sigma-scale-bug.svg',
@@ -100,10 +102,10 @@ window.ARTICLES = [
   },
   {
     slug: 'when-95-cents-is-cheap',
-    tag: 'Markets',
-    tagColor: '#a78bfa',
-    tagBg: 'rgba(167,139,250,0.14)',
-    accent: 'violet',
+    tag: 'Quant',
+    tagColor: '#6cb6ff',
+    tagBg: 'rgba(108,182,255,0.14)',
+    accent: 'blue',
     title: 'When 95¢ is cheap: pricing near-certainty with a z-score',
     excerpt: 'A prediction market price is a probability claim — and sometimes it’s wrong by a measurable amount. How a random-walk z-score decides when the last few cents are underpriced.',
     hero: 'assets/img/rss-zscore.svg',
@@ -112,10 +114,10 @@ window.ARTICLES = [
   },
   {
     slug: 'manipulation-resistance-index',
-    tag: 'Markets',
-    tagColor: '#a78bfa',
-    tagBg: 'rgba(167,139,250,0.14)',
-    accent: 'violet',
+    tag: 'Quant',
+    tagColor: '#6cb6ff',
+    tagBg: 'rgba(108,182,255,0.14)',
+    accent: 'blue',
     title: 'How hard is this market to shove? Scoring manipulation resistance 0–100',
     excerpt: 'Your confidence in an outcome and an attacker’s cost to change it are different numbers. Blending depth, imbalance, price impact, and spoof detection into one live score.',
     hero: 'assets/img/mri-composite.svg',
@@ -124,7 +126,7 @@ window.ARTICLES = [
   },
   {
     slug: 'backtest-confessions',
-    tag: 'Markets',
+    tag: 'Trading',
     tagColor: '#a78bfa',
     tagBg: 'rgba(167,139,250,0.14)',
     accent: 'violet',

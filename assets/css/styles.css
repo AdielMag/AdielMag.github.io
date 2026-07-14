@@ -248,6 +248,7 @@ a:hover { color: #ffd23f; }
 .hover-green:hover { border-color: rgba(124,242,156,0.35); }
 .hover-white:hover { border-color: rgba(255,255,255,0.22); }
 .hover-violet:hover { border-color: rgba(167,139,250,0.35); }
+.hover-blue:hover { border-color: rgba(108,182,255,0.35); }
 
 /* publisher badge + store links (used in the project modal) -------------- */
 .publisher { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 500; color: #8b8397; }
@@ -336,6 +337,19 @@ a:hover { color: #ffd23f; }
 .modal-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
 .modal-links { display: flex; gap: 10px; flex-wrap: wrap; }
 
+/* ---- articles: tag filter pills ----------------------------------------- */
+.article-filters {
+  display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 24px; position: relative; z-index: 1;
+}
+.article-filter-pill {
+  padding: 7px 16px; border-radius: 999px; font-size: 13px; font-weight: 600;
+  font-family: 'Inter', sans-serif; background: transparent; color: #a89fb0;
+  border: 1px solid rgba(255,255,255,0.12); cursor: pointer;
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
+}
+.article-filter-pill:hover { color: #f4f1ea; border-color: rgba(255,255,255,0.3); }
+.article-filter-pill.is-active { color: #151318; background: #f4f1ea; border-color: transparent; }
+
 /* ---- articles grid ------------------------------------------------------ */
 .article-grid {
   display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;
@@ -356,6 +370,21 @@ a:hover { color: #ffd23f; }
   margin: 0 0 8px; color: #f4f1ea;
 }
 .article-excerpt { font-size: 14px; color: #a89fb0; margin: 0; }
+
+/* ---- articles: "show more" pager ---------------------------------------- */
+.article-more {
+  display: flex; align-items: center; justify-content: center; gap: 16px; margin-top: 28px;
+  position: relative; z-index: 1;
+}
+.article-more:empty { display: none; }
+.article-more-count { font-size: 13px; color: #6f6780; }
+.article-more-btn {
+  padding: 10px 24px; border-radius: 12px; font-size: 14px; font-weight: 600; cursor: pointer;
+  background: transparent; color: #f4f1ea; border: 1px solid rgba(255,255,255,0.16);
+  font-family: 'Space Grotesk', sans-serif;
+  transition: border-color 0.2s, transform 0.2s;
+}
+.article-more-btn:hover { border-color: rgba(255,107,74,0.5); transform: translateY(-2px); }
 
 /* ---- footer ------------------------------------------------------------- */
 .footer { border-top: 1px solid rgba(255,255,255,0.07); padding: 32px 24px; text-align: center; }
