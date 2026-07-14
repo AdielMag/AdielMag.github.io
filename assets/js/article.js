@@ -234,15 +234,20 @@
 
   // ---- swap a "[demo:<id>]" paragraph for an interactive widget ------------
   function mountDemos(scope) {
-    if (!window.NetcodeDemos) return;
+    if (!window.ArticleDemos) return;
     Array.prototype.forEach.call(scope.querySelectorAll('p'), function (p) {
       var m = /^\[demo:([a-z]+)\]$/.exec((p.textContent || '').trim());
       if (!m) return;
-      var build = window.NetcodeDemos[m[1]];
+      var build = window.ArticleDemos[m[1]];
       if (!build) return;
       var holder = document.createElement('div');
       p.parentNode.replaceChild(holder, p);
-      try { build(holder); } catch (e) { holder.remove(); }
+      // defer one frame: this runs right after a big innerHTML swap, and a
+      // synchronous canvas-width measurement here can catch a transient
+      // layout state before the browser settles the new content's box
+      requestAnimationFrame(function () {
+        try { build(holder); } catch (e) { holder.remove(); }
+      });
     });
   }
 
