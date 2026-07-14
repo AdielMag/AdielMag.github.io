@@ -44,8 +44,6 @@ If the drop passes both checks — real depth, bids genuinely collapsed — the
 stop-loss fires exactly as before. A genuine flip still gets cut fast. The check
 only filters the theater.
 
-[demo:depthcheck]
-
 ## Failing open, deliberately
 
 There's one design decision in this code I went back and forth on. What happens

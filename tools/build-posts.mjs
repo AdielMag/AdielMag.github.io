@@ -148,8 +148,6 @@ ${FOOTER}
 <script src="assets/js/markdown.js"></script>
 <script src="assets/js/demo-kit.js"></script>
 <script src="assets/js/netcode-demos.js"></script>
-<script src="assets/js/trading-demos.js"></script>
-<script src="assets/js/infra-demos.js"></script>
 <script src="assets/js/article.js"></script>
 </body>
 </html>

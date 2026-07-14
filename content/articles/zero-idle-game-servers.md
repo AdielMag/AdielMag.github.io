@@ -67,8 +67,6 @@ gateway** — nothing left that a billing meter can find. "Awake" rebuilds all o
 Tearing down networking is the unglamorous half nobody talks about, but it's exactly
 the half standing between "$25 a month" and "nothing."
 
-[demo:idlecost]
-
 ## The one consequence worth calling out
 
 Releasing the reserved IPs has a catch: **the fleet's address is no longer stable.**
