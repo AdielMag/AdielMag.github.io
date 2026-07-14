@@ -29,6 +29,8 @@ price for upside that no longer covers the tail. The finding is now code — a
 `maxBuyPrice` filter that skips entries above 85¢ — and it exists purely
 because the replays kept saying so.
 
+[demo:evcliff]
+
 ## Confession 2: one strategy is secretly several
 
 Same assets, same exchange, same code. The sweeps tuned 15-minute markets to

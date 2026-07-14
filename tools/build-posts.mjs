@@ -148,6 +148,7 @@ ${FOOTER}
 <script src="assets/js/markdown.js"></script>
 <script src="assets/js/demo-kit.js"></script>
 <script src="assets/js/netcode-demos.js"></script>
+<script src="assets/js/quant-demos.js"></script>
 <script src="assets/js/article.js"></script>
 </body>
 </html>

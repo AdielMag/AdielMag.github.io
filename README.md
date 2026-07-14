@@ -66,6 +66,7 @@ assets/
   js/article.js            Article page: body, reactions, tags, read-next, Giscus
   js/demo-kit.js           Shared canvas/widget helpers for in-article demos
   js/netcode-demos.js      Demos for "the dumb client manifesto" (prediction, etc.)
+  js/quant-demos.js        Demos for the z-score + backtest trading posts
   img/                     App icons, studio logos, screenshots, og-card share image
 content/articles/*.md      One Markdown file per post
 .nojekyll                  Serve files as-is on GitHub Pages

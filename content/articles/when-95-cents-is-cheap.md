@@ -43,6 +43,8 @@ sitting right there unused.
 
 ![The Resolution Safety Score: BTC's lead over the strike, divided by the volatility cone that could still close the gap in the remaining time](assets/img/rss-zscore.svg)
 
+[demo:zscore]
+
 ## The five lines of theory need fifty lines of armor
 
 Everything above fits on an index card. What made it *tradeable* was defending
