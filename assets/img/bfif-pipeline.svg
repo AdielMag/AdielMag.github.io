@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 420" font-family="Segoe UI, system-ui, -apple-system, Roboto, sans-serif">
+  <defs>
+    <marker id="pgGreen" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#3fb950"/></marker>
+    <marker id="pgMut" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#8b98a5"/></marker>
+    <style>
+      text { fill: #e6edf3; }
+      .ttl  { font-size: 21px; font-weight: 700; }
+      .sub  { font-size: 12.5px; fill: #8b98a5; }
+      .t    { font-size: 14px; font-weight: 600; }
+      .s    { font-size: 11px; fill: #8b98a5; }
+      .mono { font-family: ui-monospace, Consolas, monospace; font-size: 12px; }
+    </style>
+  </defs>
+
+  <rect width="900" height="420" fill="#0f1419"/>
+  <text x="40" y="46" class="ttl">Borrowed binary, streamed results, safe fallback</text>
+  <text x="40" y="70" class="sub">The extension ships no search engine — it finds the ripgrep VS Code already installed, and degrades if it can't.</text>
+
+  <!-- detect -->
+  <rect x="40" y="104" width="230" height="120" rx="12" fill="#1a212b" stroke="#a371f7"/>
+  <text x="58" y="130" class="t" fill="#c4b1ee">Detect on activate</text>
+  <rect x="58" y="140" width="194" height="17" rx="4" fill="#12141a"/>
+  <text x="64" y="153" class="mono" font-size="9.5" fill="#c9d4df">appRoot/…asar.unpacked/rg</text>
+  <rect x="58" y="161" width="194" height="17" rx="4" fill="#12141a"/>
+  <text x="64" y="174" class="mono" font-size="9.5" fill="#c9d4df">appRoot/node_modules/…/rg</text>
+  <rect x="58" y="182" width="194" height="17" rx="4" fill="#12141a"/>
+  <text x="64" y="195" class="mono" font-size="9.5" fill="#c9d4df">require('@vscode/ripgrep')</text>
+  <text x="58" y="215" class="s">first hit wins · nothing bundled</text>
+
+  <path d="M270,150 L322,150" stroke="#3fb950" stroke-width="2" fill="none" marker-end="url(#pgGreen)"/>
+  <text x="296" y="142" class="s" text-anchor="middle">found</text>
+
+  <!-- spawn -->
+  <rect x="330" y="104" width="250" height="120" rx="12" fill="#16231a" stroke="#3fb950" stroke-width="1.5"/>
+  <text x="348" y="130" class="t" fill="#56c96a">spawn rg --vimgrep</text>
+  <text x="348" y="150" class="s">-i/-s · -w · -F · -m maxResults</text>
+  <text x="348" y="168" class="s">-g globs from the type filter</text>
+  <text x="348" y="186" class="s">-g !node_modules !.git !dist !out</text>
+  <text x="348" y="210" class="s">cancel token → child.kill()</text>
+
+  <path d="M580,150 L632,150" stroke="#3fb950" stroke-width="2" fill="none" marker-end="url(#pgGreen)"/>
+
+  <!-- stream parse -->
+  <rect x="640" y="104" width="220" height="120" rx="12" fill="#161b22" stroke="#8b98a5" stroke-width="1.5"/>
+  <text x="658" y="130" class="t">Parse per chunk</text>
+  <text x="658" y="150" class="s">split on newline, keep the</text>
+  <text x="658" y="167" class="s">trailing partial line for the</text>
+  <text x="658" y="184" class="s">next chunk</text>
+  <text x="658" y="210" class="s">onProgress() → panel repaints</text>
+
+  <!-- windows gotcha -->
+  <rect x="330" y="248" width="530" height="82" rx="12" fill="#251a1a" stroke="#ff6b4a"/>
+  <text x="348" y="272" class="t" fill="#ff8a6a">The colon problem</text>
+  <rect x="348" y="282" width="494" height="18" rx="4" fill="#1a1113"/>
+  <text x="356" y="295" class="mono" font-size="10.5" fill="#c9d4df">C:\src\Match.cs:42:8:  _queue = new MatchmakingQueue(cfg);</text>
+  <text x="348" y="320" class="s">Splitting on “:” gives file “C”, line “\src\Match.cs”. The parser sniffs for a drive letter and re-joins.</text>
+
+  <!-- fallback -->
+  <path d="M155,224 L155,286" stroke="#8b98a5" stroke-width="1.5" stroke-dasharray="4 3" fill="none" marker-end="url(#pgMut)"/>
+  <text x="166" y="252" class="s">missing / spawn error / mid-run failure</text>
+
+  <rect x="40" y="292" width="250" height="88" rx="12" fill="#1c1d26" stroke="#6cb6ff"/>
+  <text x="58" y="316" class="t" fill="#6cb6ff">Fallback path</text>
+  <text x="58" y="336" class="s">workspace.findFiles + regex sweep</text>
+  <text x="58" y="354" class="s">escaped literals · \b for whole word</text>
+  <text x="58" y="372" class="s">slower, but always available</text>
+
+  <text x="330" y="356" class="s">Same options object, same SearchHit shape — the panel never learns which engine answered.</text>
+  <text x="330" y="376" class="s">Degrading beats breaking: an odd VS Code install loses speed, not search.</text>
+</svg>

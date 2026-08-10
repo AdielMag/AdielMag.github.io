@@ -328,7 +328,7 @@ a:hover { color: var(--gold); }
 .art-hero {
   max-width: 860px; margin: -1px auto 0; height: 340px;
   border-left: 1px solid var(--line); border-right: 1px solid var(--line); border-bottom: 1px solid var(--line);
-  background-color: var(--bg-2); background-repeat: no-repeat; background-position: center; background-size: contain;
+  background-color: var(--bg-2); background-repeat: no-repeat; background-position: center; background-size: cover;
 }
 
 .art-body-wrap { padding: 56px 48px 40px; }

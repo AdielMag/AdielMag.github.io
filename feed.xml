@@ -5,7 +5,7 @@
   <link>https://adielmag.github.io/</link>
   <description>Game dev, mostly mobile, increasingly AI. Multiplayer game tech, AI-assisted workflows, and the trading-bot lab.</description>
   <language>en</language>
-  <lastBuildDate>Mon, 13 Jul 2026 12:00:00 GMT</lastBuildDate>
+  <lastBuildDate>Mon, 10 Aug 2026 12:00:00 GMT</lastBuildDate>
   <atom:link href="https://adielmag.github.io/feed.xml" rel="self" type="application/rss+xml"/>
   <item>
     <title>The dumb client manifesto: zero game logic on the phone</title>
@@ -86,6 +86,14 @@
     <pubDate>Mon, 13 Jul 2026 12:00:00 GMT</pubDate>
     <category>Trading</category>
     <description>Record every tick, replay every idea, and let the data insult your intuition: the safest prices lose money, timeframes are regimes, and a calm market is a broken feed.</description>
+  </item>
+  <item>
+    <title>I missed Rider's Find in Files, so I rebuilt it for VS Code</title>
+    <link>https://adielmag.github.io/posts/better-find-in-files.html</link>
+    <guid isPermaLink="true">https://adielmag.github.io/posts/better-find-in-files.html</guid>
+    <pubDate>Mon, 10 Aug 2026 12:00:00 GMT</pubDate>
+    <category>Engine</category>
+    <description>A VS Code extension with a floating Rider-style search modal: four modes in one shortcut, results streamed from the ripgrep VS Code already ships, and semantic usages from your language server.</description>
   </item>
 </channel>
 </rss>

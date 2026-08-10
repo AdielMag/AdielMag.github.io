@@ -5,3 +5,8 @@ desktop.ini
 *.swp
 .idea/
 .vscode/
+
+# agent skill scaffolding (installed via `npx skills add`)
+.agents/
+.claude/skills/
+skills-lock.json
