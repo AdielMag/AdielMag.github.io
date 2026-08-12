@@ -27,7 +27,7 @@ window.PROJECTS = {
     ],
     tags: ['Multiplayer', 'Real-time', 'Deterministic physics', 'Solo-built'],
     links: [],
-    shots: ['assets/img/clashup-splash.svg'],
+    shots: ['assets/img/clashup-splash.jpg'],
   },
 
   pokerface: {
