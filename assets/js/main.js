@@ -12,10 +12,12 @@
   }
 
   // ---- nav: solidify background once scrolled ----------------------------
+  // A class, not an inline colour - the value belongs in the stylesheet next to
+  // the token it's derived from.
   var nav = document.getElementById('nav');
   function onScroll() {
     var y = window.scrollY || window.pageYOffset || 0;
-    if (nav) nav.style.background = y > 8 ? 'rgba(21,19,24,0.92)' : 'rgba(21,19,24,0.82)';
+    if (nav) nav.classList.toggle('is-scrolled', y > 8);
   }
 
   var ICONS = {
@@ -34,7 +36,8 @@
     var shot = (p.shots && p.shots[0]) || '';
     var tags = ['Multiplayer', 'Real-time', 'Deterministic physics'];
     holder.innerHTML =
-      '<article class="proj-feat" data-project="clashup">' +
+      '<article class="proj-feat" data-project="clashup" tabindex="0" role="button" ' +
+        'aria-label="ClashUp - open project details">' +
         '<div class="proj-feat-body">' +
           '<div class="proj-feat-labels">' +
             '<span class="pill-status wip">IN DEVELOPMENT</span>' +
@@ -66,14 +69,15 @@
       // only surface the LIVE badge; leave delisted/archived titles unlabelled
       var pill = p.status === 'live' ? '<span class="pill-status mini live">LIVE</span>' : '<span></span>';
       html +=
-        '<article class="proj-card" data-project="' + id + '">' +
+        '<article class="proj-card" data-project="' + id + '" tabindex="0" role="button" ' +
+          'aria-label="' + esc(p.name) + ' - open project details">' +
           '<div class="proj-card-shot" style="background-image:url(\'' + esc(shot) + '\')"></div>' +
           '<div class="proj-card-body">' +
             '<div class="proj-card-top">' +
               pill +
               '<span class="proj-card-pub">' + esc(p.publisher || '') + '</span>' +
             '</div>' +
-            '<div class="proj-card-name">' + esc(p.name) + '</div>' +
+            '<h3 class="proj-card-name">' + esc(p.name) + '</h3>' +
             '<div class="proj-card-tag">' + esc(p.tagline || '') + '</div>' +
             '<div class="proj-card-link">View details →</div>' +
           '</div>' +
@@ -105,6 +109,9 @@
     var colors = tagColorMap();
     var order = ['All'];
     (window.ARTICLES || []).forEach(function (a) { if (order.indexOf(a.tag) === -1) order.push(a.tag); });
+    bar.setAttribute('role', 'group');
+    bar.setAttribute('aria-label', 'Filter articles by topic');
+    var hadFocus = bar.contains(document.activeElement);
     bar.innerHTML = '';
     order.forEach(function (tag) {
       var active = artFilter === tag;
@@ -113,6 +120,7 @@
       btn.type = 'button';
       btn.className = 'filter-pill';
       btn.textContent = tag;
+      btn.setAttribute('aria-pressed', active ? 'true' : 'false');
       if (active) {
         btn.style.background = c;
         btn.style.color = '#151318';
@@ -128,6 +136,9 @@
         renderArticles();
       });
       bar.appendChild(btn);
+      // re-rendering the bar destroys the button that was just clicked, so put
+      // focus back on its replacement instead of dumping the user to the top
+      if (active && hadFocus) btn.focus();
     });
   }
 
@@ -143,7 +154,7 @@
           '<span class="tag-cat" style="background:' + a.tagBg + ';color:' + a.tagColor + '">' + esc(a.tag) + '</span>' +
           '<span class="article-date">' + esc(a.date || '') + '</span>' +
         '</div>' +
-        '<div class="article-card-title">' + esc(a.title) + '</div>' +
+        '<h3 class="article-card-title">' + esc(a.title) + '</h3>' +
         '<div class="article-card-excerpt">' + esc(a.excerpt || '') + '</div>' +
         '<div class="article-card-read" style="color:' + a.tagColor + '">Read →</div>' +
       '</div>';
@@ -175,6 +186,9 @@
     btn.addEventListener('click', function () {
       artExpanded = !artExpanded;
       renderArticles();
+      // renderArticles() rebuilds this button; focus its replacement
+      var next = foot.querySelector('.article-more-btn');
+      if (next) next.focus();
       if (!artExpanded) {
         var s = document.getElementById('articles');
         if (s) s.scrollIntoView({ behavior: 'smooth' });
@@ -243,24 +257,44 @@
       facts + tags + links;
   }
 
+  var lastFocused = null;
+  var FOCUSABLE = 'a[href], button, input, select, textarea, [tabindex]:not([tabindex="-1"])';
+
   function openProject(id) {
     var p = window.PROJECTS && window.PROJECTS[id];
     if (!p || !overlay) return;
+    lastFocused = document.activeElement;
     modalBody.innerHTML = buildModal(p, id);
     overlay.classList.add('open');
     overlay.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
+    if (closeBtn) closeBtn.focus();
   }
 
   function closeModal() {
-    if (!overlay) return;
+    if (!overlay || !overlay.classList.contains('open')) return;
     overlay.classList.remove('open');
     overlay.setAttribute('aria-hidden', 'true');
     document.body.style.overflow = '';
+    if (lastFocused && lastFocused.focus) lastFocused.focus();
+    lastFocused = null;
+  }
+
+  // Tab must not walk out of an open dialog and into the page behind it.
+  function trapFocus(e) {
+    if (e.key !== 'Tab' || !overlay.classList.contains('open')) return;
+    var items = Array.prototype.filter.call(
+      overlay.querySelectorAll(FOCUSABLE),
+      function (el) { return el.offsetParent !== null; }
+    );
+    if (!items.length) return;
+    var first = items[0], last = items[items.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
   }
 
   function initModal() {
-    if (!overlay) return;
+    if (!overlay || !closeBtn || !modalBody) return;
     // every project card / featured card carries data-project
     document.addEventListener('click', function (e) {
       var card = e.target.closest('[data-project]');
@@ -268,12 +302,32 @@
       if (e.target.closest('a')) return; // let real links behave
       openProject(card.getAttribute('data-project'));
     });
+    // the cards are role="button", so Enter and Space have to work too
+    document.addEventListener('keydown', function (e) {
+      if (e.key !== 'Enter' && e.key !== ' ') return;
+      var card = e.target.closest && e.target.closest('[data-project]');
+      if (!card) return;
+      e.preventDefault();
+      openProject(card.getAttribute('data-project'));
+    });
     closeBtn.addEventListener('click', closeModal);
     overlay.addEventListener('click', function (e) { if (e.target === overlay) closeModal(); });
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeModal(); });
+    document.addEventListener('keydown', trapFocus);
+  }
+
+  // ---- hero demo ----------------------------------------------------------
+  // The site's one genuinely distinctive thing is that the netcode is playable.
+  // It has no business being buried two thirds of the way down one article.
+  function renderHeroDemo() {
+    var host = document.getElementById('heroDemo');
+    if (!host || !window.ArticleDemos || !window.ArticleDemos.prediction) return;
+    try { window.ArticleDemos.prediction(host); }
+    catch (e) { host.remove(); }
   }
 
   // ---- boot ---------------------------------------------------------------
+  renderHeroDemo();
   renderFeatured();
   renderProjectGrid();
   renderFilters();

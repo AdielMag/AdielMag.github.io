@@ -12,7 +12,7 @@
   'use strict';
 
   var K = window.DemoKit;
-  var COL = K.COL;
+  var COL = K.COL, SANS = K.SANS;
   var clamp = K.clamp, lerp = K.lerp, now = K.now, el = K.el;
   var holdButton = K.holdButton, tapButton = K.tapButton, toggle = K.toggle, slider = K.slider;
   var frame = K.frame, stage = K.stage, controls = K.controls, caption = K.caption;
@@ -88,7 +88,7 @@
 
       // perceived-lag readout
       ctx.fillStyle = predT.on ? COL.remote : COL.bad;
-      ctx.font = '600 12px Inter, sans-serif'; ctx.textAlign = 'right';
+      ctx.font = '600 12px ' + SANS; ctx.textAlign = 'right';
       ctx.fillText(predT.on ? 'feels instant' : 'perceived delay ≈ ' + Math.round(lag * 2) + ' ms',
         W - 44, sy - 26);
     });
@@ -180,7 +180,7 @@
         ctx.fillRect(bx, qy - 12, 20, 16); ctx.strokeRect(bx, qy - 12, 20, 16);
         ctx.fillStyle = COL.you; ctx.fillText('#' + pending[q].seq, bx + 10, qy);
       }
-      ctx.fillStyle = COL.mut; ctx.font = '600 11px Inter, sans-serif'; ctx.textAlign = 'right';
+      ctx.fillStyle = COL.mut; ctx.font = '600 11px ' + SANS; ctx.textAlign = 'right';
       ctx.fillText('acked #' + ack + ' · pending: ' + pending.length, W - 44, sy - 20);
     });
   }
@@ -244,7 +244,7 @@
       }
       drawDot(ctx, trackX(s, renderX), y, 13, COL.remote);
       ctx.fillStyle = interpT.on ? COL.remote : COL.bad;
-      ctx.font = '600 12px Inter, sans-serif'; ctx.textAlign = 'right';
+      ctx.font = '600 12px ' + SANS; ctx.textAlign = 'right';
       ctx.fillText(note, W - 44, 26);
     });
   }
@@ -293,7 +293,7 @@
       var trueX = truePos(t), seenX = shownPos(t, lag);
       // present (truth, faint) and what you see (solid)
       ctx.globalAlpha = 0.3; drawDot(ctx, trackX(s, trueX), y, 12, COL.mut); ctx.globalAlpha = 1;
-      ctx.fillStyle = COL.mut; ctx.font = '600 10px Inter, sans-serif'; ctx.textAlign = 'center';
+      ctx.fillStyle = COL.mut; ctx.font = '600 10px ' + SANS; ctx.textAlign = 'center';
       ctx.fillText('actually here', trackX(s, trueX), y + 26);
       drawDot(ctx, trackX(s, seenX), y, 13, COL.gold, 'you see');
 
@@ -312,7 +312,7 @@
         }
         if (t < shot.until) {
           ctx.fillStyle = shot.hit ? COL.remote : COL.bad;
-          ctx.font = '700 14px Inter, sans-serif'; ctx.textAlign = 'right';
+          ctx.font = '700 14px ' + SANS; ctx.textAlign = 'right';
           ctx.fillText(shot.hit ? 'HIT ✓' : 'MISS ✕', W - 44, 26);
         } else shot = null;
       }

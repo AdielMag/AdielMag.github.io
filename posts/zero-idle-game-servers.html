@@ -1,5 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<!-- --accent is the post's tag colour; it drives rules, links, captions and the
+     focus ring across the page, and it has to be here rather than set by JS so
+     the page reads right before (and without) scripts. -->
+<html lang="en" style="--accent:#ffd23f">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -24,7 +27,7 @@
   <meta name="twitter:image" content="https://adielmag.github.io/assets/img/og-card.jpg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 <body data-slug="zero-idle-game-servers">
@@ -39,14 +42,13 @@
 </nav>
 
 <header class="art-header">
-  <div class="art-header-glow"></div>
   <div class="art-header-inner">
     <div class="art-meta">
-      <span class="tag-cat" id="aTag"></span>
-      <span class="art-meta-time" id="aMeta">draft - not published yet</span>
+      <span class="tag-cat" id="aTag" style="background:rgba(255,210,63,0.14);color:#ffd23f">SERVER</span>
+      <span class="art-meta-time" id="aMeta">Jul 13, 2026 · 5 min read</span>
     </div>
-    <h1 class="art-title" id="aTitle"></h1>
-    <p class="art-sub" id="aSub"></p>
+    <h1 class="art-title" id="aTitle">Reaching $0 idle cost: serverless-style game servers on GCP</h1>
+    <p class="art-sub" id="aSub">A game with zero players should cost zero dollars. How a serverless controller sleeps the whole fleet - machines and networking - down to nothing, and wakes it on demand.</p>
     <div class="art-byline">
       <span class="art-avatar">AM</span>
       <div>
@@ -58,18 +60,14 @@
 </header>
 
 <div class="art-hero-wrap">
-  <div class="art-hero" id="aHero"></div>
+  <div class="art-hero" id="aHero" style="background-image:url('assets/img/splash-zero-idle-game-servers.jpg')"></div>
 </div>
 
 <article class="art-body-wrap">
   <div class="art-body-inner">
-    <div id="aContent"></div>
+    <div id="aContent"><div class="a-body"><p><strong>ClashUp</strong> is a real-time multiplayer brawler. That means real, dedicated servers: an authoritative game server running the match, and a services tier handling lobbies and matchmaking. It also means those servers want to run all the time - and right now, before launch, nobody is playing.</p><p>So here's the problem I set out to solve: <strong>a game with zero players should cost zero dollars to keep online.</strong> Not "cheap." Zero.</p><figure class="a-figure"><img src="assets/img/zeroidle-cost-ladder.svg" alt="Idle cost broken down into three descending steps: ~$146/mo always-on, ~$25/mo with compute asleep, $0/mo fully asleep"><figcaption class="a-figcap">Idle cost broken down into three descending steps: ~$146/mo always-on, ~$25/mo with compute asleep, $0/mo fully asleep</figcaption></figure><p>That's the whole argument in one picture. A naive always-on fleet bills for everything, 24/7. Putting the machines to sleep gets most of the way there. Getting from "cheap" to actually <strong>$0</strong> took a second pass.</p><h2>Why "just autoscale to zero" doesn't exist</h2><p>The obvious move is to let the autoscaler handle it: no players, no instances. On Google Cloud, managed instance groups don't work that way. The autoscaler has a floor. It will happily scale <em>up</em> under load, but it won't take a group below one instance. There's always a machine idling, waiting for traffic that isn't coming.</p><p>And even if the machines were free, the fleet leaves a second bill running. A few networking pieces keep charging whether or not anything is behind them: the entry point the load balancer exposes to the world, the reserved IP addresses the fleet hands out, and the egress gateway the servers use to reach the database. None of those care that the instance count is zero. They bill for simply existing.</p><h2>The idea: an external brain that <em>can</em> scale to zero</h2><p>If the fleet itself can't reach zero, something outside the fleet has to switch it off - and that something has to be genuinely free when it's not doing anything.</p><p>That's a <strong>serverless controller</strong>: a tiny always-reachable service that scales to zero on its own, costs effectively nothing at rest, and wakes up only long enough to flip the rest of the fleet on or off.</p><figure class="a-figure"><img src="assets/img/zeroidle-lifecycle.svg" alt="State diagram: a controller flips the fleet between an AWAKE state (instances running, costs money) and an ASLEEP state (scaled to zero, $0/month), triggered by an idle check and by a returning player"><figcaption class="a-figcap">State diagram: a controller flips the fleet between an AWAKE state (instances running, costs money) and an ASLEEP state (scaled to zero, $0/month), triggered by an idle check and by a returning player</figcaption></figure><p>The controller only ever makes one of two decisions. A scheduled check asks whether anyone has been connected recently, and puts the fleet under if not - with a generous window, because a match ending and the next one starting should never look like "idle." The other decision is the reverse: a real player needs the fleet, so bring it back.</p><p>Everything else - the whole matchmaking-and-brawling machine - lives on one side of that switch.</p><h2>What "asleep" actually means</h2><p>Scaling the compute to zero only gets you to the middle rung of that ladder, because all the networking is still billing.</p><p>To reach true $0, sleeping has to tear down <strong>both</strong>: the compute <em>and</em> the idle-billing networking. And waking has to put both back. So in this system, "asleep" is a fleet with no instances and no entry point, no reserved IPs, no egress gateway - nothing left that a billing meter can find. "Awake" rebuilds all of it. Tearing the networking down and standing it back up is the unglamorous half, and it's exactly the half standing between "$25 a month" and "nothing."</p><h2>Releasing the IPs costs you a stable address</h2><p>That's the catch, and it's worth stating plainly: <strong>the fleet's address is no longer stable.</strong> Sleep, and it's gone. Wake, and a fresh one gets allocated. So the client can't just bake a server address into the build.</p><p>The fix drops out of the design instead of fighting it. The always-reachable controller is already the one thing guaranteed to be up, so at boot, the client simply asks it <em>"where do I connect?"</em> That request does double duty: it hands back the current address, and if the fleet happens to be asleep, it wakes it on the way.</p><figure class="a-figure"><img src="assets/img/zeroidle-architecture.svg" alt="Architecture diagram: a Unity client asks a serverless Fleet Controller for the connection address; the controller turns the Services and GameServer fleets on and off, builds and tears down the billing networking, and re-allowlists the egress IP with MongoDB Atlas"><figcaption class="a-figcap">Architecture diagram: a Unity client asks a serverless Fleet Controller for the connection address; the controller turns the Services and GameServer fleets on and off, builds and tears down the billing networking, and re-allowlists the egress IP with MongoDB Atlas</figcaption></figure><p>The controller ends up as the only public, always-on piece. It owns the lifecycle - instances on and off, networking up and down - and because the egress IP is rebuilt on every wake, it also re-introduces the fleet to the database's allowlist so the servers can reach their data again. The client never talks to any of that machinery directly. It asks one question and gets an address back.</p><h2>The payoff, and the honest tradeoffs</h2><p>Idle cost lands where I wanted it: <strong>$0</strong>. When nobody's playing, there is genuinely nothing running and nothing billing but a serverless endpoint that's also asleep.</p><p>It isn't free of tradeoffs, and I'd rather be straight about them. Waking isn't instant - the first player back pays a cold start of a couple of minutes while the fleet spins up. For a pre-launch game that's a fine price; for a live one with players arriving around the clock, I'd keep a small "doorman" always on to absorb it. And a fully asleep fleet is woken deliberately rather than magically, which is a choice I made for maximum savings while there are no real players to surprise.</p><p>None of this makes the game better to play. But it means I can leave a real, authoritative multiplayer backend deployed indefinitely, through all the quiet weeks of solo development, without watching a cloud bill tick up for a fleet that nobody is using. The cold start is the thing I'll have to revisit on launch day.</p><p><em>More ClashUp devlog posts - the netcode, the deterministic physics, the tooling - are on the <a href="index.html#articles">article list</a>.</em></p></div></div>
   </div>
 </article>
-
-<div class="reactions">
-  <div class="reactions-inner" id="aReactions"></div>
-</div>
 
 <div class="art-foot">
   <div class="art-foot-inner">
@@ -112,9 +110,6 @@
 
 <script src="assets/js/articles.js"></script>
 <script src="assets/js/markdown.js"></script>
-<script src="assets/js/demo-kit.js"></script>
-<script src="assets/js/netcode-demos.js"></script>
-<script src="assets/js/quant-demos.js"></script>
 <script src="assets/js/article.js"></script>
 </body>
 </html>

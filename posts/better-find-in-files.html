@@ -1,5 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<!-- --accent is the post's tag colour; it drives rules, links, captions and the
+     focus ring across the page, and it has to be here rather than set by JS so
+     the page reads right before (and without) scripts. -->
+<html lang="en" style="--accent:#c9c2d6">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -24,7 +27,7 @@
   <meta name="twitter:image" content="https://adielmag.github.io/assets/img/og-card.jpg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 <body data-slug="better-find-in-files">
@@ -39,14 +42,13 @@
 </nav>
 
 <header class="art-header">
-  <div class="art-header-glow"></div>
   <div class="art-header-inner">
     <div class="art-meta">
-      <span class="tag-cat" id="aTag"></span>
-      <span class="art-meta-time" id="aMeta">draft - not published yet</span>
+      <span class="tag-cat" id="aTag" style="background:rgba(201,194,214,0.14);color:#c9c2d6">ENGINE</span>
+      <span class="art-meta-time" id="aMeta">Aug 10, 2026 · 6 min read</span>
     </div>
-    <h1 class="art-title" id="aTitle"></h1>
-    <p class="art-sub" id="aSub"></p>
+    <h1 class="art-title" id="aTitle">I missed Rider's Find in Files, so I rebuilt it for VS Code</h1>
+    <p class="art-sub" id="aSub">A VS Code extension with a floating Rider-style search modal: four modes in one shortcut, results streamed from the ripgrep VS Code already ships, and semantic usages from your language server.</p>
     <div class="art-byline">
       <span class="art-avatar">AM</span>
       <div>
@@ -58,18 +60,16 @@
 </header>
 
 <div class="art-hero-wrap">
-  <div class="art-hero" id="aHero"></div>
+  <div class="art-hero" id="aHero" style="background-image:url('assets/img/splash-better-find-in-files.jpg')"></div>
 </div>
 
 <article class="art-body-wrap">
   <div class="art-body-inner">
-    <div id="aContent"></div>
+    <div id="aContent"><div class="a-body"><p>I spent years in JetBrains Rider. Then most of my day-to-day moved to VS Code - AI tooling, the web stack, the server side of ClashUp - and one thing kept snagging me every single hour: <strong>search</strong>.</p><p>Not because VS Code's search is bad. It's fine. It's just <em>stuck to the side of the window</em>, results are a squished tree in a 300px panel, and previewing a hit means opening the file and losing your place. In Rider, Find in Files is a big centered modal with a real code preview, and you can shove it onto a second monitor. Muscle memory kept reaching for that and hitting a sidebar instead.</p><p>So I built <a href="https://github.com/AdielMag/better-find-in-files"><strong>Better Find in Files</strong></a> - a VS Code extension that brings the Rider-style Find &amp; Replace experience over. TypeScript, MIT, on the Marketplace and Open VSX.</p><figure class="a-figure"><img src="assets/img/bfif-modes.svg" alt="One query fans out to three engines - ripgrep for text, a fuzzy path scorer for files, and the language server for symbols - merged into one result list with a live preview pane"><figcaption class="a-figcap">One query fans out to three engines - ripgrep for text, a fuzzy path scorer for files, and the language server for symbols - merged into one result list with a live preview pane</figcaption></figure><h2>One shortcut, four modes</h2><p><code>Ctrl+Shift+F</code> opens a panel with a tab bar: <strong>Text</strong>, <strong>Files</strong>, <strong>Symbols</strong>, <strong>All</strong>. Text is content search backed by ripgrep, Files is fuzzy filename and path search, Symbols asks your language server for workspace symbols, and All runs the three and returns one sectioned list.</p><p>That last one is the mode I actually live in. Most of the time I don't know <em>what kind</em> of thing I'm looking for - is <code>MatchmakingQueue</code> a class, a file, or a string in a config? In VS Code that's three different keybindings and three different UIs. Here it's one query and three labelled sections.</p><p>The fuzzy scorer for Files is deliberately dumb and deliberately fast: an exact substring wins outright (scored by how late in the path it appears, so <code>queue.ts</code> beats <code>queue/legacy/old.ts</code>), and otherwise the query characters just have to appear in order, scored by how tightly they cluster. Consecutive matches are worth more than scattered ones. That's the whole algorithm, and it's indistinguishable from something cleverer at the sizes real repos actually are.</p><h2>The search itself: borrow VS Code's own ripgrep</h2><p>Search performance was the part I refused to compromise on, and it turned out to require almost no work - because <strong>VS Code already ships ripgrep</strong>. It's sitting in the install directory powering the built-in search. So on startup the extension goes looking for it:</p><pre><code>appRoot/node_modules.asar.unpacked/@vscode/ripgrep/bin/rg[.exe]
+appRoot/node_modules/@vscode/ripgrep/bin/rg[.exe]
+appRoot/node_modules.asar.unpacked/vscode-ripgrep/bin/rg[.exe]</code></pre><p>Three candidate paths, first hit wins, then a <code>require('@vscode/ripgrep')</code> as a last resort. No binary bundled, no download step, nothing to keep in sync with anyone's platform.</p><figure class="a-figure"><img src="assets/img/bfif-pipeline.svg" alt="Results stream from ripgrep's stdout into the panel line by line, with a safe fallback to the VS Code search API when the binary is missing"><figcaption class="a-figcap">Results stream from ripgrep's stdout into the panel line by line, with a safe fallback to the VS Code search API when the binary is missing</figcaption></figure><p>Results <strong>stream</strong>. The extension spawns <code>rg --vimgrep</code>, and every chunk of stdout is split on newlines, parsed, and pushed to the panel - with one leftover partial line carried into the next chunk, because a process boundary lands mid-line far more often than you'd guess. You see the first hits while ripgrep is still working through the rest of the repo, and cancelling just kills the child process.</p><p>Two details cost more thought than they deserved.</p><p>The first is Windows paths. ripgrep's <code>--vimgrep</code> output is <code>path:line:col:text</code>, and you parse it by splitting on <code>:</code>. On Windows, <code>C:\src\Foo.cs:42:8:...</code> has a colon in the drive letter, so a naive split hands you a file called <code>C</code> on line <code>\src\Foo.cs</code>. The parser sniffs for that case and re-joins the first two fields.</p><p>The second is the fallback. If ripgrep isn't found, or the spawn fails, or it errors mid-run, the whole thing falls back to <code>vscode.workspace.findFiles</code> plus a regex sweep - slower, but it works everywhere, and it means a weird VS Code install degrades instead of breaking. Non-regex queries get escaped, whole-word wraps in <code>\b</code>, so both engines answer the same question the same way.</p><h2>Making a webview act like a window</h2><p>The Rider feel isn't only about the search - it's that the panel is a real floating window you can park on a second monitor. VS Code gives you exactly one lever for that: <code>workbench.action.moveEditorToNewWindow</code>. So the panel opens as a normal webview editor and then, on a short timer, detaches itself into its own OS window.</p><p>Living in that space turned up three sharp edges.</p><p>Capture the editor state <em>before</em> creating the panel. The moment a webview takes focus, <code>vscode.window.activeTextEditor</code> goes <code>undefined</code>, so if you wait until after the panel exists to grab the current selection and seed the search box, it's already gone.</p><p>Never pass a view column when re-revealing. Passing one yanks an already-floated panel back out of its window and into the main one. <code>reveal()</code> with no arguments leaves it where the user put it.</p><p>And focus needs saying twice. The panel posts a <code>focusInput</code> message at 100ms and again at 300ms after opening, and again whenever the panel becomes active. One message is reliably too early: it lands before the webview's DOM is listening, and you get a floating search box that ignores your typing.</p><p>The result: hit the shortcut, start typing immediately, hit it again to toggle the panel closed.</p><h2>The two features I now can't work without</h2><p>Explorer highlighting came first. Files matching the current query get badged in VS Code's Explorer tree, live, as you type. Search a symbol and the file tree quietly tells you the shape of the answer - which folders it's in, how spread out it is - before you read a single result.</p><p>The other is a Usages CodeLens. In Rider I click a method name to see its usages. That gesture can't be intercepted by an extension - Ctrl/Alt+Click is handled entirely inside VS Code's core editor, with no hook to hang anything on. So instead a clickable <code>Usages</code> lens sits above every function, class, method, property, and enum declaration (pulled from the document symbol provider, walked recursively so nested members get one too). Clicking it opens the panel with the symbol pre-filled, showing <strong>real semantic references from the language server</strong> - not text matches that also hit comments and unrelated same-named things.</p><p>There's also a file-type filter that scans your workspace for the extensions actually present, frequency-sorted, cached in workspace state for a week. And an editable preview pane: fix the typo you just found in the preview, <code>Ctrl+S</code>, done, without ever opening the file.</p><h2>Mostly assembly</h2><p>For a tool I use several hundred times a day, the payback was immediate. What surprised me was how little of it I actually wrote. The fast search engine was already installed. The symbol index was already running. The semantic reference data was already there behind the language server. Nearly all of the real work was in the seams: parsing a colon-delimited format on the one OS where colons are ambiguous, and convincing a webview to behave like a window.</p><p>Grab it from the <a href="https://github.com/AdielMag/better-find-in-files">repo</a> - issues and PRs welcome.</p><p><em>More devlog - netcode, servers, tooling - on the <a href="index.html#articles">article list</a>.</em></p></div></div>
   </div>
 </article>
-
-<div class="reactions">
-  <div class="reactions-inner" id="aReactions"></div>
-</div>
 
 <div class="art-foot">
   <div class="art-foot-inner">
@@ -112,9 +112,6 @@
 
 <script src="assets/js/articles.js"></script>
 <script src="assets/js/markdown.js"></script>
-<script src="assets/js/demo-kit.js"></script>
-<script src="assets/js/netcode-demos.js"></script>
-<script src="assets/js/quant-demos.js"></script>
 <script src="assets/js/article.js"></script>
 </body>
 </html>

@@ -18,7 +18,7 @@
   var tapButton = K.tapButton, slider = K.slider;
   var frame = K.frame, stage = K.stage, controls = K.controls, caption = K.caption, loop = K.loop;
 
-  var SANS = "'Space Grotesk', system-ui, sans-serif";
+  var SANS = K.SANS;
   var MONO = "'JetBrains Mono', ui-monospace, monospace";
 
   // standard-normal CDF (Abramowitz & Stegun 26.2.17) - turns a z-score into

@@ -56,11 +56,11 @@ window.PROJECTS = {
       { label: 'Google Play', href: 'https://play.google.com/store/apps/details?id=com.comunix.pokerface', kind: 'android' },
     ],
     shots: [
-      'assets/img/shots/pokerface_1.png',
-      'assets/img/shots/pokerface_2.png',
-      'assets/img/shots/pokerface_3.png',
-      'assets/img/shots/pokerface_4.png',
-      'assets/img/shots/pokerface_5.png',
+      'assets/img/shots/pokerface_1.jpg',
+      'assets/img/shots/pokerface_2.jpg',
+      'assets/img/shots/pokerface_3.jpg',
+      'assets/img/shots/pokerface_4.jpg',
+      'assets/img/shots/pokerface_5.jpg',
     ],
   },
 

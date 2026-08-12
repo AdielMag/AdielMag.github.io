@@ -9,10 +9,17 @@
 (function () {
   'use strict';
 
+  // Straight off the site tokens in assets/css/styles.css - the demos are part
+  // of this site, not a different one.
   var COL = {
-    you: '#ff6b4a', server: '#4da3ff', remote: '#3fb950', gold: '#ffd23f',
-    purple: '#a371f7', bad: '#f85149', mut: '#8b98a5', ink: '#e6edf3', line: '#2a2733',
+    you: '#ff6b4a', server: '#6cb6ff', remote: '#7cf29c', gold: '#ffd23f',
+    purple: '#a78bfa', bad: '#ff6b4a', mut: '#9a92a8', ink: '#f4f1ea', line: '#2a2733',
   };
+
+  // Canvas text can't use var(), so the stack is spelled out. It must stay in
+  // step with --sans; drawing in a font the page never loads is how these
+  // labels ended up in a different typeface from the prose.
+  var SANS = "'Space Grotesk', system-ui, -apple-system, sans-serif";
 
   function clamp(v, a, b) { return v < a ? a : v > b ? b : v; }
   function lerp(a, b, t) { return a + (b - a) * t; }
@@ -29,12 +36,25 @@
   function holdButton(label, onDown, onUp) {
     var b = el('button', 'demo-btn', label);
     b.type = 'button';
-    var down = function (e) { e.preventDefault(); b.classList.add('pressed'); onDown(); };
-    var up = function () { b.classList.remove('pressed'); if (onUp) onUp(); };
+    var held = false;
+    var down = function (e) {
+      if (e && e.preventDefault) e.preventDefault();
+      if (held) return;
+      held = true; b.classList.add('pressed'); onDown();
+    };
+    var up = function () {
+      if (!held) return;
+      held = false; b.classList.remove('pressed'); if (onUp) onUp();
+    };
     b.addEventListener('pointerdown', down);
     b.addEventListener('pointerup', up);
     b.addEventListener('pointerleave', up);
     b.addEventListener('pointercancel', up);
+    // Enter/Space hold the button for as long as the key is held, so the demo
+    // is drivable without a pointer. Key repeat is why `held` guards re-entry.
+    b.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') down(e); });
+    b.addEventListener('keyup', function (e) { if (e.key === 'Enter' || e.key === ' ') up(); });
+    b.addEventListener('blur', up);
     return b;
   }
 
@@ -71,9 +91,15 @@
     return wrap;
   }
 
+  // The most recently built demo root. Every demo calls frame() and then loop()
+  // synchronously, so loop() can bind to the widget it belongs to without every
+  // call site having to pass it.
+  var currentRoot = null;
+
   function frame(host, cls) {
     var wrap = el('div', 'demo ' + (cls || ''));
     host.appendChild(wrap);
+    currentRoot = wrap;
     return wrap;
   }
 
@@ -96,7 +122,14 @@
     }
     s.resize = resize;
     window.addEventListener('resize', resize);
-    setTimeout(resize, 0);
+    // If the demo is ever torn out of the page, take its listener with it.
+    if (typeof ResizeObserver === 'function') {
+      var ro = new ResizeObserver(resize);
+      ro.observe(box);
+      s.stop = function () { ro.disconnect(); window.removeEventListener('resize', resize); };
+    } else {
+      s.stop = function () { window.removeEventListener('resize', resize); };
+    }
     resize();
     return s;
   }
@@ -111,7 +144,7 @@
     ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2);
     ctx.fillStyle = color; ctx.fill();
     if (label) {
-      ctx.fillStyle = COL.ink; ctx.font = '600 11px Inter, sans-serif';
+      ctx.fillStyle = COL.ink; ctx.font = '600 11px ' + SANS;
       ctx.textAlign = 'center'; ctx.fillText(label, x, y - r - 6);
     }
   }
@@ -122,7 +155,7 @@
   }
 
   function tag(ctx, x, y, text, color) {
-    ctx.fillStyle = color; ctx.font = '700 10.5px Inter, sans-serif';
+    ctx.fillStyle = color; ctx.font = '700 10.5px ' + SANS;
     ctx.textAlign = 'left'; ctx.fillText(text, x, y);
   }
 
@@ -136,18 +169,83 @@
     ctx.closePath();
   }
 
+  var reduceMotion = window.matchMedia
+    ? window.matchMedia('(prefers-reduced-motion: reduce)')
+    : { matches: false };
+
+  /* An animation loop that only runs when it's worth running: the widget is on
+     screen, the tab is visible, and the reader hasn't asked for less motion.
+     Four of these used to run forever on one article page.
+
+     Under prefers-reduced-motion the demo isn't dead - it draws one frame so
+     there's something to look at, and wakes for a short burst whenever the
+     reader touches a control, so the sliders and buttons still do something. */
   function loop(fn) {
+    var root = currentRoot;
     var last = now();
-    function tick() {
-      var t = now(); var dt = Math.min(64, t - last); last = t;
-      fn(t, dt);
-      requestAnimationFrame(tick);
+    var running = false;
+    var onScreen = !root; // no root to observe -> assume visible
+    var rafId = 0;
+    var burstUntil = 0;
+
+    function step(animate) {
+      var t = now();
+      var dt = Math.min(64, t - last);
+      last = t;
+      fn(t, animate ? dt : 0);
     }
-    requestAnimationFrame(tick);
+
+    function tick() {
+      step(true);
+      if (reduceMotion.matches && now() > burstUntil) { running = false; rafId = 0; return; }
+      rafId = requestAnimationFrame(tick);
+    }
+
+    function shouldRun() {
+      if (document.hidden || !onScreen) return false;
+      return !reduceMotion.matches || now() <= burstUntil;
+    }
+
+    function sync() {
+      if (shouldRun()) {
+        if (running) return;
+        running = true;
+        last = now();
+        rafId = requestAnimationFrame(tick);
+      } else if (running) {
+        running = false;
+        if (rafId) cancelAnimationFrame(rafId);
+        rafId = 0;
+      }
+    }
+
+    // one frame up front so the widget is never a blank rectangle
+    step(false);
+
+    if (root && typeof IntersectionObserver === 'function') {
+      new IntersectionObserver(function (entries) {
+        onScreen = entries[entries.length - 1].isIntersecting;
+        sync();
+      }, { rootMargin: '120px' }).observe(root);
+    } else {
+      onScreen = true;
+    }
+
+    document.addEventListener('visibilitychange', sync);
+    if (reduceMotion.addEventListener) reduceMotion.addEventListener('change', sync);
+
+    if (root) {
+      // a control was touched - animate briefly so the interaction reads
+      ['input', 'click', 'pointerdown', 'keydown'].forEach(function (evt) {
+        root.addEventListener(evt, function () { burstUntil = now() + 1200; sync(); });
+      });
+    }
+
+    sync();
   }
 
   window.DemoKit = {
-    COL: COL, clamp: clamp, lerp: lerp, now: now, el: el,
+    COL: COL, SANS: SANS, clamp: clamp, lerp: lerp, now: now, el: el,
     holdButton: holdButton, tapButton: tapButton, toggle: toggle, slider: slider,
     frame: frame, stage: stage, controls: controls, caption: caption,
     trackX: trackX, drawDot: drawDot, laneLine: laneLine, tag: tag, roundRect: roundRect, loop: loop,

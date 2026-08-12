@@ -1,5 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<!-- --accent is the post's tag colour; it drives rules, links, captions and the
+     focus ring across the page, and it has to be here rather than set by JS so
+     the page reads right before (and without) scripts. -->
+<html lang="en" style="--accent:#ffd23f">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -24,7 +27,7 @@
   <meta name="twitter:image" content="https://adielmag.github.io/assets/img/og-card.jpg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 <body data-slug="version-aware-gateway">
@@ -39,14 +42,13 @@
 </nav>
 
 <header class="art-header">
-  <div class="art-header-glow"></div>
   <div class="art-header-inner">
     <div class="art-meta">
-      <span class="tag-cat" id="aTag"></span>
-      <span class="art-meta-time" id="aMeta">draft - not published yet</span>
+      <span class="tag-cat" id="aTag" style="background:rgba(255,210,63,0.14);color:#ffd23f">SERVER</span>
+      <span class="art-meta-time" id="aMeta">Jul 13, 2026 · 4 min read</span>
     </div>
-    <h1 class="art-title" id="aTitle"></h1>
-    <p class="art-sub" id="aSub"></p>
+    <h1 class="art-title" id="aTitle">The version-aware gateway: shipping without kicking anyone off</h1>
+    <p class="art-sub" id="aSub">Updating a live multiplayer game usually means downtime or a forced update. How treating each game version as a container behind one router lets old and new builds run side-by-side.</p>
     <div class="art-byline">
       <span class="art-avatar">AM</span>
       <div>
@@ -58,18 +60,14 @@
 </header>
 
 <div class="art-hero-wrap">
-  <div class="art-hero" id="aHero"></div>
+  <div class="art-hero" id="aHero" style="background-image:url('assets/img/splash-version-aware-gateway.jpg')"></div>
 </div>
 
 <article class="art-body-wrap">
   <div class="art-body-inner">
-    <div id="aContent"></div>
+    <div id="aContent"><div class="a-body"><p>Updating a live multiplayer game is scarier than it sounds. The client and the server have to agree - on the shape of every message, on the rules of the simulation, on what each byte means. Change the server and suddenly every player still running yesterday's build is talking to something that no longer understands them.</p><p>The usual answers are all a bit grim: a maintenance window that boots everyone off, a forced update that won't let anyone play until they download the new build, or a careful blue-green dance of spinning up parallel fleets of machines. For a solo pre-launch project, I wanted none of that. So <strong>ClashUp</strong> treats a game version as a disposable container image, and puts a small router in front that speaks every version at once.</p><h2>A version is a container, not a machine</h2><p>The server isn't "the server." Each <em>version</em> of the game server is its own container image, tagged with the build it was compiled from - <code>:1.0.1</code>, <code>:1.0.2</code>, and so on. In front of them sits one long-lived <strong>gateway</strong>.</p><p>Every request a client makes carries its build version in a header. The gateway reads that header and forwards the request to a backend running <em>exactly</em> that version, spawning one on demand if it isn't already up. Internal server-to-server traffic arrives with no version header, so it routes to a default (<code>latest</code>).</p><figure class="a-figure"><img src="assets/img/gateway-router.svg" alt="One gateway reads each client's version header and routes them to a backend container for exactly that version, spawned on demand"><figcaption class="a-figcap">One gateway reads each client's version header and routes them to a backend container for exactly that version, spawned on demand</figcaption></figure><p>The consequence is the quietly powerful bit: <strong>two builds never have to agree on anything.</strong> A player on 1.0.1 talks to a 1.0.1 backend; a player on 1.0.2 talks to a 1.0.2 backend. They can differ in physics, in rules, in message formats, because they never share a process. The only contract that has to stay stable is the thin one between the client and the gateway itself.</p><h2>Shipping a new version</h2><p>Because versions are just images, a deploy is almost boring - which is exactly what you want.</p><figure class="a-figure"><img src="assets/img/gateway-release.svg" alt="A release timeline: push 1.0.2 to the registry, old 1.0.1 players keep their warm backend, new players get a 1.0.2 backend spawned side-by-side, the old one idle-evicts after 30 minutes"><figcaption class="a-figcap">A release timeline: push 1.0.2 to the registry, old 1.0.1 players keep their warm backend, new players get a 1.0.2 backend spawned side-by-side, the old one idle-evicts after 30 minutes</figcaption></figure><p>Push the new image to the registry. No machines change, nothing restarts, and the players already in a match on the old version don't feel a thing. When the first player on the new build connects, the gateway sees a version it isn't running yet and spins up a backend for it, right alongside the old one. Then, as the last players on the old version drift away, that backend sits idle and evicts itself after about half an hour. No one schedules its death.</p><p>There's no maintenance window because nothing goes down, and no forced update because the old build keeps working for as long as people are on it. Rollback is a non-event too: if a new build is bad, the players on the old version were never migrated onto it in the first place, so there's nothing to undo.</p><h2>What happens to a client that's <em>too</em> old</h2><p>Not every old version can live forever. When a build finally ages out and stops being served, a client on it doesn't get a cryptic crash. It gets a clean, specific answer: the gateway replies with a "your version isn't supported, please update" signal and lists which versions <em>are</em> live, so the client can show a friendly update screen instead of silently failing.</p><h2>One image, two jobs</h2><p>There's a smaller trick hiding in here that saves a lot of maintenance. The lobby and matchmaking side of the game and the in-match game-server side are <em>the same gateway image</em>. They differ only in configuration: which ports, which backend images, whether to pre-warm. One thing to build, one thing to reason about, one thing that can break, running in two roles.</p><h2>The tradeoffs</h2><p>This isn't free. The first player to reach a brand-new version pays a small cold-start while the gateway spins that backend up. And the whole scheme leans hard on that thin client-to-gateway contract staying stable - the routing layer is the one seam you have to keep backwards-compatible, forever. Every message I add to it now, I add knowing I'm stuck with its shape.</p><p>What it buys, from nothing more than pushing an image to a registry, is gradual rollouts, coexisting versions, instant rollback, and deploys nobody has to be awake for.</p><p><em>More from the ClashUp devlog - the netcode, the physics, the $0-idle fleet - on the <a href="index.html#articles">article list</a>.</em></p></div></div>
   </div>
 </article>
-
-<div class="reactions">
-  <div class="reactions-inner" id="aReactions"></div>
-</div>
 
 <div class="art-foot">
   <div class="art-foot-inner">
@@ -112,9 +110,6 @@
 
 <script src="assets/js/articles.js"></script>
 <script src="assets/js/markdown.js"></script>
-<script src="assets/js/demo-kit.js"></script>
-<script src="assets/js/netcode-demos.js"></script>
-<script src="assets/js/quant-demos.js"></script>
 <script src="assets/js/article.js"></script>
 </body>
 </html>

@@ -1,5 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<!-- --accent is the post's tag colour; it drives rules, links, captions and the
+     focus ring across the page, and it has to be here rather than set by JS so
+     the page reads right before (and without) scripts. -->
+<html lang="en" style="--accent:#6cb6ff">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -24,7 +27,7 @@
   <meta name="twitter:image" content="https://adielmag.github.io/assets/img/og-card.jpg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 <body data-slug="when-95-cents-is-cheap">
@@ -39,14 +42,13 @@
 </nav>
 
 <header class="art-header">
-  <div class="art-header-glow"></div>
   <div class="art-header-inner">
     <div class="art-meta">
-      <span class="tag-cat" id="aTag"></span>
-      <span class="art-meta-time" id="aMeta">draft - not published yet</span>
+      <span class="tag-cat" id="aTag" style="background:rgba(108,182,255,0.14);color:#6cb6ff">QUANT</span>
+      <span class="art-meta-time" id="aMeta">Jul 13, 2026 · 4 min read</span>
     </div>
-    <h1 class="art-title" id="aTitle"></h1>
-    <p class="art-sub" id="aSub"></p>
+    <h1 class="art-title" id="aTitle">When 95¢ is cheap: pricing near-certainty with a z-score</h1>
+    <p class="art-sub" id="aSub">A prediction market price is a probability claim - and sometimes it’s wrong by a measurable amount. How a random-walk z-score decides when the last few cents are underpriced.</p>
     <div class="art-byline">
       <span class="art-avatar">AM</span>
       <div>
@@ -58,18 +60,18 @@
 </header>
 
 <div class="art-hero-wrap">
-  <div class="art-hero" id="aHero"></div>
+  <div class="art-hero" id="aHero" style="background-image:url('assets/img/splash-when-95-cents-is-cheap.jpg')"></div>
 </div>
 
 <article class="art-body-wrap">
   <div class="art-body-inner">
-    <div id="aContent"></div>
+    <div id="aContent"><div class="a-body"><p>Polymarket runs crypto resolution markets on a loop: <em>will BTC close this 15-minute window above where it opened?</em> YES and NO tokens trade between 0 and $1, the winner redeems for exactly $1, and a new market starts every quarter hour, all day, forever.</p><p>Late in a window, when BTC is sitting well above the open, YES trades at 95–99¢. Buying at 97¢ to collect $1.00 a few minutes later is a 3% return in minutes - <em>if</em> you're right. The entire strategy of my bot, <strong>MoneyMaker</strong>, reduces to one question asked over and over: the market says 97%. Is the real number higher?</p><p>Unlike almost everything else in trading, that question is answerable with math a physics undergrad would recognize.</p><h2>The market prices the token. I price the asset.</h2><p>The token's price is a crowd's opinion. But the event it resolves on is purely mechanical: BTC's spot price versus a fixed strike, at a fixed time. So instead of modeling the crowd, model the asset. Over minutes, BTC's price is a decent random walk, and a random walk's expected wander in the remaining time <code>T</code> is <code>σ√T</code>, where σ is its current volatility. That gives a natural yardstick:</p><pre><code>z = lead / (σ√T)
+
+lead = how far BTC is past the strike, in dollars
+σ√T  = how far normal volatility could move it
+       in the time remaining</code></pre><p>The z-score is the distance to disaster measured in units of plausible movement, and it converts straight into probability: <code>z = 1.64</code> means ~95% the outcome holds, <code>2.0</code> means ~97.7%, <code>3.0</code> is near certainty.</p><p>That conversion is what turns a price into a verdict. If YES trades at 95¢, the market is implicitly claiming <code>z ≈ 1.64</code>. When my measured z is 2.0 or higher, the market is <em>underpricing</em> certainty, and the bot buys those last few cents. The entry gate is exactly that: <strong>enter only when measured z ≥ 2.0 while the price still implies ~1.64.</strong></p><figure class="a-figure"><img src="assets/img/rss-zscore.svg" alt="The Resolution Safety Score: BTC's lead over the strike, divided by the volatility cone that could still close the gap in the remaining time"><figcaption class="a-figcap">The Resolution Safety Score: BTC's lead over the strike, divided by the volatility cone that could still close the gap in the remaining time</figcaption></figure><div class="demo-mount" data-demo="zscore"><p class="demo-fallback">There's an interactive demo here - it needs JavaScript.</p></div><h2>The five lines of theory need fifty lines of armor</h2><p>Everything above fits on an index card. What made it <em>tradeable</em> was defending each variable from real-world data quality, and each defense earned its place by failing without it.</p><p>σ is measured rather than assumed: the realized volatility of the last 90 seconds of ticks, each price move scaled by <code>√Δt</code> so irregular tick spacing doesn't bias it. One flash wick would poison the estimate, so moves beyond 5× the RMS get winsorized out before the final figure, and the result is clamped into bounds that scale with the asset's price - never zero, never absurd.</p><p>The lead gets smoothed too. The current price runs through an EMA before the lead is computed, because a single stale or noisy tick at exactly the wrong moment could spike z past the gate and buy the whole balance. No single tick is allowed to make that decision alone.</p><p>Time gets a floor. <code>√T</code> with seconds-to-zero explodes the z-score just before resolution - mathematically true, practically the most dangerous moment to trust it. The remaining time never counts below one second, and separate guards stop entries in the final half-minute anyway.</p><p>And cheap certainty has to age. Alongside z, the signal tracks how long the price has already held above the entry threshold. A 97¢ that's three seconds old gets its score halved; one that's held for fifteen gets trusted. A number that just appeared is a number I don't believe yet.</p><h2>A model as a gate, not an oracle</h2><p>On the dashboard all of this collapses into one violet line - the Resolution Safety Score, 0–100 - drawn over the live BTC chart. It actually <em>replaced</em> two earlier overlays from a more complicated era of the bot: an orderbook manipulation index and an "edge" estimate. Both were smarter on paper. Neither survived contact with the recorded data as cleanly as lead-over-expected-move.</p><p>The choice that made this work is that the model never <em>finds</em> trades, it only <strong>vetoes</strong> them. The market proposes - a price crosses 97¢ - and the z-score disposes. Used that way, a crude model's errors mostly cost you missed trades instead of lost money.</p><p>The random walk is wrong about BTC in a dozen well-documented ways, and it doesn't matter, because it's only ever asked one modest question: is normal volatility big enough to flip this outcome in the next few minutes?</p><p><em>More from the MoneyMaker devlog - the last-20-seconds casino and the SOL bug that was a dollar sign - on the <a href="index.html#articles">article list</a>.</em></p></div></div>
   </div>
 </article>
-
-<div class="reactions">
-  <div class="reactions-inner" id="aReactions"></div>
-</div>
 
 <div class="art-foot">
   <div class="art-foot-inner">
@@ -113,7 +115,6 @@
 <script src="assets/js/articles.js"></script>
 <script src="assets/js/markdown.js"></script>
 <script src="assets/js/demo-kit.js"></script>
-<script src="assets/js/netcode-demos.js"></script>
 <script src="assets/js/quant-demos.js"></script>
 <script src="assets/js/article.js"></script>
 </body>

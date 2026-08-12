@@ -1,5 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<!-- --accent is the post's tag colour; it drives rules, links, captions and the
+     focus ring across the page, and it has to be here rather than set by JS so
+     the page reads right before (and without) scripts. -->
+<html lang="en" style="--accent:#a78bfa">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -24,7 +27,7 @@
   <meta name="twitter:image" content="https://adielmag.github.io/assets/img/og-card.jpg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 <body data-slug="stop-loss-depth-check">
@@ -39,14 +42,13 @@
 </nav>
 
 <header class="art-header">
-  <div class="art-header-glow"></div>
   <div class="art-header-inner">
     <div class="art-meta">
-      <span class="tag-cat" id="aTag"></span>
-      <span class="art-meta-time" id="aMeta">draft - not published yet</span>
+      <span class="tag-cat" id="aTag" style="background:rgba(167,139,250,0.14);color:#a78bfa">TRADING</span>
+      <span class="art-meta-time" id="aMeta">Jul 13, 2026 · 4 min read</span>
     </div>
-    <h1 class="art-title" id="aTitle"></h1>
-    <p class="art-sub" id="aSub"></p>
+    <h1 class="art-title" id="aTitle">Stop-losses that don't trust the price</h1>
+    <p class="art-sub" id="aSub">On a thin market, a $2 order can fake a crash and trigger your stop-loss. Why my bot audits orderbook depth before believing a price - and deliberately fails open when it can’t.</p>
     <div class="art-byline">
       <span class="art-avatar">AM</span>
       <div>
@@ -58,18 +60,14 @@
 </header>
 
 <div class="art-hero-wrap">
-  <div class="art-hero" id="aHero"></div>
+  <div class="art-hero" id="aHero" style="background-image:url('assets/img/splash-stop-loss-depth-check.jpg')"></div>
 </div>
 
 <article class="art-body-wrap">
   <div class="art-body-inner">
-    <div id="aContent"></div>
+    <div id="aContent"><div class="a-body"><p>A stop-loss is supposed to be the safety net: if the position drops below a threshold, sell, cap the damage, live to trade again. Every trading tutorial treats the trigger price as ground truth. My Polymarket bot learned the hard way that on a thin market, <strong>the price is just a number someone chose to show you.</strong></p><h2>The $2 attack on a $100 position</h2><p>Reconstructed from the bot's own tick recordings. The bot holds NO, trading happily at 99¢. An attacker places one tiny sell order, a couple of dollars' worth, at 45¢. On a thin orderbook that single order <em>is</em> now the market, and the quoted price craters through the bot's 60¢ stop-loss threshold. The bot does what stop-losses do. It panic-sells into a book with almost no real bids, taking a catastrophic fill. The attacker buys the cheap shares, cancels their order, and the price snaps back to 99¢. Cost of the attack: a few dollars of bait. Take: my whole position.</p><p>The stop-loss didn't fail. It executed perfectly, protecting me from a threat that didn't exist and handing my shares to the person who invented it.</p><figure class="a-figure"><img src="assets/img/stoploss-depth.svg" alt="A fake dip: one thin sell order drags the quoted price through the stop threshold while the real bids never moved - the depth check catches it"><figcaption class="a-figcap">A fake dip: one thin sell order drags the quoted price through the stop threshold while the real bids never moved - the depth check catches it</figcaption></figure><h2>A price without depth behind it is an opinion</h2><p>The fix ships in the bot as a pre-flight check on every stop-loss trigger. Before selling a single share, it fetches the live CLOB orderbook for the token it holds and asks two questions.</p><p>First: is there real money underneath this price? It sums every bid within 10¢ of the current price, and if the total is under a configurable floor - $15 by default - the "crash" has no substance. Nobody is actually offering to buy at these panic prices in any size, which means the quoted drop is likely one synthetic order. The bot skips the sell and re-checks next tick.</p><p>Second, and this is the sharper tell: where is the best bid? If the token "dropped" to 58¢ but the highest bid in the book is still sitting at 97¢, the price move came entirely from the <em>ask</em> side - someone dangling a low offer. Real sellers fleeing a genuinely dying position hit the bids and drag them down. Bids that never moved mean the fear is fake.</p><p>If the drop passes both checks, the stop-loss fires exactly as before. A genuine flip still gets cut fast. Nothing about the real case changed.</p><h2>Failing open, deliberately</h2><p>One design decision in this code I went back and forth on for days. What happens when the orderbook fetch itself fails? API timeout, rate limit, network blip.</p><p>The bot <strong>fails open: it allows the sell.</strong> That feels backwards for a manipulation defense, but the alternative is worse. If a dead API blocked the stop-loss, then any outage - or any attacker who can <em>induce</em> an outage - would leave the position completely unprotected during a real crash. A rare bad sell on a fake dip costs one trade. A stop-loss that silently stops existing can cost the whole balance. When a safety system degrades, it should degrade toward the mode whose worst case is smaller.</p><h2>The rest of the armor</h2><p>The depth check is one layer of a stack, because the final minutes of these markets are adversarial from every direction. The stop-loss itself is <strong>tiered</strong> - sell 25% at one threshold, more at the next, everything at the last - so a borderline dip doesn't dump the whole position. It refuses to fire in the final seconds before expiry, where the exchange rejects orders anyway and a failed sell just burns the retry budget. And the position size it protects is re-synced from the on-chain positions API every tick, so after a partial fill it always sells what actually remains rather than what it remembers buying.</p><p>None of this made the bot smarter about <em>entering</em> trades. It made the bot harder to lie to, which in a market where the lying is automated too turned out to be the cheaper thing to buy.</p><p><em>More from the MoneyMaker devlog - the Time-Vegas kill switch and the z-score entry gate - on the <a href="index.html#articles">article list</a>.</em></p></div></div>
   </div>
 </article>
-
-<div class="reactions">
-  <div class="reactions-inner" id="aReactions"></div>
-</div>
 
 <div class="art-foot">
   <div class="art-foot-inner">
@@ -112,9 +110,6 @@
 
 <script src="assets/js/articles.js"></script>
 <script src="assets/js/markdown.js"></script>
-<script src="assets/js/demo-kit.js"></script>
-<script src="assets/js/netcode-demos.js"></script>
-<script src="assets/js/quant-demos.js"></script>
 <script src="assets/js/article.js"></script>
 </body>
 </html>

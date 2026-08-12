@@ -6,7 +6,9 @@
    Reads the manifest (assets/js/articles.js) and writes:
      - posts/<slug>.html  - one static page per published post, with real
        <title>/description/Open Graph tags so shared links unfurl properly
-       (social scrapers don't run JS, so article.html?slug= previews are bare)
+       (social scrapers don't run JS, so article.html?slug= previews are bare),
+       and the post body already rendered into the page: a crawler or a reader
+       with JS off gets the whole article, and the browser skips a round trip
      - feed.xml           - RSS 2.0 feed of published posts
      - sitemap.xml        - index + all post pages
 
@@ -26,6 +28,59 @@ const OG_IMAGE = `${SITE}/assets/img/og-card.jpg`;
 const window = {};
 new Function('window', readFileSync(join(root, 'assets/js/articles.js'), 'utf8'))(window);
 const articles = (window.ARTICLES || []).filter((a) => a.status === 'published');
+
+// Same trick for the Markdown renderer: rendering here means posts/ ships the
+// article text instead of an empty <div> waiting on fetch().
+new Function('window', readFileSync(join(root, 'assets/js/markdown.js'), 'utf8'))(window);
+const renderMarkdown = window.renderMarkdown;
+
+// Which demo script registers which id, read off the sources so the two can't
+// drift. A post only loads the files whose demos it actually uses.
+const DEMO_FILES = ['netcode-demos', 'quant-demos'];
+const demoOwner = new Map();
+for (const f of DEMO_FILES) {
+  const src = readFileSync(join(root, `assets/js/${f}.js`), 'utf8');
+  for (const m of src.matchAll(/window\.ArticleDemos\.([a-z]+)\s*=/g)) demoOwner.set(m[1], f);
+}
+
+const stripLeadingH1 = (src) => String(src).replace(/^﻿?\s*#(?!#)\s+[^\n]*\n+/, '');
+
+function bodyFor(a) {
+  const md = readFileSync(join(root, 'content/articles', `${a.slug}.md`), 'utf8');
+  // Reading time counts prose only - code fences and [demo:] markers aren't read.
+  const prose = md.replace(/```[\s\S]*?```/g, '').replace(/^\[demo:[a-z]+\]$/gm, '');
+  const used = new Set();
+  for (const m of md.matchAll(/^\[demo:([a-z]+)\]$/gm)) {
+    const owner = demoOwner.get(m[1]);
+    if (owner) used.add(owner);
+    else console.warn(`  ! ${a.slug}: no demo registered for [demo:${m[1]}]`);
+  }
+  // A "[demo:x]" paragraph is a placeholder the browser swaps for a widget.
+  // Pre-rendered, it would otherwise sit in the page as literal text for anyone
+  // without JS, so it becomes a mount point with a sentence in it instead.
+  const mountDemos = (html) => html.replace(
+    /<p>\[demo:([a-z]+)\]<\/p>/g,
+    (_, id) => `<div class="demo-mount" data-demo="${id}">` +
+      `<p class="demo-fallback">There's an interactive demo here - it needs JavaScript.</p></div>`
+  );
+
+  // Diagram alt text is a full sentence, so it doubles as the visible caption.
+  // Building the <figure> here means it's there without JS; article.js only has
+  // to add the click-to-enlarge behaviour on top.
+  const figures = (html) => html.replace(
+    /<p>(<img src="([^"]*)" alt="([^"]*)"[^>]*>)<\/p>/g,
+    (_, img, src, alt) =>
+      `<figure class="a-figure">${img}` +
+      (alt ? `<figcaption class="a-figcap">${alt}</figcaption>` : '') +
+      `</figure>`
+  );
+
+  return {
+    html: figures(mountDemos(renderMarkdown(stripLeadingH1(md)))),
+    minutes: Math.max(1, Math.round(prose.trim().split(/\s+/).length / 200)),
+    scripts: DEMO_FILES.filter((f) => used.has(f)),
+  };
+}
 
 const esc = (s) =>
   String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -47,8 +102,11 @@ const FOOTER = `
 </footer>
 `;
 
-const page = (a) => `<!DOCTYPE html>
-<html lang="en">
+const page = (a, body) => `<!DOCTYPE html>
+<!-- --accent is the post's tag colour; it drives rules, links, captions and the
+     focus ring across the page, and it has to be here rather than set by JS so
+     the page reads right before (and without) scripts. -->
+<html lang="en" style="--accent:${a.tagColor}">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -73,7 +131,7 @@ const page = (a) => `<!DOCTYPE html>
   <meta name="twitter:image" content="${OG_IMAGE}">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 <body data-slug="${a.slug}">
@@ -88,14 +146,13 @@ const page = (a) => `<!DOCTYPE html>
 </nav>
 
 <header class="art-header">
-  <div class="art-header-glow"></div>
   <div class="art-header-inner">
     <div class="art-meta">
-      <span class="tag-cat" id="aTag"></span>
-      <span class="art-meta-time" id="aMeta">draft - not published yet</span>
+      <span class="tag-cat" id="aTag" style="background:${a.tagBg};color:${a.tagColor}">${esc((a.tag || '').toUpperCase())}</span>
+      <span class="art-meta-time" id="aMeta">${esc(a.date || 'published')} · ${body.minutes} min read</span>
     </div>
-    <h1 class="art-title" id="aTitle"></h1>
-    <p class="art-sub" id="aSub"></p>
+    <h1 class="art-title" id="aTitle">${esc(a.title)}</h1>
+    <p class="art-sub" id="aSub">${esc(a.excerpt || '')}</p>
     <div class="art-byline">
       <span class="art-avatar">AM</span>
       <div>
@@ -107,18 +164,14 @@ const page = (a) => `<!DOCTYPE html>
 </header>
 
 <div class="art-hero-wrap">
-  <div class="art-hero" id="aHero"></div>
+  <div class="art-hero" id="aHero" style="background-image:url('${esc(a.hero || '')}')"></div>
 </div>
 
 <article class="art-body-wrap">
   <div class="art-body-inner">
-    <div id="aContent"></div>
+    <div id="aContent"><div class="a-body">${body.html}</div></div>
   </div>
 </article>
-
-<div class="reactions">
-  <div class="reactions-inner" id="aReactions"></div>
-</div>
 
 <div class="art-foot">
   <div class="art-foot-inner">
@@ -146,17 +199,18 @@ const page = (a) => `<!DOCTYPE html>
 ${FOOTER}
 <script src="assets/js/articles.js"></script>
 <script src="assets/js/markdown.js"></script>
-<script src="assets/js/demo-kit.js"></script>
-<script src="assets/js/netcode-demos.js"></script>
-<script src="assets/js/quant-demos.js"></script>
-<script src="assets/js/article.js"></script>
+${body.scripts.length
+  ? ['<script src="assets/js/demo-kit.js"></script>']
+      .concat(body.scripts.map((f) => `<script src="assets/js/${f}.js"></script>`))
+      .join('\n') + '\n'
+  : ''}<script src="assets/js/article.js"></script>
 </body>
 </html>
 `;
 
 mkdirSync(join(root, 'posts'), { recursive: true });
 for (const a of articles) {
-  writeFileSync(join(root, 'posts', `${a.slug}.html`), page(a));
+  writeFileSync(join(root, 'posts', `${a.slug}.html`), page(a, bodyFor(a)));
 }
 
 // ---- RSS 2.0 feed ---------------------------------------------------------

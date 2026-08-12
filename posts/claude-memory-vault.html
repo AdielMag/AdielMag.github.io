@@ -1,5 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<!-- --accent is the post's tag colour; it drives rules, links, captions and the
+     focus ring across the page, and it has to be here rather than set by JS so
+     the page reads right before (and without) scripts. -->
+<html lang="en" style="--accent:#7cf29c">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -24,7 +27,7 @@
   <meta name="twitter:image" content="https://adielmag.github.io/assets/img/og-card.jpg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 <body data-slug="claude-memory-vault">
@@ -39,14 +42,13 @@
 </nav>
 
 <header class="art-header">
-  <div class="art-header-glow"></div>
   <div class="art-header-inner">
     <div class="art-meta">
-      <span class="tag-cat" id="aTag"></span>
-      <span class="art-meta-time" id="aMeta">draft - not published yet</span>
+      <span class="tag-cat" id="aTag" style="background:rgba(124,242,156,0.14);color:#7cf29c">AI</span>
+      <span class="art-meta-time" id="aMeta">Jul 13, 2026 · 4 min read</span>
     </div>
-    <h1 class="art-title" id="aTitle"></h1>
-    <p class="art-sub" id="aSub"></p>
+    <h1 class="art-title" id="aTitle">Giving Claude a memory: a git-tracked knowledge vault</h1>
+    <p class="art-sub" id="aSub">AI pair-programming falls apart when every session starts cold. How an index-driven, git-tracked memory vault makes the assistant accumulate knowledge about your project instead.</p>
     <div class="art-byline">
       <span class="art-avatar">AM</span>
       <div>
@@ -58,18 +60,14 @@
 </header>
 
 <div class="art-hero-wrap">
-  <div class="art-hero" id="aHero"></div>
+  <div class="art-hero" id="aHero" style="background-image:url('assets/img/splash-claude-memory-vault.jpg')"></div>
 </div>
 
 <article class="art-body-wrap">
   <div class="art-body-inner">
-    <div id="aContent"></div>
+    <div id="aContent"><div class="a-body"><p>I build ClashUp mostly with an AI pair - Claude Code - sitting alongside me. And the single biggest thing that made that partnership actually <em>work</em> wasn't a cleverer prompt. It was giving the AI a <strong>memory</strong> that survives between sessions.</p><p>Out of the box, every session starts cold. The model re-derives what it already figured out last week, re-asks questions I've already answered, and occasionally "fixes" something back to a state I deliberately moved away from. That last one is the expensive failure. The fix is a persistent, project-scoped knowledge base that lives in the repo, and the interesting part is <em>how</em> it's structured so it stays fast as it grows.</p><h2>The trick: an index, not a pile</h2><p>The naive version of AI memory is one giant file that gets loaded every session. That works for a week. Then it collapses under its own weight: the file balloons, and you're paying to load all of it on every single request, most of it irrelevant.</p><p>Instead, only a tiny <strong>index</strong> loads automatically at the start of a session. Every individual fact is its own small note, and those notes are pulled in <em>on demand</em> - only when the current task actually touches them.</p><figure class="a-figure"><img src="assets/img/memory-recall.svg" alt="Session start loads only the MEMORY.md index; individual topic notes are read on demand by following the index's links, not by scanning folders"><figcaption class="a-figcap">Session start loads only the MEMORY.md index; individual topic notes are read on demand by following the index's links, not by scanning folders</figcaption></figure><p>The index is a list of one-line pointers, one per note, each a link plus a few words of hook - enough for the model to decide whether the note is worth opening. When I ask about netcode, it follows the netcode link and reads that note. The fifty notes about things unrelated to today's task stay on disk. They cost nothing.</p><p>This is the whole reason it scales. Recall is <strong>index-driven, not a folder scan</strong>. The index stays small, so loading it every session is basically free, and hundreds of topic notes can pile up behind it without bloating the conversation. Folders become free organization too: since recall follows the index's links rather than walking directories, I can re-sort notes into topic folders whenever I like without ever breaking the AI's ability to find them.</p><h2>Living in the repo, browsable by me</h2><p>The second decision: the memory isn't hidden away in some tool's private storage. It lives <strong>inside the repository</strong>, as plain Markdown, in the same folder I keep the rest of the project's docs - which happens to be an Obsidian vault.</p><figure class="a-figure"><img src="assets/img/memory-vault.svg" alt="The vault sits in the repo, read by Claude, browsed by me in Obsidian, and versioned by git - all three views of the same notes"><figcaption class="a-figcap">The vault sits in the repo, read by Claude, browsed by me in Obsidian, and versioned by git - all three views of the same notes</figcaption></figure><p>That one placement decision buys three different things from the same files. The AI reads them as its memory, following links to recall facts. I read them in Obsidian as a linked wiki, which means I can see exactly what the assistant thinks it knows, and correct it when it's wrong. And git versions them: every memory the AI writes shows up as a commit in the same history as the code, so a bad "fact" gets reverted the same way bad code does.</p><p>That third one matters more than I expected. A wrong memory is worse than no memory, because the model acts on it confidently. Nothing else catches those. Seeing new notes arrive in a diff, right next to the change that prompted them, is the only review step that has ever caught one before it did damage.</p><p>There's a companion idea too: a set of project <em>rules</em> - conventions like naming and async discipline - that automatically come into play when the AI edits the kind of file they apply to. The memory captures what's <em>true</em> about the project. The rules capture how I want things <em>done</em>.</p><h2>The part that compounds</h2><p>The knowledge base and the code now evolve together, in one history. When a decision changes, the note changes in the same commit, so the memory can't quietly drift out of sync with the thing it describes.</p><p>That's the real unlock of AI pair-programming for me. The model was always smart in the moment. What it wasn't, was <em>cumulative</em>. Now it gets more useful on my specific project every week instead of starting over every morning.</p><p><em>More from the ClashUp devlog - the netcode and the tooling - on the <a href="index.html#articles">article list</a>.</em></p></div></div>
   </div>
 </article>
-
-<div class="reactions">
-  <div class="reactions-inner" id="aReactions"></div>
-</div>
 
 <div class="art-foot">
   <div class="art-foot-inner">
@@ -112,9 +110,6 @@
 
 <script src="assets/js/articles.js"></script>
 <script src="assets/js/markdown.js"></script>
-<script src="assets/js/demo-kit.js"></script>
-<script src="assets/js/netcode-demos.js"></script>
-<script src="assets/js/quant-demos.js"></script>
 <script src="assets/js/article.js"></script>
 </body>
 </html>

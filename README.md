@@ -10,25 +10,31 @@ A personal game-development blog. Six years deep in mobile game dev, now buildin
 solo with AI - client, server, physics, all of it. The site showcases shipped
 games, a work-in-progress flagship (**ClashUp**), and short devlog articles.
 
-Built as a **static site** - plain HTML/CSS/JS, **zero dependencies, no build
-step** - and hosted free on **GitHub Pages**. Articles are Markdown files rendered
-in the browser. Type is **Space Grotesk** (UI/body) + **JetBrains Mono** (labels,
-tags, code).
+Built as a **static site** - plain HTML/CSS/JS, **zero dependencies** - and hosted
+free on **GitHub Pages**. Articles are Markdown files; `tools/build-posts.mjs`
+renders them into `posts/` so the pages ship with their text already in them.
+Type is **Bricolage Grotesque** (titles) + **Space Grotesk** (body) +
+**JetBrains Mono** (labels, tags, code), on a nine-step `--text-*` scale.
+The site is **dark-only on purpose** - no light theme, no toggle.
 
 ## ✨ Highlights
 
-- **Clean hero** - badge, headline, two CTAs, soft radial glows (no heavy motion).
+- **A live hero** - the netcode prediction demo runs in the hero itself, because
+  a playable simulation is the most characteristic thing on the site.
 - **Projects** - a featured "in development" spotlight (ClashUp) plus a grid of
   shipped games.
 - **Expandable project cards** - click any project for a modal with a **scrollable
   screenshot gallery**, extra data (publisher, genre, rating, installs), and links
   to the App Store / Google Play (or archive mirrors for delisted titles).
 - **Real writable articles** - drop in a Markdown file, flip it to `published`.
-- **Rich article pages** - hero art, reading time, like/dislike reactions
-  (remembered per device), post tags, "read next" cards, and **comments**.
+- **Rich article pages** - hero art, reading time, post tags, "read next" cards,
+  and **comments**. Each post's tag colour becomes the page accent (`--accent`),
+  driving heading rules, links, captions, and the focus ring.
 - **Free comments via [Giscus](https://giscus.app)** - backed by GitHub
   Discussions, no server, no database. See _Comments_ below.
-- **Responsive + themed** - clamped type, auto-fit grids, no horizontal scroll.
+- **Responsive + accessible** - fluid type, auto-fit grids, no horizontal scroll
+  down to 320px, a visible focus ring on everything, and canvas demos that stop
+  animating off-screen, in background tabs, and under `prefers-reduced-motion`.
 
 ## 🎮 Projects featured
 
@@ -46,7 +52,7 @@ tags, code).
   <img src="assets/img/shots/swapheroes_1.jpg" height="220" alt="Swap Heroes"/>
   <img src="assets/img/shots/solaria_1.jpg" height="220" alt="Solaria: Dawn of Heroes"/>
   <img src="assets/img/shots/royalbingo_1.jpg" height="220" alt="Royal Bingo"/>
-  <img src="assets/img/shots/pokerface_1.png" height="220" alt="Pokerface"/>
+  <img src="assets/img/shots/pokerface_1.jpg" height="220" alt="Pokerface"/>
 </p>
 
 ## 🗂 Structure
@@ -57,13 +63,14 @@ article.html               Article template - reads ?slug=, renders a post
 posts/<slug>.html          Generated static page per post (real share metadata)
 feed.xml / sitemap.xml     Generated RSS feed + sitemap
 tools/build-posts.mjs      Generator for posts/, feed.xml, sitemap.xml
+tools/audit-prose.mjs      Prose tic counter for content/articles/*.md
 assets/
   css/styles.css           Theme, component, modal + article-page styles
   js/articles.js           Article manifest
   js/projects.js           Project data (facts, screenshots, store links)
   js/markdown.js           Tiny Markdown -> HTML renderer (no dependencies)
   js/main.js               Landing: projects (featured + grid + modal), article cards
-  js/article.js            Article page: body, reactions, tags, read-next, Giscus
+  js/article.js            Article page: body, tags, read-next, lightbox, Giscus
   js/demo-kit.js           Shared canvas/widget helpers for in-article demos
   js/netcode-demos.js      Demos for "the dumb client manifesto" (prediction, etc.)
   js/quant-demos.js        Demos for the z-score + backtest trading posts
@@ -108,9 +115,10 @@ python -m http.server 8000
 2. Add an entry to `assets/js/articles.js` with a matching `slug` (set both
    `date` and `dateISO`).
 3. Set `status: 'published'` when it's ready (drafts show a placeholder).
-4. Run `node tools/build-posts.mjs` - regenerates the static pages in `posts/`
-   (these carry the Open Graph tags that make shared links unfurl properly),
-   plus `feed.xml` and `sitemap.xml`. Commit the output.
+4. Run `node tools/audit-prose.mjs <slug>` and fix anything it flags.
+5. Run `node tools/build-posts.mjs` - regenerates the static pages in `posts/`
+   (these carry the rendered body plus the Open Graph tags that make shared links
+   unfurl properly), plus `feed.xml` and `sitemap.xml`. Commit the output.
 
 ## 🕹 Add or edit a project
 

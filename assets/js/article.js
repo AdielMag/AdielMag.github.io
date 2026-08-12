@@ -1,9 +1,11 @@
 /* ===========================================================================
    Article page. Reads the slug (?slug= on article.html, or data-slug on the
    generated posts/ pages), looks the post up in the shared manifest, and:
-     - published -> fetches content/articles/<slug>.md, renders it, then wires
-       the hero art, reactions, tags, read-next cards, and the Giscus comments
-     - draft (or fetch fails) -> shows the "coming soon" placeholder
+     - published -> wires the hero art, tags, read-next cards, and the Giscus
+       comments around the body. The generated posts/ pages already
+       contain the rendered body, so only article.html?slug= fetches and renders
+       content/articles/<slug>.md at runtime.
+     - draft -> shows the "coming soon" placeholder
    Recreated from the Claude Design handoff (Article Page.dc.html).
    =========================================================================== */
 (function () {
@@ -46,7 +48,6 @@
   var subEl   = document.getElementById('aSub');
   var heroEl  = document.getElementById('aHero');
   var content = document.getElementById('aContent');
-  var reactEl = document.getElementById('aReactions');
   var tagsEl  = document.getElementById('aTags');
   var commentsEl = document.getElementById('aComments');
   var readNextEl = document.getElementById('aReadNext');
@@ -54,7 +55,6 @@
   // Elements/sections to hide when there's nothing to show them for.
   var heroWrap  = document.querySelector('.art-hero-wrap');
   var footWrap  = document.querySelector('.art-foot');
-  var reactWrap = document.querySelector('.reactions');
   var commentsSec = document.querySelector('.comments');
   var readNextSec = document.querySelector('.readnext');
 
@@ -67,11 +67,24 @@
     if (metaEl) metaEl.textContent = 'that link doesn’t match any post';
     if (subEl) subEl.style.display = 'none';
     if (content) content.innerHTML = notFoundHtml();
-    hide(heroWrap); hide(footWrap); hide(reactWrap); hide(commentsSec); hide(readNextSec);
+    hide(heroWrap); hide(footWrap); hide(commentsSec); hide(readNextSec);
     return;
   }
 
   document.title = article.title + ' - devlog.';
+  // The post's tag colour drives the whole page: rules, links, focus ring,
+  // figure captions, read-next borders. A Server post reads gold throughout.
+  // The generated posts/ pages already carry this inline; setting it again is
+  // harmless and covers the article.html?slug= route.
+  if (article.tagColor) document.documentElement.style.setProperty('--accent', article.tagColor);
+  // article.html?slug= renders the same post as posts/<slug>.html. Point search
+  // engines at the generated page so the two don't compete as duplicates.
+  if (!document.querySelector('link[rel="canonical"]')) {
+    var canon = document.createElement('link');
+    canon.rel = 'canonical';
+    canon.href = 'https://adielmag.github.io/posts/' + encodeURIComponent(article.slug) + '.html';
+    document.head.appendChild(canon);
+  }
   if (tagEl) {
     tagEl.textContent = (article.tag || '').toUpperCase();
     tagEl.style.background = article.tagBg;
@@ -90,38 +103,51 @@
 
   if (!published) {
     if (content) content.innerHTML = placeholderHtml();
-    hide(heroWrap); hide(reactWrap); hide(footWrap); hide(commentsSec); hide(readNextSec);
+    hide(heroWrap); hide(footWrap); hide(commentsSec); hide(readNextSec);
     return;
   }
 
-  // reactions + comments are for real, published posts
-  renderReactions();
+  // Comments (and their reactions) come from Giscus. There used to be a
+  // like/dislike pair here too, but it only ever read 0 or 1 off localStorage -
+  // a private toggle drawn as a public score, directly above the real thing.
   mountGiscus();
 
-  // published: load and render the Markdown file
-  fetch('content/articles/' + article.slug + '.md', { cache: 'no-cache' })
-    .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.text(); })
-    .then(function (md) {
-      var body = document.createElement('div');
-      body.className = 'a-body';
-      body.style.animation = 'articleZoomIn 0.4s ease both';
-      body.innerHTML = window.renderMarkdown(stripLeadingH1(md));
-      content.innerHTML = '';
-      content.appendChild(body);
-      stripDuplicateHero(body);
-      setupLightbox(body);
-      mountDemos(body);
-      if (metaEl) metaEl.textContent = (article.date || 'published') + ' · ' + readTime(md) + ' min read';
-    })
-    .catch(function () {
-      content.innerHTML = placeholderHtml();
-      hide(heroWrap); hide(reactWrap); hide(footWrap); hide(commentsSec);
-    });
+  // The generated posts/ pages ship the body already rendered. Only the
+  // fallback article.html?slug= route has to fetch and render it here.
+  var prerendered = content && content.querySelector('.a-body');
+  if (prerendered) {
+    enhance(prerendered);
+  } else {
+    fetch('content/articles/' + article.slug + '.md', { cache: 'no-cache' })
+      .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.text(); })
+      .then(function (md) {
+        var body = document.createElement('div');
+        body.className = 'a-body';
+        body.style.animation = 'articleZoomIn 0.4s ease both';
+        body.innerHTML = window.renderMarkdown(stripLeadingH1(md));
+        content.innerHTML = '';
+        content.appendChild(body);
+        enhance(body);
+        if (metaEl) metaEl.textContent = (article.date || 'published') + ' · ' + readTime(md) + ' min read';
+      })
+      .catch(function () {
+        // A published post that won't load is a failure, not a draft - say so
+        // rather than claiming it hasn't been written, and leave comments up.
+        content.innerHTML = loadErrorHtml();
+      });
+  }
+
+  function enhance(body) {
+    stripDuplicateHero(body);
+    setupLightbox(body);
+    mountDemos(body);
+  }
 
   // ---- read time ----------------------------------------------------------
   function readTime(md) {
-    var words = String(md).trim().split(/\s+/).length;
-    return Math.max(1, Math.round(words / 200));
+    // prose only - code fences and [demo:] markers aren't read
+    var prose = String(md).replace(/```[\s\S]*?```/g, '').replace(/^\[demo:[a-z]+\]$/gm, '');
+    return Math.max(1, Math.round(prose.trim().split(/\s+/).length / 200));
   }
 
   // Remove a leading level-1 heading (title is already shown in the header).
@@ -140,36 +166,6 @@
     if (src.split('/').pop() !== file) return;
     var p = first.closest('p');
     if (p && !p.textContent.trim()) p.remove(); else first.remove();
-  }
-
-  // ---- reactions (remembered locally on this device) ----------------------
-  function renderReactions() {
-    if (!reactEl) return;
-    var key = 'devlog-react-' + article.slug;
-    var vote = null;
-    try { vote = localStorage.getItem(key); } catch (e) {}
-
-    var THUMB_UP = '<svg width="17" height="17" viewBox="0 0 24 24" fill="{{fill}}" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 10v12"></path><path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2a3.13 3.13 0 0 1 3 3.88Z"></path></svg>';
-    var THUMB_DN = '<svg width="17" height="17" viewBox="0 0 24 24" fill="{{fill}}" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 14V2"></path><path d="M9 18.12 10 14H4.17a2 2 0 0 1-1.92-2.56l2.33-8A2 2 0 0 1 6.5 2H20a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-2.76a2 2 0 0 0-1.79 1.11L12 22a3.13 3.13 0 0 1-3-3.88Z"></path></svg>';
-
-    function draw() {
-      var up = vote === 'up', down = vote === 'down';
-      reactEl.innerHTML =
-        '<button class="react-btn like' + (up ? ' is-on' : '') + '" type="button">' +
-          THUMB_UP.replace('{{fill}}', up ? 'rgba(124,242,156,0.25)' : 'none') +
-          '<span>' + (up ? 1 : 0) + '</span></button>' +
-        '<button class="react-btn dislike' + (down ? ' is-on' : '') + '" type="button">' +
-          THUMB_DN.replace('{{fill}}', down ? 'rgba(255,107,74,0.25)' : 'none') +
-          '<span>' + (down ? 1 : 0) + '</span></button>';
-      reactEl.querySelector('.like').onclick = function () { set(up ? null : 'up'); };
-      reactEl.querySelector('.dislike').onclick = function () { set(down ? null : 'down'); };
-    }
-    function set(v) {
-      vote = v;
-      try { if (v) localStorage.setItem(key, v); else localStorage.removeItem(key); } catch (e) {}
-      draw();
-    }
-    draw();
   }
 
   // ---- tags ---------------------------------------------------------------
@@ -235,10 +231,20 @@
   // ---- swap a "[demo:<id>]" paragraph for an interactive widget ------------
   function mountDemos(scope) {
     if (!window.ArticleDemos) return;
+    // The generated pages carry <div class="demo-mount" data-demo="id">; the
+    // article.html?slug= route renders straight from Markdown and still has the
+    // literal "[demo:id]" paragraph. Both end up here.
+    var targets = [];
+    Array.prototype.forEach.call(scope.querySelectorAll('[data-demo]'), function (el) {
+      targets.push([el, el.getAttribute('data-demo')]);
+    });
     Array.prototype.forEach.call(scope.querySelectorAll('p'), function (p) {
       var m = /^\[demo:([a-z]+)\]$/.exec((p.textContent || '').trim());
-      if (!m) return;
-      var build = window.ArticleDemos[m[1]];
+      if (m) targets.push([p, m[1]]);
+    });
+    targets.forEach(function (pair) {
+      var p = pair[0];
+      var build = window.ArticleDemos[pair[1]];
       if (!build) return;
       var holder = document.createElement('div');
       p.parentNode.replaceChild(holder, p);
@@ -260,42 +266,80 @@
     lb.className = 'lightbox';
     lb.setAttribute('aria-hidden', 'true');
     lb.innerHTML =
-      '<button class="lightbox-close" type="button" aria-label="Close">×</button>' +
+      '<button class="lightbox-close" type="button" aria-label="Close image">×</button>' +
       '<img class="lightbox-img" alt="">';
     document.body.appendChild(lb);
     var lbImg = lb.querySelector('.lightbox-img');
+    var lbClose = lb.querySelector('.lightbox-close');
+    var lastFocused = null;
 
-    function open(src, alt) {
+    function open(src, alt, opener) {
       lbImg.src = src; lbImg.alt = alt || '';
+      lastFocused = opener || document.activeElement;
       lb.classList.add('open'); lb.setAttribute('aria-hidden', 'false');
       document.body.style.overflow = 'hidden';
+      lbClose.focus();
     }
     function close() {
+      if (!lb.classList.contains('open')) return;
       lb.classList.remove('open'); lb.setAttribute('aria-hidden', 'true');
       document.body.style.overflow = '';
+      if (lastFocused && lastFocused.focus) lastFocused.focus();
+      lastFocused = null;
     }
 
     Array.prototype.forEach.call(imgs, function (img) {
-      var fig = document.createElement('figure');
-      fig.className = 'a-figure';
-      img.parentNode.insertBefore(fig, img);
-      fig.appendChild(img);
-      var cap = document.createElement('figcaption');
-      cap.className = 'a-figcap';
-      cap.textContent = '⤢ Click to enlarge';
-      fig.appendChild(cap);
-      img.addEventListener('click', function () { open(img.getAttribute('src'), img.getAttribute('alt')); });
+      var alt = img.getAttribute('alt') || '';
+      // The generated pages already ship the <figure> and its caption. Only the
+      // article.html?slug= route, which renders Markdown at runtime, needs them
+      // built here.
+      if (!img.closest('.a-figure')) {
+        var fig = document.createElement('figure');
+        fig.className = 'a-figure';
+        img.parentNode.insertBefore(fig, img);
+        fig.appendChild(img);
+        // The alt text is a full sentence describing the diagram, so it makes a
+        // real caption. It used to say "Click to enlarge" on every single
+        // figure - an instruction sitting where the explanation belongs.
+        if (alt) {
+          var cap = document.createElement('figcaption');
+          cap.className = 'a-figcap';
+          cap.textContent = alt;
+          fig.appendChild(cap);
+        }
+      }
+      // enlarging is a real action, so the image has to behave like a control
+      img.setAttribute('tabindex', '0');
+      img.setAttribute('role', 'button');
+      img.setAttribute('aria-label', 'Enlarge diagram' + (alt ? ': ' + alt : ''));
+      function openThis() { open(img.getAttribute('src'), alt, img); }
+      img.addEventListener('click', openThis);
+      img.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openThis(); }
+      });
     });
 
-    lb.querySelector('.lightbox-close').addEventListener('click', close);
+    lbClose.addEventListener('click', close);
     lb.addEventListener('click', function (e) { if (e.target === lb) close(); });
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
+    // the dialog holds two focusable things; keep Tab inside it
+    document.addEventListener('keydown', function (e) {
+      if (e.key !== 'Tab' || !lb.classList.contains('open')) return;
+      e.preventDefault();
+      lbClose.focus();
+    });
   }
 
   function notFoundHtml() {
     return '<div class="a-placeholder">' +
       '<p>There\'s no post at this address - the link may be mistyped or the post may have moved.</p>' +
       '<p>Head back to the <a href="index.html#articles">article list</a> to find what you were after.</p>' +
+    '</div>';
+  }
+  function loadErrorHtml() {
+    return '<div class="a-placeholder">' +
+      "<p>This post didn't load. That's on the site, not on you - a reload usually sorts it.</p>" +
+      '<p>Otherwise the <a href="index.html#articles">article list</a> has everything else.</p>' +
     '</div>';
   }
   function placeholderHtml() {

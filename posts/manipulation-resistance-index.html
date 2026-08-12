@@ -1,5 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<!-- --accent is the post's tag colour; it drives rules, links, captions and the
+     focus ring across the page, and it has to be here rather than set by JS so
+     the page reads right before (and without) scripts. -->
+<html lang="en" style="--accent:#6cb6ff">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -24,7 +27,7 @@
   <meta name="twitter:image" content="https://adielmag.github.io/assets/img/og-card.jpg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 <body data-slug="manipulation-resistance-index">
@@ -39,14 +42,13 @@
 </nav>
 
 <header class="art-header">
-  <div class="art-header-glow"></div>
   <div class="art-header-inner">
     <div class="art-meta">
-      <span class="tag-cat" id="aTag"></span>
-      <span class="art-meta-time" id="aMeta">draft - not published yet</span>
+      <span class="tag-cat" id="aTag" style="background:rgba(108,182,255,0.14);color:#6cb6ff">QUANT</span>
+      <span class="art-meta-time" id="aMeta">Jul 13, 2026 · 4 min read</span>
     </div>
-    <h1 class="art-title" id="aTitle"></h1>
-    <p class="art-sub" id="aSub"></p>
+    <h1 class="art-title" id="aTitle">How hard is this market to shove? Scoring manipulation resistance 0–100</h1>
+    <p class="art-sub" id="aSub">Your confidence in an outcome and an attacker’s cost to change it are different numbers. Blending depth, imbalance, price impact, and spoof detection into one live score.</p>
     <div class="art-byline">
       <span class="art-avatar">AM</span>
       <div>
@@ -58,18 +60,14 @@
 </header>
 
 <div class="art-hero-wrap">
-  <div class="art-hero" id="aHero"></div>
+  <div class="art-hero" id="aHero" style="background-image:url('assets/img/splash-manipulation-resistance-index.jpg')"></div>
 </div>
 
 <article class="art-body-wrap">
   <div class="art-body-inner">
-    <div id="aContent"></div>
+    <div id="aContent"><div class="a-body"><p>Every quant blog post is about the same question: <em>what will the price do next?</em> This one is about a different question: <strong>how expensive would it be, right now, for someone to make the price lie?</strong></p><p>My Polymarket bot bets that BTC's spot price will stay on one side of a strike for a few more minutes. The bet's real enemy isn't volatility - the entry math already prices that in. The enemy is that the resolution source is <em>itself a market</em>, and markets can be pushed. If BTC's orderbook is thin enough, a whale can shove the spot price across the strike at the exact moment it matters, flip the outcome, and collect from everyone on the other side. So before risking a balance on "the price will hold," ask a different question. How firmly is it held?</p><p>The bot's answer is the <strong>Manipulation Resistance Index</strong> - a live 0–100 score composed from four microstructure measurements, each one estimating the cost of a different way to lie.</p><h2>Four ways to push a market</h2><p><em>Depth-to-Volatility Resilience</em> is the blunt-force question: how much real volume sits within ±1% of the mid price, relative to how fast the price is currently moving? Deep book in a calm market, and a shove costs millions. Thin book in a fast market, and it costs pocket change. This is the workhorse, weighted 40% in normal conditions.</p><p>The other three exist because depth alone lies.</p><p><em>Weighted Orderbook Imbalance</em> asks which way the book leans. A balanced book resists pressure from both directions; a lopsided one is pre-tipped, waiting for a push it can't absorb. The bot weights the top ten levels by <code>1/L</code> decay, so the levels nearest the mid matter most, and scores balance high.</p><p><em>Kyle's lambda</em> is the most classically quant of the four. Regress price change against signed volume over the last hundred trades, and the slope λ tells you how many dollars of price movement one dollar of aggressive flow buys. It's the exchange rate of manipulation, quoted live. High lambda means the market is fragile <em>in practice</em>, whatever the book looks like.</p><p><em>Quote persistence</em> is the spoofing detector. Track every price level that vanished from the book in the last five minutes and ask whether it disappeared because it <em>traded</em> or because it was <em>cancelled</em>. A book full of orders that evaporate untouched is scenery. That depth will not be there when you need it.</p><figure class="a-figure"><img src="assets/img/mri-composite.svg" alt="Four microstructure measurements - depth vs volatility, book balance, price impact, quote persistence - blend into one 0–100 resistance score, with weights that shift by regime"><figcaption class="a-figcap">Four microstructure measurements - depth vs volatility, book balance, price impact, quote persistence - blend into one 0–100 resistance score, with weights that shift by regime</figcaption></figure><h2>The weights change when the weather does</h2><p>The part of this design I'm proudest of: the four components don't blend with fixed weights. The calculator first detects the volatility regime, and the blend shifts with it.</p><p>In a <strong>calm regime</strong>, standing depth is king (DVR 40%). The book you can see is the defense you'll get. In a <strong>volatile regime</strong>, the weights flip. Kyle's lambda jumps from 20% to 40%, because when the market is already moving, the measured cost of pushing it is the truth, and a snapshot of resting depth is stale the moment you read it. Same signals, different judge. A single fixed formula would be tuned for exactly one kind of day.</p><h2>The honest epilogue</h2><p>The MRI is no longer the bot's primary entry gate. It ran that job for a full major version, and it worked. Then a simpler signal - the z-score of the asset's lead over its expected remaining move - turned out to filter almost the same bad entries with a fraction of the machinery. Machinery you don't need is machinery that breaks. The composite still runs, but the flagship overlay on the dashboard is the simpler signal's violet line.</p><p>I don't consider it wasted. Building the MRI is what taught me to <em>think</em> in manipulation cost, and that mindset produced the defenses that did stay load-bearing: the stop-loss that audits orderbook depth before believing a price, and the divergence tripwires in the final seconds. Those are still running.</p><p>If you're automating anything against a thin market, the reusable idea is this. Your confidence in an outcome and your opponent's cost to <em>change</em> that outcome are different numbers. Most systems obsessively compute the first and never ask the second, even though the second one is perfectly computable from depth, balance, impact, and persistence.</p><p><em>More from the MoneyMaker devlog - the z-score that replaced this index, and the depth-checked stop-losses - on the <a href="index.html#articles">article list</a>.</em></p></div></div>
   </div>
 </article>
-
-<div class="reactions">
-  <div class="reactions-inner" id="aReactions"></div>
-</div>
 
 <div class="art-foot">
   <div class="art-foot-inner">
@@ -112,9 +110,6 @@
 
 <script src="assets/js/articles.js"></script>
 <script src="assets/js/markdown.js"></script>
-<script src="assets/js/demo-kit.js"></script>
-<script src="assets/js/netcode-demos.js"></script>
-<script src="assets/js/quant-demos.js"></script>
 <script src="assets/js/article.js"></script>
 </body>
 </html>

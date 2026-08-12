@@ -2,7 +2,9 @@
    Tiny dependency-free Markdown -> HTML renderer.
    Covers what a dev blog needs: headings, paragraphs, bold/italic, inline code,
    fenced code blocks, ordered/unordered lists, links, images, blockquotes, rules.
-   HTML in source text is escaped, so it's safe to inject the output.
+   HTML in source text is escaped and link/image URLs are attribute-escaped and
+   scheme-checked, so the output is safe to inject for the author-written
+   Markdown this blog serves. It is not a sanitiser for untrusted input.
    Exposes: window.renderMarkdown(src) -> htmlString
    =========================================================================== */
 (function () {
@@ -12,6 +14,15 @@
 
   function escapeHtml(s) {
     return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  // URLs land inside a double-quoted attribute, so the quote has to go too.
+  // Anything that isn't a plain relative path, http(s), mailto or fragment is
+  // dropped rather than rendered - that's where javascript: would sneak in.
+  function safeUrl(url) {
+    var u = String(url).trim();
+    if (/^\s*(javascript|data|vbscript):/i.test(u.replace(/[\x00-\x20]/g, ''))) return '#';
+    return u.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   }
 
   // Inline formatting for a single run of text.
@@ -28,22 +39,24 @@
     // images: ![alt](url "title")
     text = text.replace(/!\[([^\]]*)\]\(([^)\s]+)(?:\s+"([^"]*)")?\)/g,
       function (_, alt, url, title) {
-        return '<img src="' + url + '" alt="' + alt + '"' +
+        return '<img src="' + safeUrl(url) + '" alt="' + alt + '"' +
           (title ? ' title="' + title + '"' : '') + '>';
       });
 
     // links: [text](url "title")
     text = text.replace(/\[([^\]]+)\]\(([^)\s]+)(?:\s+"([^"]*)")?\)/g,
       function (_, t, url, title) {
-        return '<a href="' + url + '"' + (title ? ' title="' + title + '"' : '') +
+        return '<a href="' + safeUrl(url) + '"' + (title ? ' title="' + title + '"' : '') +
           '>' + t + '</a>';
       });
 
-    // bold then italic (both * and _)
+    // Bold then italic. The underscore forms only fire at word boundaries, so
+    // snake_case identifiers in prose stay intact - `foo_bar_baz` used to come
+    // out as foo<em>bar</em>baz.
     text = text.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
-    text = text.replace(/__([^_]+)__/g, '<strong>$1</strong>');
+    text = text.replace(/(^|\W)__(\S(?:[^_]*\S)?)__(?!\w)/g, '$1<strong>$2</strong>');
     text = text.replace(/\*([^*]+)\*/g, '<em>$1</em>');
-    text = text.replace(/_([^_]+)_/g, '<em>$1</em>');
+    text = text.replace(/(^|\W)_(\S(?:[^_]*\S)?)_(?!\w)/g, '$1<em>$2</em>');
 
     // restore code spans
     text = text.replace(new RegExp(NUL + '(\\d+)' + NUL, 'g'), function (_, i) {

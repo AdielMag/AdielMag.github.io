@@ -1,5 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<!-- --accent is the post's tag colour; it drives rules, links, captions and the
+     focus ring across the page, and it has to be here rather than set by JS so
+     the page reads right before (and without) scripts. -->
+<html lang="en" style="--accent:#ff6b4a">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -24,7 +27,7 @@
   <meta name="twitter:image" content="https://adielmag.github.io/assets/img/og-card.jpg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 <body data-slug="dumb-client-manifesto">
@@ -39,14 +42,13 @@
 </nav>
 
 <header class="art-header">
-  <div class="art-header-glow"></div>
   <div class="art-header-inner">
     <div class="art-meta">
-      <span class="tag-cat" id="aTag"></span>
-      <span class="art-meta-time" id="aMeta">draft - not published yet</span>
+      <span class="tag-cat" id="aTag" style="background:rgba(255,107,74,0.14);color:#ff6b4a">CLIENT</span>
+      <span class="art-meta-time" id="aMeta">Jul 13, 2026 · 5 min read</span>
     </div>
-    <h1 class="art-title" id="aTitle"></h1>
-    <p class="art-sub" id="aSub"></p>
+    <h1 class="art-title" id="aTitle">The dumb client manifesto: zero game logic on the phone</h1>
+    <p class="art-sub" id="aSub">ClashUp's phone decides nothing - the server owns the whole game. Here's why, and how prediction, reconciliation, and interpolation make it feel instant anyway.</p>
     <div class="art-byline">
       <span class="art-avatar">AM</span>
       <div>
@@ -58,18 +60,14 @@
 </header>
 
 <div class="art-hero-wrap">
-  <div class="art-hero" id="aHero"></div>
+  <div class="art-hero" id="aHero" style="background-image:url('assets/img/splash-dumb-client-manifesto.jpg')"></div>
 </div>
 
 <article class="art-body-wrap">
   <div class="art-body-inner">
-    <div id="aContent"></div>
+    <div id="aContent"><div class="a-body"><p>One decision shapes everything else about <strong>ClashUp's</strong> netcode: the phone in your hand is not allowed to decide anything.</p><p>It reads your thumb and it draws the world. That's it. It doesn't know the rules, it doesn't keep score, it doesn't decide who got hit or who won. Every one of those answers comes from the server. The client is, on purpose, <em>dumb</em>.</p><figure class="a-figure"><img src="assets/img/dumbclient-authority.svg" alt="The client renders and sends inputs while the server owns the entire simulation as the single source of truth"><figcaption class="a-figcap">The client renders and sends inputs while the server owns the entire simulation as the single source of truth</figcaption></figure><h2>Why hand all the power to the server?</h2><p>Because in a real-time multiplayer game, the alternative is chaos. If two phones each simulate the fight and disagree - one says the shot connected, the other says it missed - who's right?</p><p>The moment the client is <em>allowed</em> to be right about anything that matters, you get two problems that never fully go away. A player who controls the simulation controls the outcome, so anything the client decides, a modified client can lie about. And without one authority, every device drifts into its own slightly different version of the match, and you spend forever trying to reconcile them.</p><p>So there's exactly one simulation, and it runs on the server. Everyone else is watching a broadcast of it. One source of truth, and the phone isn't it.</p><h2>"But doesn't that feel laggy?"</h2><p>This is the obvious objection. If the phone has to send your input to a server and wait for the answer before you move, the game feels like it's underwater. Every demo below is live - drag the sliders and play with them.</p><p>The techniques that fix it come straight from Gabriel Gambetta's <a href="https://www.gabrielgambetta.com/client-server-game-architecture.html">Fast-Paced Multiplayer</a> series, which is the reference every netcode implementation quietly leans on.</p><h2>Prediction puts you in the present</h2><p>Watch the problem first. Turn <strong>prediction off</strong> and hold a direction. Your character sits still until a full round-trip later, because only the server is allowed to move it. Now turn prediction <strong>on</strong>: the phone shows your move the instant you press, running the same movement the server will, and never waits for permission.</p><div class="demo-mount" data-demo="prediction"><p class="demo-fallback">There's an interactive demo here - it needs JavaScript.</p></div><p>The move you make locally is an educated guess the client is almost always right about, so it just makes it, immediately.</p><h2>Reconciliation corrects you without you noticing</h2><p>Prediction leaves a gap: you're now <em>ahead</em> of the server, running on moves it hasn't confirmed yet.</p><p>Every input is numbered. The server processes them and echoes back the last number it handled. The client throws away the inputs the server has confirmed, then <strong>replays</strong> the handful still in flight on top of the server's authoritative position. The glowing queue below is those un-acked inputs - hit "Network spike" and watch it swell, then drain as the acknowledgements catch up.</p><div class="demo-mount" data-demo="reconciliation"><p class="demo-fallback">There's an interactive demo here - it needs JavaScript.</p></div><p>Acking by input <em>number</em> rather than by clock time is what makes this robust. Client and server clocks drift; a sequence counter the server echoes back is exact, so precisely the right inputs get replayed and nothing rubber-bands.</p><h2>Everyone else renders a hair in the past</h2><p>Your own character you see in the present. Everyone else is different: they're not simulated on your device at all, just played back from the server's broadcast.</p><p>The catch is that the server only sends snapshots a few times a second. Render straight from them and remote players teleport. So instead the client <strong>buffers</strong> the snapshots and draws each remote player <em>between</em> the two most recent ones, deliberately rendering them a fraction of a second behind. Toggle interpolation off to see the raw snapshots jump; on to see it smoothed.</p><div class="demo-mount" data-demo="interpolation"><p class="demo-fallback">There's an interactive demo here - it needs JavaScript.</p></div><p><strong>See yourself in the present, everyone else in the past.</strong> Instant response for your own movement, smooth motion for everyone else, at the cost of viewing them slightly behind.</p><h2>Lag compensation makes the shot count</h2><p>That trade has a sting. When you line up a shot, you're aiming at where the enemy <em>was</em>, not where they are now. Fire, and by the time your shot reaches the server they've already moved, so a perfectly aimed shot misses.</p><p>Lag compensation fixes it by leaning on the server's authority in reverse: the server knows exactly what you saw and when, so it <strong>rewinds</strong> the world to the instant you fired and checks the hit <em>there</em>. Turn it off and watch even dead-on shots whiff; turn it on and your aim is honored.</p><div class="demo-mount" data-demo="lagcomp"><p class="demo-fallback">There's an interactive demo here - it needs JavaScript.</p></div><p>This is the one place the server bends toward the client. It trusts <em>when</em> you fired so it can reward good aim. The flip side is that occasionally you'll get hit a moment after ducking behind cover, because on the shooter's screen you were still exposed.</p><h2>The discipline this demands</h2><p>The hard part of a dumb client isn't the clever prediction code. It's the <em>discipline</em> to never cheat on the principle when you're tired and something's broken.</p><p>The temptation shows up constantly, and I've argued myself into it more than once. A client gets stuck because it missed a message from the server - say, the signal that the match ended. The lazy fix is a client-side timeout: if I haven't heard from the server in three seconds, just end the match myself. It works in the demo. And it's poison.</p><p>The moment the client <em>synthesizes</em> an authoritative event, the contract is broken, and a real server bug is now hidden behind a plausible-looking guess. So the rule holds even when it's inconvenient. If the client is stuck waiting on the server, the fix goes in the <em>server</em> - deliver the message reliably, replay it on reconnect - never in a client that invents the answer.</p><h2>Why it's worth the trouble</h2><p>A dumb client is more work up front. You build prediction, reconciliation, interpolation, and lag compensation instead of just moving a sprite. What you get back is a game that's fair by construction and honest about where its bugs actually live, which for a competitive brawler I'm maintaining alone is the part that saves me time later.</p><p>The phone is dumb on purpose.</p><p><em>More from the ClashUp devlog - the physics, the tooling, the ops - on the <a href="index.html#articles">article list</a>.</em></p></div></div>
   </div>
 </article>
-
-<div class="reactions">
-  <div class="reactions-inner" id="aReactions"></div>
-</div>
 
 <div class="art-foot">
   <div class="art-foot-inner">
@@ -114,7 +112,6 @@
 <script src="assets/js/markdown.js"></script>
 <script src="assets/js/demo-kit.js"></script>
 <script src="assets/js/netcode-demos.js"></script>
-<script src="assets/js/quant-demos.js"></script>
 <script src="assets/js/article.js"></script>
 </body>
 </html>

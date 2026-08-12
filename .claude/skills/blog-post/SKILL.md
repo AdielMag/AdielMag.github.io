@@ -22,6 +22,15 @@ Read one existing article end to end before writing.
 Skipping step 4 means shared links unfurl with no preview and RSS silently omits the post.
 Social scrapers do not run JS, so the generated static page is what the outside world sees.
 
+The generator **pre-renders the Markdown body into the page**, so `posts/<slug>.html` contains the full article text rather than an empty `<div>` waiting on `fetch()`.
+It also derives two things from the post automatically, with no manifest field to keep in sync:
+
+- **Which demo scripts to load.** It scans the Markdown for `[demo:<id>]` and the demo sources for `window.ArticleDemos.<id> =`, and emits only the files that post actually uses. An unregistered id prints a build warning.
+- **Reading time**, counted over prose with code fences and demo markers stripped.
+
+A `[demo:<id>]` paragraph becomes `<div class="demo-mount" data-demo="<id>">` in the generated page, with a one-line fallback inside for readers without JS.
+`assets/js/article.js` mounts into those, and still handles the raw `[demo:<id>]` paragraph on the `article.html?slug=` route.
+
 ## Voice
 
 Adiel's voice on this blog is specific and easy to break.
@@ -37,6 +46,47 @@ Adiel's voice on this blog is specific and easy to break.
 Write in plain English.
 Avoid buzzwords, avoid "leverage" as a verb, avoid "in today's world" openings.
 
+### The rhetorical tics that make a post read as generated
+
+The corpus was audited for AI-writing tells in August 2026.
+Vocabulary came back clean - no "delve", no "landscape", no hedging, no formulaic transitions.
+The problem was a set of repeated *moves*, and they are easy to fall back into because each one feels like good writing in isolation.
+
+**Epigrams.** Every section used to end on a short abstract sentence that generalised the technical point above it, averaging 4.4 per post.
+Budget one or two per post, and let most sections stop on the technical point.
+An epigram earns its place when it carries information the paragraph didn't; it doesn't when it restates the paragraph in a more quotable shape.
+
+**Verdict endings.** Three separate posts closed with a variant of "for a solo project, that's the right trade".
+Don't end on a judgement about whether the work was worth it.
+End on a specific fact, an unresolved consequence, or the thing you'll have to revisit.
+
+**Self-flattery.** "The part most write-ups skip", "a question I've almost never seen written up", "the unglamorous half nobody talks about".
+Seven of these across the corpus.
+Say the thing; don't claim it's rare.
+
+**"X isn't A, it's B."** Thirteen instances corpus-wide, twice in some posts.
+Once per post is a rhetorical device. Three times is a crutch.
+
+**Bolded inline-header lists** (`- **Thing.** explanation`).
+Eight of eleven posts had one, and six announced the count first ("pays off three ways at once", "three things conspired").
+At most one such list per post, and never announce how many items are coming - if the third item is padding, cut to two.
+
+**"Here's the..."** as the opener that introduces the core idea. Nine hits across seven posts. Vary it.
+
+**Sentence rhythm.** Every post should contain sentences of six words or fewer; one post had none in 693 words.
+Aim for 10-20% of sentences under seven words, and a mean around 15-19.
+
+Counting beats impressions here, so the counter ships with the repo:
+
+```bash
+node tools/audit-prose.mjs                 # whole corpus
+node tools/audit-prose.mjs <slug>          # one post
+```
+
+It prints words, em dashes, spaced dashes per 100 words, bold spans, short-sentence
+percentage, mean sentence length, and counts for the four tics above, marking anything
+outside budget with a `!`. The budgets live at the top of that file.
+
 ### Dashes
 
 Use a plain dash `-` with spaces around it, never an em dash.
@@ -48,6 +98,11 @@ A line that begins with an em dash becomes `- ` and the renderer parses it as a 
 And leave the `'—'` glyph in `quant-demos.js` alone; it marks "no value" in a canvas readout, where a plain dash reads as a minus sign.
 
 En dashes in numeric ranges (`0–100`, `95–99¢`) are correct typography and stay.
+
+**Budget the spaced dash.**
+The em dash count is zero, but ` - ` was doing the em dash's job at roughly one every 55 words, sometimes twice in a sentence.
+The corpus now sits near one every 110 words.
+Keep it there: when a third dash wants into a paragraph, it's a comma, a colon, or a full stop.
 
 ## Structure
 
@@ -61,6 +116,9 @@ Section headings are statements or questions, not labels.
 Good: "A version is a container, not a machine", "What happens to a client that's *too* old".
 Bad: "Architecture", "Implementation", "Conclusion".
 
+Vary the **closing-section heading**.
+"Was it worth it", "The payoff, and the honest tradeoffs", "Why it's worth the trouble", "The moral", "What generalizes" - five of eleven posts used that shape before the sweep.
+
 The **closing line** is an italic pointer back to the article list, naming two or three sibling posts by topic:
 
 ```markdown
@@ -69,6 +127,7 @@ The **closing line** is an italic pointer back to the article list, naming two o
 ```
 
 Use "the ClashUp devlog" for game-tech posts, "the MoneyMaker devlog" for trading-bot posts, and plain "More devlog" for standalone tooling posts.
+Name two siblings, not always three - eleven identical three-item lists read as generated.
 If the post ships something public, put a repo or store link in the paragraph directly above that closing line.
 
 ## Markdown: what the renderer actually supports
@@ -103,7 +162,8 @@ Generate it with the `higgsfield-generate` skill, keeping the style consistent w
 ```
 
 The alt text is a full sentence explaining what the diagram shows, not a label.
-It is the only description a screen reader gets, and `assets/js/article.js` reuses it as the lightbox caption.
+It does three jobs: the screen-reader description, the lightbox caption, and - since August 2026 - the **visible caption printed under the figure**.
+Write it as a sentence a sighted reader will read, because they now do.
 
 Place a diagram immediately after the paragraph that motivates it.
 A post with more than three body diagrams is usually a post that should be two posts.
@@ -178,11 +238,23 @@ Write it as a hook plus a "how" clause: what was hard, then what the post shows.
 **status** is `'draft'` while writing (the card shows a placeholder) and `'published'` when ready.
 Only published posts reach `posts/`, the feed, and the sitemap.
 
+## The page these posts land on
+
+Two things about the article page are worth knowing while writing.
+
+**The post's tag colour is the page's accent.** `tagColor` is emitted as `--accent` on `<html>` by the generator, and it drives the rules above `##` headings, body links, the hero's top border, the figure-caption bar, the focus ring, and text selection.
+Picking the tag picks the palette of the whole page, so pick it for the content, not the colour.
+
+**Type is a three-face system.** Bricolage Grotesque for titles and `##` headings, Space Grotesk for body, JetBrains Mono for labels and code.
+Sizes come from the `--text-*` scale in `assets/css/styles.css`; don't add a raw `px` font size.
+
 ## Before you call it done
 
 - `node tools/build-posts.mjs` ran, and `posts/<slug>.html`, `feed.xml`, `sitemap.xml` are staged.
 - Serve locally (`python -m http.server 8000`) and open the post. The article page fetches Markdown, so `file://` will not work.
 - Check the landing-page card, the hero image, the reading time, every diagram, and every demo.
 - Confirm no literal `[demo:...]` text and no escaped HTML is visible in the rendered body.
-- Check it at a narrow viewport. Nothing should scroll horizontally.
+- Check it at a narrow viewport, down to 320px. Nothing should scroll horizontally.
+- Tab through the post without a mouse. Every stop shows a focus ring; the diagrams open with Enter; any demo is drivable from the keyboard.
 - Re-read the post once for em dashes that crept in.
+- Count the tics: spaced dashes (roughly one per 110 words), bold spans (single digits), sentences under seven words (at least a few), and section-ending epigrams (one or two, not one per section).

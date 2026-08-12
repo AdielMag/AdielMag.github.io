@@ -14,12 +14,12 @@ at once.
 
 ## A version is a container, not a machine
 
-Here's the core move. The server isn't "the server." Each *version* of the game server
-is its own container image, tagged with the build it was compiled from - `:1.0.1`,
-`:1.0.2`, and so on. In front of them sits one long-lived **gateway**.
+The server isn't "the server." Each *version* of the game server is its own container
+image, tagged with the build it was compiled from - `:1.0.1`, `:1.0.2`, and so on. In
+front of them sits one long-lived **gateway**.
 
 Every request a client makes carries its build version in a header. The gateway reads
-that header and forwards the request to a backend running *exactly* that version -
+that header and forwards the request to a backend running *exactly* that version,
 spawning one on demand if it isn't already up. Internal server-to-server traffic
 arrives with no version header, so it routes to a default (`latest`).
 
@@ -27,9 +27,9 @@ arrives with no version header, so it routes to a default (`latest`).
 
 The consequence is the quietly powerful bit: **two builds never have to agree on
 anything.** A player on 1.0.1 talks to a 1.0.1 backend; a player on 1.0.2 talks to a
-1.0.2 backend. They can differ in physics, in rules, in message formats - it doesn't
-matter, because they never share a process. The only contract that has to stay stable
-is the thin one between the client and the gateway itself.
+1.0.2 backend. They can differ in physics, in rules, in message formats, because they
+never share a process. The only contract that has to stay stable is the thin one
+between the client and the gateway itself.
 
 ## Shipping a new version
 
@@ -38,34 +38,32 @@ want.
 
 ![A release timeline: push 1.0.2 to the registry, old 1.0.1 players keep their warm backend, new players get a 1.0.2 backend spawned side-by-side, the old one idle-evicts after 30 minutes](assets/img/gateway-release.svg)
 
-1. **Push the new image** to the registry. No machines change. Nothing restarts. The
-   players already in a match on the old version don't feel a thing.
-2. **The first player on the new build connects.** The gateway sees a version it isn't
-   running yet and spins up a backend for it, right alongside the old one.
-3. **The old version fades out.** As its last players drift away, that backend sits
-   idle and evicts itself after about half an hour. No one schedules its death; it just
-   tidies up after itself.
+Push the new image to the registry. No machines change, nothing restarts, and the
+players already in a match on the old version don't feel a thing. When the first
+player on the new build connects, the gateway sees a version it isn't running yet and
+spins up a backend for it, right alongside the old one. Then, as the last players on
+the old version drift away, that backend sits idle and evicts itself after about half
+an hour. No one schedules its death.
 
-There's no maintenance window because nothing goes down. There's no forced update
-because the old build keeps working for as long as people are on it. And rollback is a
-non-event: if a new build is bad, the players on the old version were never migrated
-onto it in the first place - there's nothing to undo.
+There's no maintenance window because nothing goes down, and no forced update because
+the old build keeps working for as long as people are on it. Rollback is a non-event
+too: if a new build is bad, the players on the old version were never migrated onto it
+in the first place, so there's nothing to undo.
 
 ## What happens to a client that's *too* old
 
 Not every old version can live forever. When a build finally ages out and stops being
-served, a client on it doesn't get a cryptic crash - it gets a clean, specific answer.
-The gateway replies with a "your version isn't supported, please update" signal (and
-even lists which versions *are* live), so the client can show a friendly "time to
-update" screen instead of silently failing. Saying *no* clearly is part of the design,
-not an afterthought.
+served, a client on it doesn't get a cryptic crash. It gets a clean, specific answer:
+the gateway replies with a "your version isn't supported, please update" signal and
+lists which versions *are* live, so the client can show a friendly update screen
+instead of silently failing.
 
 ## One image, two jobs
 
-There's a smaller trick hiding in here that saves a lot of maintenance. The lobby/
+There's a smaller trick hiding in here that saves a lot of maintenance. The lobby and
 matchmaking side of the game and the in-match game-server side are *the same gateway
-image* - they differ only in configuration (which ports, which backend images, whether
-to pre-warm). One thing to build, one thing to reason about, one thing that can break,
+image*. They differ only in configuration: which ports, which backend images, whether
+to pre-warm. One thing to build, one thing to reason about, one thing that can break,
 running in two roles.
 
 ## The tradeoffs
@@ -73,12 +71,12 @@ running in two roles.
 This isn't free. The first player to reach a brand-new version pays a small cold-start
 while the gateway spins that backend up. And the whole scheme leans hard on that thin
 client-to-gateway contract staying stable - the routing layer is the one seam you have
-to keep backwards-compatible, forever.
+to keep backwards-compatible, forever. Every message I add to it now, I add knowing
+I'm stuck with its shape.
 
-In exchange, a solo developer gets something that normally takes a platform team:
-gradual rollouts, coexisting versions, instant rollback, and deploys with no downtime
-and no forced updates - all from pushing an image to a registry. For keeping a live
-game healthy while you iterate fast, that's a trade I'll take every time.
+What it buys, from nothing more than pushing an image to a registry, is gradual
+rollouts, coexisting versions, instant rollback, and deploys nobody has to be awake
+for.
 
 *More from the ClashUp devlog - the netcode, the physics, the $0-idle fleet - on the
 [article list](index.html#articles).*

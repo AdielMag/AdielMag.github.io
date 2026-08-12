@@ -10,8 +10,8 @@ Buying at 97¢ to collect $1.00 a few minutes later is a 3% return in minutes -
 *if* you're right. The entire strategy of my bot, **MoneyMaker**, reduces to one
 question asked over and over: the market says 97%. Is the real number higher?
 
-That question has a wonderful property: unlike almost everything else in
-trading, it's answerable with math a physics undergrad would recognize.
+Unlike almost everything else in trading, that question is answerable with math
+a physics undergrad would recognize.
 
 ## The market prices the token. I price the asset.
 
@@ -35,11 +35,9 @@ holds, `2.0` means ~97.7%, `3.0` is near certainty.
 
 That conversion is what turns a price into a verdict. If YES trades at 95¢, the
 market is implicitly claiming `z ≈ 1.64`. When my measured z is 2.0 or higher,
-the market is *underpricing* certainty - those last few cents are being sold too
-cheap, and the bot buys them. The entry gate is exactly that: **enter only when
-measured z ≥ 2.0 while the price still implies ~1.64.** The edge isn't secret
-information; it's that the crowd prices round numbers and vibes, and a √T is
-sitting right there unused.
+the market is *underpricing* certainty, and the bot buys those last few cents.
+The entry gate is exactly that: **enter only when measured z ≥ 2.0 while the
+price still implies ~1.64.**
 
 ![The Resolution Safety Score: BTC's lead over the strike, divided by the volatility cone that could still close the gap in the remaining time](assets/img/rss-zscore.svg)
 
@@ -51,26 +49,26 @@ Everything above fits on an index card. What made it *tradeable* was defending
 each variable from real-world data quality, and each defense earned its place by
 failing without it.
 
-**σ is measured, not assumed** - the realized volatility of the last 90 seconds
+σ is measured rather than assumed: the realized volatility of the last 90 seconds
 of ticks, each price move scaled by `√Δt` so irregular tick spacing doesn't bias
 it. One flash wick would poison the estimate, so moves beyond 5× the RMS get
-winsorized out before the final figure. And the result is clamped into bounds
+winsorized out before the final figure, and the result is clamped into bounds
 that scale with the asset's price - never zero, never absurd.
 
-**The lead is smoothed.** The current price runs through an EMA before the lead
+The lead gets smoothed too. The current price runs through an EMA before the lead
 is computed, because a single stale or noisy tick at exactly the wrong moment
 could spike z past the gate and buy the whole balance. No single tick is allowed
 to make that decision alone.
 
-**Time gets a floor.** `√T` with seconds-to-zero explodes the z-score just
-before resolution - mathematically true, practically the most dangerous moment
-to trust it. The remaining time never counts below one second, and separate
-guards stop entries in the final half-minute anyway.
+Time gets a floor. `√T` with seconds-to-zero explodes the z-score just before
+resolution - mathematically true, practically the most dangerous moment to trust
+it. The remaining time never counts below one second, and separate guards stop
+entries in the final half-minute anyway.
 
-**Cheap certainty has to age.** Alongside z, the signal tracks how long the
-price has already held above the entry threshold. A 97¢ that's three seconds
-old gets its score halved; one that's held for fifteen gets trusted. Freshness
-is suspicion.
+And cheap certainty has to age. Alongside z, the signal tracks how long the price
+has already held above the entry threshold. A 97¢ that's three seconds old gets
+its score halved; one that's held for fifteen gets trusted. A number that just
+appeared is a number I don't believe yet.
 
 ## A model as a gate, not an oracle
 
@@ -80,14 +78,14 @@ earlier overlays from a more complicated era of the bot: an orderbook
 manipulation index and an "edge" estimate. Both were smarter on paper. Neither
 survived contact with the recorded data as cleanly as lead-over-expected-move.
 
-The philosophical choice that made this work: the model never *finds* trades,
-it only **vetoes** them. The market proposes - a price crosses 97¢ - and the
-z-score disposes. Used that way, a crude model's errors mostly cost you missed
-trades instead of lost money. The random walk is wrong about BTC in a dozen
-well-documented ways, and it doesn't matter, because it's only ever asked one
-modest question: is normal volatility big enough to flip this outcome in the
-next few minutes? For that question, at this timescale, √T is enough.
+The choice that made this work is that the model never *finds* trades, it only
+**vetoes** them. The market proposes - a price crosses 97¢ - and the z-score
+disposes. Used that way, a crude model's errors mostly cost you missed trades
+instead of lost money.
 
-*More from the MoneyMaker devlog - the last-20-seconds casino, the SOL bug that
-was a dollar sign, the backtest confessions - on the
-[article list](index.html#articles).*
+The random walk is wrong about BTC in a dozen well-documented ways, and it
+doesn't matter, because it's only ever asked one modest question: is normal
+volatility big enough to flip this outcome in the next few minutes?
+
+*More from the MoneyMaker devlog - the last-20-seconds casino and the SOL bug
+that was a dollar sign - on the [article list](index.html#articles).*
