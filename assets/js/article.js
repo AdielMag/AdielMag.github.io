@@ -9,7 +9,7 @@
 (function () {
   'use strict';
 
-  // Giscus (GitHub Discussions) config — free, shared comments, no backend.
+  // Giscus (GitHub Discussions) config - free, shared comments, no backend.
   var GISCUS = {
     repo: 'AdielMag/AdielMag.github.io',
     repoId: 'R_kgDOTTtcOQ',
@@ -61,7 +61,7 @@
   function hide(el) { if (el) el.style.display = 'none'; }
 
   if (!article) {
-    document.title = 'Post not found — devlog.';
+    document.title = 'Post not found - devlog.';
     if (titleEl) titleEl.textContent = 'Post not found';
     if (tagEl) tagEl.style.display = 'none';
     if (metaEl) metaEl.textContent = 'that link doesn’t match any post';
@@ -71,7 +71,7 @@
     return;
   }
 
-  document.title = article.title + ' — devlog.';
+  document.title = article.title + ' - devlog.';
   if (tagEl) {
     tagEl.textContent = (article.tag || '').toUpperCase();
     tagEl.style.background = article.tagBg;
@@ -82,9 +82,9 @@
   if (heroEl && article.hero) heroEl.style.backgroundImage = "url('" + article.hero + "')";
 
   var published = article.status === 'published';
-  if (metaEl) metaEl.textContent = published ? (article.date || 'published') : 'draft — not published yet';
+  if (metaEl) metaEl.textContent = published ? (article.date || 'published') : 'draft - not published yet';
 
-  // read-next + tags don't depend on the body — render them now
+  // read-next + tags don't depend on the body - render them now
   renderTags();
   renderReadNext();
 
@@ -294,13 +294,13 @@
 
   function notFoundHtml() {
     return '<div class="a-placeholder">' +
-      '<p>There\'s no post at this address — the link may be mistyped or the post may have moved.</p>' +
+      '<p>There\'s no post at this address - the link may be mistyped or the post may have moved.</p>' +
       '<p>Head back to the <a href="index.html#articles">article list</a> to find what you were after.</p>' +
     '</div>';
   }
   function placeholderHtml() {
     return '<div class="a-placeholder">' +
-      '<p>This one\'s still being written. Full post — code, diagrams, the works — is coming soon.</p>' +
+      '<p>This one\'s still being written. Full post - code, diagrams, the works - is coming soon.</p>' +
       '<p>In the meantime, check out what\'s <a href="index.html#projects">shipping</a> ' +
       'or head back to the <a href="index.html#articles">article list</a>.</p>' +
     '</div>';

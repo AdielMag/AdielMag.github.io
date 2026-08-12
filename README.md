@@ -1,5 +1,5 @@
 <h1 align="center">🕹️ devlog.</h1>
-<p align="center"><strong>Adiel Magenheim — game dev, mostly mobile, increasingly AI.</strong></p>
+<p align="center"><strong>Adiel Magenheim - game dev, mostly mobile, increasingly AI.</strong></p>
 <p align="center">
   <a href="https://adielmag.github.io/"><strong>▶ View the live site →</strong></a>
 </p>
@@ -7,28 +7,28 @@
 ---
 
 A personal game-development blog. Six years deep in mobile game dev, now building
-solo with AI — client, server, physics, all of it. The site showcases shipped
+solo with AI - client, server, physics, all of it. The site showcases shipped
 games, a work-in-progress flagship (**ClashUp**), and short devlog articles.
 
-Built as a **static site** — plain HTML/CSS/JS, **zero dependencies, no build
-step** — and hosted free on **GitHub Pages**. Articles are Markdown files rendered
+Built as a **static site** - plain HTML/CSS/JS, **zero dependencies, no build
+step** - and hosted free on **GitHub Pages**. Articles are Markdown files rendered
 in the browser. Type is **Space Grotesk** (UI/body) + **JetBrains Mono** (labels,
 tags, code).
 
 ## ✨ Highlights
 
-- **Clean hero** — badge, headline, two CTAs, soft radial glows (no heavy motion).
-- **Projects** — a featured "in development" spotlight (ClashUp) plus a grid of
+- **Clean hero** - badge, headline, two CTAs, soft radial glows (no heavy motion).
+- **Projects** - a featured "in development" spotlight (ClashUp) plus a grid of
   shipped games.
-- **Expandable project cards** — click any project for a modal with a **scrollable
+- **Expandable project cards** - click any project for a modal with a **scrollable
   screenshot gallery**, extra data (publisher, genre, rating, installs), and links
   to the App Store / Google Play (or archive mirrors for delisted titles).
-- **Real writable articles** — drop in a Markdown file, flip it to `published`.
-- **Rich article pages** — hero art, reading time, like/dislike reactions
+- **Real writable articles** - drop in a Markdown file, flip it to `published`.
+- **Rich article pages** - hero art, reading time, like/dislike reactions
   (remembered per device), post tags, "read next" cards, and **comments**.
-- **Free comments via [Giscus](https://giscus.app)** — backed by GitHub
+- **Free comments via [Giscus](https://giscus.app)** - backed by GitHub
   Discussions, no server, no database. See _Comments_ below.
-- **Responsive + themed** — clamped type, auto-fit grids, no horizontal scroll.
+- **Responsive + themed** - clamped type, auto-fit grids, no horizontal scroll.
 
 ## 🎮 Projects featured
 
@@ -53,7 +53,7 @@ tags, code).
 
 ```
 index.html                 Landing page (hero, projects, articles)
-article.html               Article template — reads ?slug=, renders a post
+article.html               Article template - reads ?slug=, renders a post
 posts/<slug>.html          Generated static page per post (real share metadata)
 feed.xml / sitemap.xml     Generated RSS feed + sitemap
 tools/build-posts.mjs      Generator for posts/, feed.xml, sitemap.xml
@@ -74,7 +74,7 @@ content/articles/*.md      One Markdown file per post
 
 ## 💬 Comments (Giscus)
 
-Comments are powered by **[Giscus](https://giscus.app)** — free, backed by this
+Comments are powered by **[Giscus](https://giscus.app)** - free, backed by this
 repo's **GitHub Discussions**, no backend. Each post maps to one discussion by
 its slug (`data-mapping="specific"`, `data-term=<slug>`). Config lives in
 `assets/js/article.js` (`GISCUS`): repo `AdielMag/AdielMag.github.io`, category
@@ -85,7 +85,7 @@ its slug (`data-mapping="specific"`, `data-term=<slug>`). Config lives in
 1. **Install the Giscus app** on the repo → <https://github.com/apps/giscus>
    (grant it access to `AdielMag.github.io`). Until this is done the widget shows
    _"giscus is not installed on this repository."_
-2. **Discussions** must be enabled (Settings → Features → Discussions) — already on.
+2. **Discussions** must be enabled (Settings → Features → Discussions) - already on.
 
 Moderate comments from the repo's **Discussions** tab. To restyle the widget,
 change `GISCUS.theme` in `assets/js/article.js` (a preset name or a full CSS URL).
@@ -93,7 +93,7 @@ change `GISCUS.theme` in `assets/js/article.js` (a preset name or a full CSS URL
 ## 🚀 Run locally
 
 The article page uses `fetch()` to load Markdown, which browsers block on
-`file://` — so serve it over a local web server:
+`file://` - so serve it over a local web server:
 
 ```bash
 python -m http.server 8000
@@ -104,17 +104,17 @@ python -m http.server 8000
 
 ## ✍️ Add an article
 
-1. Create `content/articles/<slug>.md` — Markdown, starting with a `# Title`.
+1. Create `content/articles/<slug>.md` - Markdown, starting with a `# Title`.
 2. Add an entry to `assets/js/articles.js` with a matching `slug` (set both
    `date` and `dateISO`).
 3. Set `status: 'published'` when it's ready (drafts show a placeholder).
-4. Run `node tools/build-posts.mjs` — regenerates the static pages in `posts/`
+4. Run `node tools/build-posts.mjs` - regenerates the static pages in `posts/`
    (these carry the Open Graph tags that make shared links unfurl properly),
    plus `feed.xml` and `sitemap.xml`. Commit the output.
 
 ## 🕹 Add or edit a project
 
-Everything about a project — description, facts, screenshots, and store links —
+Everything about a project - description, facts, screenshots, and store links -
 lives in `assets/js/projects.js`. Add screenshots to `assets/img/shots/` and
 reference them in the project's `shots` array; the modal builds the gallery
 automatically.
@@ -123,7 +123,7 @@ automatically.
 
 Hosted on GitHub Pages from the `main` branch root at
 **https://adielmag.github.io/**. Push to `main` and Pages redeploys
-automatically — the Markdown `fetch()` works in production because Pages serves
+automatically - the Markdown `fetch()` works in production because Pages serves
 over HTTPS.
 
 ---

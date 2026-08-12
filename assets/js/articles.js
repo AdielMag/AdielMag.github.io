@@ -1,5 +1,5 @@
 /* ===========================================================================
-   Article manifest — the single source of truth for both the landing page
+   Article manifest - the single source of truth for both the landing page
    (renders the article cards) and the article page (renders one post).
 
    To add a post:
@@ -14,8 +14,8 @@
      Server  -> gold   #ffd23f
      AI      -> green  #7cf29c
      Engine  -> muted  #c9c2d6
-     Trading -> violet #a78bfa   (MoneyMaker bot — live-market behavior & defenses)
-     Quant   -> blue   #6cb6ff   (MoneyMaker bot — models, math, backtests)
+     Trading -> violet #a78bfa   (MoneyMaker bot - live-market behavior & defenses)
+     Quant   -> blue   #6cb6ff   (MoneyMaker bot - models, math, backtests)
    =========================================================================== */
 window.ARTICLES = [
   {
@@ -25,7 +25,7 @@ window.ARTICLES = [
     tagBg: 'rgba(255,107,74,0.14)',
     accent: 'coral',
     title: 'The dumb client manifesto: zero game logic on the phone',
-    excerpt: "ClashUp's phone decides nothing — the server owns the whole game. Here's why, and how prediction, reconciliation, and interpolation make it feel instant anyway.",
+    excerpt: "ClashUp's phone decides nothing - the server owns the whole game. Here's why, and how prediction, reconciliation, and interpolation make it feel instant anyway.",
     hero: 'assets/img/splash-dumb-client-manifesto.jpg',
     date: 'Jul 13, 2026',
     dateISO: '2026-07-13',
@@ -38,7 +38,7 @@ window.ARTICLES = [
     tagBg: 'rgba(255,210,63,0.14)',
     accent: 'gold',
     title: 'Reaching $0 idle cost: serverless-style game servers on GCP',
-    excerpt: 'A game with zero players should cost zero dollars. How a serverless controller sleeps the whole fleet — machines and networking — down to nothing, and wakes it on demand.',
+    excerpt: 'A game with zero players should cost zero dollars. How a serverless controller sleeps the whole fleet - machines and networking - down to nothing, and wakes it on demand.',
     hero: 'assets/img/splash-zero-idle-game-servers.jpg',
     date: 'Jul 13, 2026',
     dateISO: '2026-07-13',
@@ -77,7 +77,7 @@ window.ARTICLES = [
     tagBg: 'rgba(167,139,250,0.14)',
     accent: 'violet',
     title: 'Time-Vegas: the last 20 seconds of a prediction market are a casino',
-    excerpt: "Predators shake out near-certain positions in the final seconds before resolution. How two tripwires — divergence detection and a kill switch — earned their keep, in dollars.",
+    excerpt: "Predators shake out near-certain positions in the final seconds before resolution. How two tripwires - divergence detection and a kill switch - earned their keep, in dollars.",
     hero: 'assets/img/splash-time-vegas.jpg',
     date: 'Jul 13, 2026',
     dateISO: '2026-07-13',
@@ -90,7 +90,7 @@ window.ARTICLES = [
     tagBg: 'rgba(167,139,250,0.14)',
     accent: 'violet',
     title: "Stop-losses that don't trust the price",
-    excerpt: 'On a thin market, a $2 order can fake a crash and trigger your stop-loss. Why my bot audits orderbook depth before believing a price — and deliberately fails open when it can’t.',
+    excerpt: 'On a thin market, a $2 order can fake a crash and trigger your stop-loss. Why my bot audits orderbook depth before believing a price - and deliberately fails open when it can’t.',
     hero: 'assets/img/splash-stop-loss-depth-check.jpg',
     date: 'Jul 13, 2026',
     dateISO: '2026-07-13',
@@ -103,7 +103,7 @@ window.ARTICLES = [
     tagBg: 'rgba(108,182,255,0.14)',
     accent: 'blue',
     title: 'My bot couldn’t trade SOL, and the bug was a dollar sign',
-    excerpt: 'A volatility floor hand-tuned in dollars for BTC made the entry gate mathematically impossible for SOL — with no errors and no losses. A postmortem on constants that don’t scale.',
+    excerpt: 'A volatility floor hand-tuned in dollars for BTC made the entry gate mathematically impossible for SOL - with no errors and no losses. A postmortem on constants that don’t scale.',
     hero: 'assets/img/splash-the-bug-was-a-dollar-sign.jpg',
     date: 'Jul 13, 2026',
     dateISO: '2026-07-13',
@@ -116,7 +116,7 @@ window.ARTICLES = [
     tagBg: 'rgba(108,182,255,0.14)',
     accent: 'blue',
     title: 'When 95¢ is cheap: pricing near-certainty with a z-score',
-    excerpt: 'A prediction market price is a probability claim — and sometimes it’s wrong by a measurable amount. How a random-walk z-score decides when the last few cents are underpriced.',
+    excerpt: 'A prediction market price is a probability claim - and sometimes it’s wrong by a measurable amount. How a random-walk z-score decides when the last few cents are underpriced.',
     hero: 'assets/img/splash-when-95-cents-is-cheap.jpg',
     date: 'Jul 13, 2026',
     dateISO: '2026-07-13',

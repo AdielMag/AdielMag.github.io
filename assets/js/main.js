@@ -41,7 +41,7 @@
             '<span class="proj-feat-meta">solo-built · client + server + physics</span>' +
           '</div>' +
           '<h3 class="proj-feat-name">ClashUp</h3>' +
-          '<p class="proj-feat-desc">A fast, portrait-mode multiplayer brawler — Brawl Stars energy in one hand. ' +
+          '<p class="proj-feat-desc">A fast, portrait-mode multiplayer brawler - Brawl Stars energy in one hand. ' +
             'Real-time 1v1 and team clashes on an authoritative server, powered by my own deterministic physics ' +
             'engine, <strong>AetherNet</strong>, so every player sees exactly the same fight, frame for frame.</p>' +
           '<div class="proj-feat-tags">' +

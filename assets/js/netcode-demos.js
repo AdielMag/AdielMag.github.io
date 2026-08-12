@@ -22,7 +22,7 @@
   var INPUT_MS = 90;     // ms between inputs while holding
 
   // ==========================================================================
-  // 1) PREDICTION — the lag problem, and instant local response
+  // 1) PREDICTION - the lag problem, and instant local response
   // ==========================================================================
   function prediction(host) {
     var wrap = frame(host, 'demo-prediction');
@@ -39,7 +39,7 @@
     cc.appendChild(lagS);
 
     caption(wrap, 'Hold a direction. With prediction OFF, your character waits a full round-trip before it ' +
-      'moves — the server is the only thing allowed to move it. Turn prediction ON and it responds the instant ' +
+      'moves - the server is the only thing allowed to move it. Turn prediction ON and it responds the instant ' +
       'you press, while the server quietly catches up.');
 
     var serverX = 0.5, clientX = 0.5, msgs = [], lastInput = 0;
@@ -95,7 +95,7 @@
   }
 
   // ==========================================================================
-  // 2) RECONCILIATION — predict ahead, retire inputs as the server acks them
+  // 2) RECONCILIATION - predict ahead, retire inputs as the server acks them
   // ==========================================================================
   function reconciliation(host) {
     var wrap = frame(host, 'demo-reconcile');
@@ -113,7 +113,7 @@
 
     caption(wrap, 'Prediction moves you immediately, so you run ahead of the server. Each input is numbered; ' +
       'the server echoes the last number it processed. The client keeps the not-yet-confirmed inputs (the ' +
-      'glowing queue) and replays them on top of the server’s truth — so it stays ahead with no rubber-banding. ' +
+      'glowing queue) and replays them on top of the server’s truth - so it stays ahead with no rubber-banding. ' +
       'Hit “Network spike” to watch the queue swell and drain.');
 
     var serverX = 0.5, confirmedX = 0.5, clientX = 0.5;
@@ -186,7 +186,7 @@
   }
 
   // ==========================================================================
-  // 3) INTERPOLATION — smooth remotes from sparse snapshots, rendered in the past
+  // 3) INTERPOLATION - smooth remotes from sparse snapshots, rendered in the past
   // ==========================================================================
   function interpolation(host) {
     var wrap = frame(host, 'demo-interp');
@@ -201,7 +201,7 @@
 
     caption(wrap, 'The green player is someone else, moving continuously (faint ghost = the truth). The server ' +
       'only samples them a few times a second (ticks). Rendering straight from those snapshots jumps; ' +
-      'interpolation buffers them and draws between the two most recent — a fraction of a second in the past — ' +
+      'interpolation buffers them and draws between the two most recent - a fraction of a second in the past - ' +
       'for perfectly smooth motion.');
 
     var snaps = [], lastSnap = 0, t0 = now();
@@ -250,7 +250,7 @@
   }
 
   // ==========================================================================
-  // 4) LAG COMPENSATION — rewind to what the shooter actually saw
+  // 4) LAG COMPENSATION - rewind to what the shooter actually saw
   // ==========================================================================
   function lagcomp(host) {
     var wrap = frame(host, 'demo-lagcomp');
@@ -266,7 +266,7 @@
     var fireBtn = tapButton('🎯 Fire', function () { doFire(); });
     cc.appendChild(fireBtn);
 
-    caption(wrap, 'You see the enemy in the past (interpolation), so you aim at their delayed position — but by ' +
+    caption(wrap, 'You see the enemy in the past (interpolation), so you aim at their delayed position - but by ' +
       'the time your shot reaches the server, they’ve moved on. With lag compensation the server rewinds to the ' +
       'exact instant you fired and checks the hit there. Turn it off and your perfect aim keeps missing.');
 

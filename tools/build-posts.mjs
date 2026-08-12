@@ -4,11 +4,11 @@
        node tools/build-posts.mjs
 
    Reads the manifest (assets/js/articles.js) and writes:
-     - posts/<slug>.html  — one static page per published post, with real
+     - posts/<slug>.html  - one static page per published post, with real
        <title>/description/Open Graph tags so shared links unfurl properly
        (social scrapers don't run JS, so article.html?slug= previews are bare)
-     - feed.xml           — RSS 2.0 feed of published posts
-     - sitemap.xml        — index + all post pages
+     - feed.xml           - RSS 2.0 feed of published posts
+     - sitemap.xml        - index + all post pages
 
    The pages use <base href="../"> so every relative asset/script/fetch path
    resolves from the site root, and stamp data-slug on <body>, which
@@ -22,7 +22,7 @@ const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const SITE = 'https://adielmag.github.io';
 const OG_IMAGE = `${SITE}/assets/img/og-card.jpg`;
 
-// Evaluate the manifest with a window shim — it's a plain browser script.
+// Evaluate the manifest with a window shim - it's a plain browser script.
 const window = {};
 new Function('window', readFileSync(join(root, 'assets/js/articles.js'), 'utf8'))(window);
 const articles = (window.ARTICLES || []).filter((a) => a.status === 'published');
@@ -53,15 +53,15 @@ const page = (a) => `<!DOCTYPE html>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <base href="../">
-  <title>${esc(a.title)} — devlog.</title>
+  <title>${esc(a.title)} - devlog.</title>
   <meta name="description" content="${esc(a.excerpt || '')}">
   <link rel="canonical" href="${SITE}/posts/${a.slug}.html">
-  <link rel="alternate" type="application/rss+xml" title="devlog. — Adiel Magenheim" href="${SITE}/feed.xml">
+  <link rel="alternate" type="application/rss+xml" title="devlog. - Adiel Magenheim" href="${SITE}/feed.xml">
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
   <meta name="theme-color" content="#151318">
   <meta property="og:type" content="article">
   <meta property="og:url" content="${SITE}/posts/${a.slug}.html">
-  <meta property="og:site_name" content="devlog. — Adiel Magenheim">
+  <meta property="og:site_name" content="devlog. - Adiel Magenheim">
   <meta property="og:title" content="${esc(a.title)}">
   <meta property="og:description" content="${esc(a.excerpt || '')}">
   <meta property="og:image" content="${OG_IMAGE}">
@@ -92,7 +92,7 @@ const page = (a) => `<!DOCTYPE html>
   <div class="art-header-inner">
     <div class="art-meta">
       <span class="tag-cat" id="aTag"></span>
-      <span class="art-meta-time" id="aMeta">draft — not published yet</span>
+      <span class="art-meta-time" id="aMeta">draft - not published yet</span>
     </div>
     <h1 class="art-title" id="aTitle"></h1>
     <p class="art-sub" id="aSub"></p>
@@ -165,7 +165,7 @@ const newest = articles.map((a) => a.dateISO).sort().at(-1);
 const feed = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 <channel>
-  <title>devlog. — Adiel Magenheim</title>
+  <title>devlog. - Adiel Magenheim</title>
   <link>${SITE}/</link>
   <description>Game dev, mostly mobile, increasingly AI. Multiplayer game tech, AI-assisted workflows, and the trading-bot lab.</description>
   <language>en</language>

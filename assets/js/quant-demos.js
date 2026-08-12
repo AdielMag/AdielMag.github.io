@@ -2,12 +2,12 @@
    Interactive quant demos for the MoneyMaker trading posts. Built on
    window.DemoKit (assets/js/demo-kit.js). Registers into window.ArticleDemos.
 
-     zscore  — "When 95¢ is cheap": a live random walk toward a strike, with the
+     zscore  - "When 95¢ is cheap": a live random walk toward a strike, with the
                volatility cone, z-score, and implied probability updating in
                real time. Shows why late-window certainty is measurable.
-     evcliff — "Everything my backtests told me": entry price vs. the risk it
+     evcliff - "Everything my backtests told me": entry price vs. the risk it
                buys. Slide the entry price and watch how many winners a single
-               stop-loss erases — the exact arithmetic behind the 85¢ cutoff.
+               stop-loss erases - the exact arithmetic behind the 85¢ cutoff.
    =========================================================================== */
 (function () {
   'use strict';
@@ -21,7 +21,7 @@
   var SANS = "'Space Grotesk', system-ui, sans-serif";
   var MONO = "'JetBrains Mono', ui-monospace, monospace";
 
-  // standard-normal CDF (Abramowitz & Stegun 26.2.17) — turns a z-score into
+  // standard-normal CDF (Abramowitz & Stegun 26.2.17) - turns a z-score into
   // the probability the lead holds to resolution
   function Phi(z) {
     if (z < 0) return 1 - Phi(-z);
@@ -38,7 +38,7 @@
   }
 
   // ==========================================================================
-  // zscore — random walk toward a strike, with a live volatility cone
+  // zscore - random walk toward a strike, with a live volatility cone
   // ==========================================================================
   function zscore(host) {
     var wrap = frame(host, 'demo-zscore');
@@ -51,11 +51,11 @@
     cc.appendChild(tapButton('↻ New 15-min window', function () { reset(); }));
 
     caption(wrap, 'BTC random-walks from the open (the strike) toward resolution. The purple cone is ' +
-      'how far ordinary volatility could still move it in the time left — ±1σ and ±2σ. Once the strike ' +
+      'how far ordinary volatility could still move it in the time left - ±1σ and ±2σ. Once the strike ' +
       'falls outside the 2σ cone, the outcome is ~97.7% locked (z ≥ 2): the market is still pricing ' +
       '~95¢, and those last cents are underpriced. Nudge the volatility and watch the cone breathe.');
 
-    var WD = 16000;           // window duration (ms) — one 15-min market, compressed
+    var WD = 16000;           // window duration (ms) - one 15-min market, compressed
     var STEP_MS = 40;
     var SIGMA_K = 6;          // points per unit-vol per √second
     var t0 = now(), lastStep = now(), path = [], price = 0, resolvedAt = 0, outcome = null;
@@ -156,9 +156,9 @@
       // verdict badge
       var vb = resolvedAt
         ? { txt: outcome === 'YES' ? 'YES ✓ held' : 'NO ✕ flipped', c: outcome === 'YES' ? COL.remote : COL.bad }
-        : buy ? { txt: 'UNDERPRICED — buy', c: COL.remote }
+        : buy ? { txt: 'UNDERPRICED - buy', c: COL.remote }
         : z >= 1.64 ? { txt: 'fairly priced', c: COL.gold }
-        : { txt: 'too risky — skip', c: COL.bad };
+        : { txt: 'too risky - skip', c: COL.bad };
       ctx.fillStyle = vb.c; ctx.font = '700 12px ' + SANS;
       ctx.fillText(vb.txt, px, bot - 4);
 
@@ -169,7 +169,7 @@
   }
 
   // ==========================================================================
-  // evcliff — entry price vs. the risk it buys (winners erased by one stop-loss)
+  // evcliff - entry price vs. the risk it buys (winners erased by one stop-loss)
   // ==========================================================================
   function evcliff(host) {
     var wrap = frame(host, 'demo-evcliff');
@@ -180,7 +180,7 @@
     var priceS = slider('Entry price', 80, 99, 97, 1, '¢');
     cc.appendChild(priceS);
 
-    caption(wrap, 'The strategy buys near-certain outcomes, so “more certain” feels safer — but the ' +
+    caption(wrap, 'The strategy buys near-certain outcomes, so “more certain” feels safer - but the ' +
       'arithmetic disagrees. Redeem at $1.00, stop-losses exit near 75¢. Slide the entry price and watch ' +
       'how many winning trades a single stop-loss wipes out. Past 85¢ the replays turned negative: tiny ' +
       'upside, fat tail, and manipulation clusters exactly where conviction is highest.');

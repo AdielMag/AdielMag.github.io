@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 <channel>
-  <title>devlog. — Adiel Magenheim</title>
+  <title>devlog. - Adiel Magenheim</title>
   <link>https://adielmag.github.io/</link>
   <description>Game dev, mostly mobile, increasingly AI. Multiplayer game tech, AI-assisted workflows, and the trading-bot lab.</description>
   <language>en</language>
@@ -13,7 +13,7 @@
     <guid isPermaLink="true">https://adielmag.github.io/posts/dumb-client-manifesto.html</guid>
     <pubDate>Mon, 13 Jul 2026 12:00:00 GMT</pubDate>
     <category>Client</category>
-    <description>ClashUp's phone decides nothing — the server owns the whole game. Here's why, and how prediction, reconciliation, and interpolation make it feel instant anyway.</description>
+    <description>ClashUp's phone decides nothing - the server owns the whole game. Here's why, and how prediction, reconciliation, and interpolation make it feel instant anyway.</description>
   </item>
   <item>
     <title>Reaching $0 idle cost: serverless-style game servers on GCP</title>
@@ -21,7 +21,7 @@
     <guid isPermaLink="true">https://adielmag.github.io/posts/zero-idle-game-servers.html</guid>
     <pubDate>Mon, 13 Jul 2026 12:00:00 GMT</pubDate>
     <category>Server</category>
-    <description>A game with zero players should cost zero dollars. How a serverless controller sleeps the whole fleet — machines and networking — down to nothing, and wakes it on demand.</description>
+    <description>A game with zero players should cost zero dollars. How a serverless controller sleeps the whole fleet - machines and networking - down to nothing, and wakes it on demand.</description>
   </item>
   <item>
     <title>The version-aware gateway: shipping without kicking anyone off</title>
@@ -45,7 +45,7 @@
     <guid isPermaLink="true">https://adielmag.github.io/posts/time-vegas.html</guid>
     <pubDate>Mon, 13 Jul 2026 12:00:00 GMT</pubDate>
     <category>Trading</category>
-    <description>Predators shake out near-certain positions in the final seconds before resolution. How two tripwires — divergence detection and a kill switch — earned their keep, in dollars.</description>
+    <description>Predators shake out near-certain positions in the final seconds before resolution. How two tripwires - divergence detection and a kill switch - earned their keep, in dollars.</description>
   </item>
   <item>
     <title>Stop-losses that don't trust the price</title>
@@ -53,7 +53,7 @@
     <guid isPermaLink="true">https://adielmag.github.io/posts/stop-loss-depth-check.html</guid>
     <pubDate>Mon, 13 Jul 2026 12:00:00 GMT</pubDate>
     <category>Trading</category>
-    <description>On a thin market, a $2 order can fake a crash and trigger your stop-loss. Why my bot audits orderbook depth before believing a price — and deliberately fails open when it can’t.</description>
+    <description>On a thin market, a $2 order can fake a crash and trigger your stop-loss. Why my bot audits orderbook depth before believing a price - and deliberately fails open when it can’t.</description>
   </item>
   <item>
     <title>My bot couldn’t trade SOL, and the bug was a dollar sign</title>
@@ -61,7 +61,7 @@
     <guid isPermaLink="true">https://adielmag.github.io/posts/the-bug-was-a-dollar-sign.html</guid>
     <pubDate>Mon, 13 Jul 2026 12:00:00 GMT</pubDate>
     <category>Quant</category>
-    <description>A volatility floor hand-tuned in dollars for BTC made the entry gate mathematically impossible for SOL — with no errors and no losses. A postmortem on constants that don’t scale.</description>
+    <description>A volatility floor hand-tuned in dollars for BTC made the entry gate mathematically impossible for SOL - with no errors and no losses. A postmortem on constants that don’t scale.</description>
   </item>
   <item>
     <title>When 95¢ is cheap: pricing near-certainty with a z-score</title>
@@ -69,7 +69,7 @@
     <guid isPermaLink="true">https://adielmag.github.io/posts/when-95-cents-is-cheap.html</guid>
     <pubDate>Mon, 13 Jul 2026 12:00:00 GMT</pubDate>
     <category>Quant</category>
-    <description>A prediction market price is a probability claim — and sometimes it’s wrong by a measurable amount. How a random-walk z-score decides when the last few cents are underpriced.</description>
+    <description>A prediction market price is a probability claim - and sometimes it’s wrong by a measurable amount. How a random-walk z-score decides when the last few cents are underpriced.</description>
   </item>
   <item>
     <title>How hard is this market to shove? Scoring manipulation resistance 0–100</title>

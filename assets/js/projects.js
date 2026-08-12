@@ -1,5 +1,5 @@
 /* ===========================================================================
-   Project data — powers the "View details" modal (extra data + screenshot
+   Project data - powers the "View details" modal (extra data + screenshot
    gallery + store/archive links) for each project card.
    Cards in index.html carry data-project="<id>"; main.js opens the modal.
    Screenshots live in assets/img/shots/. Store facts sourced from the App
@@ -14,16 +14,16 @@ window.PROJECTS = {
     statusLabel: '🚀 In development · coming soon',
     tagline: 'A fast portrait-mode multiplayer brawler.',
     description:
-      "ClashUp is a fast, portrait-mode multiplayer brawler — Brawl Stars energy in one hand. " +
+      "ClashUp is a fast, portrait-mode multiplayer brawler - Brawl Stars energy in one hand. " +
       "Jump into real-time 1v1 and team clashes on an authoritative server, powered by my own " +
       "deterministic physics engine, AetherNet, so every player sees exactly the same fight, frame " +
-      "for frame. I'm building the whole thing solo — client, server, and physics. Coming soon.",
+      "for frame. I'm building the whole thing solo - client, server, and physics. Coming soon.",
     facts: [
       ['Genre', 'Real-time multiplayer brawler'],
       ['Modes', '1v1 · team clashes'],
       ['Platforms', 'iOS · Android (planned)'],
       ['Netcode', 'Authoritative server · deterministic physics (AetherNet)'],
-      ['Status', 'In development — coming soon'],
+      ['Status', 'In development - coming soon'],
     ],
     tags: ['Multiplayer', 'Real-time', 'Deterministic physics', 'Solo-built'],
     links: [],
@@ -38,7 +38,7 @@ window.PROJECTS = {
     statusLabel: '✅ Live',
     tagline: 'Live group video-chat Texas Hold’em.',
     description:
-      "Poker Face is a social Texas Hold'em game built around live group video chat — up to five " +
+      "Poker Face is a social Texas Hold'em game built around live group video chat - up to five " +
       "friends at one table, face to face. Daily free chips, mini-slot games between hands, and a VIP " +
       "program keep it social and casual. It's one of Comunix's flagship titles, enjoyed by millions of " +
       "players worldwide.",
@@ -70,11 +70,11 @@ window.PROJECTS = {
     publisherLogo: 'assets/img/comunix.png',
     status: 'unavailable',
     statusLabel: '⚠ No longer available',
-    tagline: 'Live bingo with friends — quick rounds, big daubs.',
+    tagline: 'Live bingo with friends - quick rounds, big daubs.',
     description:
       "Royal Bingo is a casual live bingo game: fast rounds, big daubs, and live video chat with friends. " +
       "Thousands of levels across themed locations, plus tournaments and leaderboards to climb. Built by " +
-      "Comunix — it has since been pulled from the App Store and Google Play, but the listing survives on " +
+      "Comunix - it has since been pulled from the App Store and Google Play, but the listing survives on " +
       "third-party archives.",
     facts: [
       ['Publisher', 'Comunix Ltd'],
@@ -106,7 +106,7 @@ window.PROJECTS = {
     statusLabel: '⚠ No longer available',
     tagline: 'A hero-collector RPG about rebuilding the light.',
     description:
-      "Solaria: Dawn of Heroes is a hero-collector action RPG — assemble a squad, master real-time squad " +
+      "Solaria: Dawn of Heroes is a hero-collector action RPG - assemble a squad, master real-time squad " +
       "combat, and swap between heroes on the fly to adapt to any fight. Recruit and upgrade a roster of " +
       "heroes, each with distinct powers and stories. A Glaive Games title, now retired from the stores " +
       "but preserved on third-party archives.",
@@ -140,10 +140,10 @@ window.PROJECTS = {
     publisherLogo: 'assets/img/glaive.png',
     status: 'live',
     statusLabel: '✅ Live · actively updated',
-    tagline: 'Real-time squad ARPG — swap heroes mid-fight.',
+    tagline: 'Real-time squad ARPG - swap heroes mid-fight.',
     description:
       "Swap Heroes: Eternal Legends is a real-time squad ARPG where you switch between heroes mid-fight to " +
-      "counter every threat — your bench is half your strategy. Collect and upgrade heroes, climb " +
+      "counter every threat - your bench is half your strategy. Collect and upgrade heroes, climb " +
       "leaderboards, and join guilds. Live globally on iOS and Android, and still in active development " +
       "at Glaive Games.",
     facts: [
