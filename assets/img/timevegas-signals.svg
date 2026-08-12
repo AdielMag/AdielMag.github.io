@@ -12,7 +12,7 @@
 
   <rect width="940" height="480" fill="#0f1419"/>
   <text x="40" y="44" class="ttl">The final 30 seconds: the token lies, the asset doesn't</text>
-  <text x="40" y="68" class="sub">Two independent tripwires watch the close — divergence detection and a kill switch for pennies-vs-dollars risk.</text>
+  <text x="40" y="68" class="sub">Two independent tripwires watch the close - divergence detection and a kill switch for pennies-vs-dollars risk.</text>
 
   <!-- chart frame -->
   <rect x="40" y="96" width="620" height="300" rx="12" fill="#131a22" stroke="#20344a"/>
@@ -32,12 +32,12 @@
   <!-- BTC line: flat/slightly rising, calm -->
   <path d="M70,190 L150,187 L230,189 L310,184 L390,183 L470,180 L550,178 L630,176"
         fill="none" stroke="#ffd23f" stroke-width="2.5"/>
-  <text x="76" y="178" class="mono" fill="#ffd23f" font-size="11">BTC spot — flat, comfortably above strike</text>
+  <text x="76" y="178" class="mono" fill="#ffd23f" font-size="11">BTC spot - flat, comfortably above strike</text>
 
   <!-- token line: high then predatory dive -->
   <path d="M70,150 L150,148 L230,146 L310,148 L370,147 L410,168 L440,214 L470,258 L520,262 L560,244 L630,140"
         fill="none" stroke="#a78bfa" stroke-width="2.5"/>
-  <text x="76" y="140" class="mono" fill="#a78bfa" font-size="11">YES token — 97¢, high conviction</text>
+  <text x="76" y="140" class="mono" fill="#a78bfa" font-size="11">YES token - 97¢, high conviction</text>
 
   <!-- PDD annotation -->
   <circle cx="440" cy="214" r="5" fill="#f85149"/>
@@ -50,7 +50,7 @@
 
   <!-- tripwire cards -->
   <rect x="690" y="110" width="216" height="128" rx="10" fill="#1a212b" stroke="#f85149"/>
-  <text x="706" y="136" class="t" fill="#ff7b72">Tripwire 1 — PDD</text>
+  <text x="706" y="136" class="t" fill="#ff7b72">Tripwire 1 - PDD</text>
   <text x="706" y="158" class="s">Token dives while the asset is</text>
   <text x="706" y="173" class="s">flat or rising. Only arms in the</text>
   <text x="706" y="188" class="s">last 30s, below 88¢, after a</text>
@@ -58,7 +58,7 @@
   <text x="706" y="226" class="mono" fill="#ff7b72" font-size="11">divergence = predator</text>
 
   <rect x="690" y="256" width="216" height="128" rx="10" fill="#1a212b" stroke="#ffd23f"/>
-  <text x="706" y="282" class="t" fill="#ffd23f">Tripwire 2 — Time-Vegas</text>
+  <text x="706" y="282" class="t" fill="#ffd23f">Tripwire 2 - Time-Vegas</text>
   <text x="706" y="304" class="s">&lt; 20s remaining and still under</text>
   <text x="706" y="319" class="s">98.5¢? Exit. Risking ~98¢ to</text>
   <text x="706" y="334" class="s">earn ~2¢ at the most</text>

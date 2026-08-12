@@ -17,7 +17,7 @@
 
   <rect width="920" height="560" fill="#0f1419"/>
   <text x="40" y="46" class="ttl">One controller, two states</text>
-  <text x="40" y="70" class="sub">A serverless controller — itself scaled to zero — flips the whole fleet between awake and asleep.</text>
+  <text x="40" y="70" class="sub">A serverless controller - itself scaled to zero - flips the whole fleet between awake and asleep.</text>
 
   <!-- ===== AWAKE state ===== -->
   <rect x="70" y="185" width="300" height="190" rx="14" fill="#16231a" stroke="#3fb950" stroke-width="1.5"/>
@@ -46,7 +46,7 @@
   <!-- ===== WAKE transition (bottom) ===== -->
   <path d="M550,340 C 475,340 475,455 375,455 L280,455" stroke="#4da3ff" stroke-width="2" fill="none" marker-end="url(#lBlue)"/>
   <path d="M280,455 C 200,455 200,377 160,377" stroke="#4da3ff" stroke-width="2" fill="none" marker-end="url(#lBlue)"/>
-  <text x="460" y="447" class="trig" fill="#79c0ff" text-anchor="middle">🎮 a player returns — "where do I connect?"</text>
+  <text x="460" y="447" class="trig" fill="#79c0ff" text-anchor="middle">🎮 a player returns - "where do I connect?"</text>
   <text x="460" y="493" class="act" fill="#c9d4df" text-anchor="middle">autoscalers on · rebuild networking · re-allowlist the database · hand back the address</text>
 
   <!-- ===== stay-awake self loop ===== -->

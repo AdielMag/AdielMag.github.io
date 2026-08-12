@@ -37,7 +37,7 @@
   <rect x="650" y="396" width="150" height="8" rx="4" fill="#3fb950"/>
   <text x="725" y="384" class="val" text-anchor="middle" fill="#56c96a">$0</text>
   <text x="725" y="434" class="cat" text-anchor="middle">Fully asleep</text>
-  <text x="725" y="454" class="note" text-anchor="middle">networking torn down too —</text>
+  <text x="725" y="454" class="note" text-anchor="middle">networking torn down too -</text>
   <text x="725" y="470" class="note" text-anchor="middle">nothing left to bill</text>
 
   <!-- ==== step annotations ==== -->

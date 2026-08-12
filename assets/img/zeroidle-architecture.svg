@@ -65,7 +65,7 @@
   <rect x="486" y="484" width="150" height="34" rx="7" fill="#231f12" stroke="#7a5c1e"/>
   <text x="561" y="506" class="chip" text-anchor="middle">Static IPs</text>
   <rect x="320" y="528" width="316" height="34" rx="7" fill="#231f12" stroke="#7a5c1e"/>
-  <text x="478" y="550" class="chip" text-anchor="middle">Cloud NAT — egress to the database</text>
+  <text x="478" y="550" class="chip" text-anchor="middle">Cloud NAT - egress to the database</text>
 
   <!-- ===== MongoDB Atlas ===== -->
   <g transform="translate(720,440)">

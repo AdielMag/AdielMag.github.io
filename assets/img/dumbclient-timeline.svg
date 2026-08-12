@@ -24,7 +24,7 @@
   <!-- Lane 1: local player -->
   <rect x="40" y="128" width="820" height="120" rx="12" fill="#1a212b" stroke="#a371f7" stroke-opacity="0.6"/>
   <text x="60" y="154" class="lane" fill="#c4b1ee">🕹 You (the local player)</text>
-  <text x="60" y="176" class="s">Prediction: your move happens the instant you touch the screen — no waiting for the round-trip.</text>
+  <text x="60" y="176" class="s">Prediction: your move happens the instant you touch the screen - no waiting for the round-trip.</text>
   <circle cx="470" cy="212" r="9" fill="#a371f7"/>
   <text x="470" y="240" class="lbl" text-anchor="middle">rendered at NOW</text>
   <path d="M120,212 L455,212" stroke="#a371f7" stroke-width="2" fill="none" marker-end="url(#tlArrow)"/>
@@ -34,7 +34,7 @@
   <rect x="40" y="260" width="820" height="92" rx="12" fill="#16202b" stroke="#4da3ff" stroke-opacity="0.6"/>
   <text x="60" y="286" class="lane" fill="#79c0ff">✓ Reconciliation</text>
   <text x="60" y="308" class="s">A snapshot arrives: snap to the server's truth, then instantly replay the inputs it hadn't seen yet.</text>
-  <text x="60" y="328" class="s">Inputs are acked by a counter the server echoes back — so exactly the un-acked ones get replayed.</text>
+  <text x="60" y="328" class="s">Inputs are acked by a counter the server echoes back - so exactly the un-acked ones get replayed.</text>
   <circle cx="470" cy="300" r="7" fill="#4da3ff"/>
   <path d="M470,300 C 540,300 560,300 600,300" stroke="#4da3ff" stroke-width="2" fill="none" marker-end="url(#tlArrow)"/>
   <text x="640" y="304" class="s" fill="#79c0ff">replay un-acked</text>
@@ -42,7 +42,7 @@
   <!-- Lane 3: remotes -->
   <rect x="40" y="364" width="820" height="92" rx="12" fill="#16231a" stroke="#3fb950" stroke-opacity="0.6"/>
   <text x="60" y="390" class="lane" fill="#56c96a">👥 Everyone else (remote players)</text>
-  <text x="60" y="412" class="s">Not simulated on your device — just smoothly interpolated between buffered snapshots, ~66 ms behind.</text>
+  <text x="60" y="412" class="s">Not simulated on your device - just smoothly interpolated between buffered snapshots, ~66 ms behind.</text>
   <circle cx="150" cy="430" r="9" fill="#3fb950"/>
   <text x="150" y="448" class="s" text-anchor="middle" fill="#56c96a">rendered in the past</text>
   <line x1="170" y1="430" x2="450" y2="430" stroke="#3fb950" stroke-width="1.5" stroke-dasharray="5 4"/>

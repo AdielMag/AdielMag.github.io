@@ -15,7 +15,7 @@
 
   <rect width="900" height="470" fill="#0f1419"/>
   <text x="40" y="46" class="ttl">One query, three engines, one list</text>
-  <text x="40" y="70" class="sub">“All” mode runs text, filename, and symbol search together — results arrive tagged by section.</text>
+  <text x="40" y="70" class="sub">“All” mode runs text, filename, and symbol search together - results arrive tagged by section.</text>
 
   <!-- query box -->
   <rect x="40" y="104" width="200" height="72" rx="12" fill="#1a212b" stroke="#a371f7" stroke-width="1.5"/>
@@ -68,7 +68,7 @@
 
   <!-- preview pane -->
   <rect x="300" y="320" width="560" height="118" rx="12" fill="#12141a" stroke="#a371f7"/>
-  <text x="318" y="344" class="t" fill="#c4b1ee">Live preview — editable</text>
+  <text x="318" y="344" class="t" fill="#c4b1ee">Live preview - editable</text>
   <text x="318" y="362" class="s">contextLines around the hit, syntax + semantic tokens · Ctrl+S writes to the real file</text>
   <rect x="318" y="374" width="524" height="18" rx="4" fill="#0f1419"/>
   <text x="326" y="387" class="mono" font-size="10.5" fill="#8b98a5">  38   private readonly MatchmakingQueue _queue;</text>
@@ -78,7 +78,7 @@
   <text x="326" y="429" class="mono" font-size="9.5" fill="#8b98a5">  43   …</text>
 
   <text x="40" y="344" class="lbl">No result opens a file</text>
-  <text x="40" y="364" class="s">until you press Enter —</text>
+  <text x="40" y="364" class="s">until you press Enter -</text>
   <text x="40" y="382" class="s">the preview pane carries</text>
   <text x="40" y="400" class="s">the context, so browsing</text>
   <text x="40" y="418" class="s">40 hits doesn't leave 40</text>

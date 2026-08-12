@@ -67,20 +67,22 @@
       if (!p) return;
       var shot = (p.shots && p.shots[0]) || '';
       // only surface the LIVE badge; leave delisted/archived titles unlabelled
-      var pill = p.status === 'live' ? '<span class="pill-status mini live">LIVE</span>' : '<span></span>';
+      var pill = p.status === 'live' ? '<span class="pill-status mini live">LIVE</span>' : '';
+      var icon = ICONS[id]
+        ? '<img class="proj-card-icon" src="' + ICONS[id] + '" alt="" loading="lazy">'
+        : '';
       html +=
         '<article class="proj-card" data-project="' + id + '" tabindex="0" role="button" ' +
           'aria-label="' + esc(p.name) + ' - open project details">' +
-          '<div class="proj-card-shot" style="background-image:url(\'' + esc(shot) + '\')"></div>' +
+          '<div class="proj-card-shot" style="background-image:url(\'' + esc(shot) + '\')">' + pill + '</div>' +
           '<div class="proj-card-body">' +
-            '<div class="proj-card-top">' +
-              pill +
-              '<span class="proj-card-pub">' + esc(p.publisher || '') + '</span>' +
+            icon +
+            '<div class="proj-card-text">' +
+              '<h3 class="proj-card-name">' + esc(p.name) + '</h3>' +
+              '<div class="proj-card-pub">' + esc(p.publisher || '') + '</div>' +
             '</div>' +
-            '<h3 class="proj-card-name">' + esc(p.name) + '</h3>' +
-            '<div class="proj-card-tag">' + esc(p.tagline || '') + '</div>' +
-            '<div class="proj-card-link">View details →</div>' +
           '</div>' +
+          '<div class="proj-card-tag">' + esc(p.tagline || '') + '</div>' +
         '</article>';
     });
     grid.innerHTML = html;
@@ -142,21 +144,29 @@
     });
   }
 
+  // Every card carries a spine in its tag colour and one mono line of facts.
+  // The tag taxonomy is the most useful thing about this list, so it should be
+  // legible before you read a single title.
   function buildArticleCard(a) {
+    var meta = (window.ARTICLE_META || {})[a.slug] || {};
     var card = document.createElement('a');
     card.className = 'article-card';
     card.href = 'posts/' + encodeURIComponent(a.slug) + '.html';
     card.style.setProperty('--tc', a.tagColor);
+
+    var facts = [esc((a.tag || '').toUpperCase()), esc(a.date || '')];
+    if (meta.minutes) facts.push(meta.minutes + ' min read');
+
     card.innerHTML =
-      '<div class="article-card-media" style="background-image:url(\'' + esc(a.hero || '') + '\')"></div>' +
+      '<div class="article-card-media" style="background-image:url(\'' + esc(a.hero || '') + '\')">' +
+        (meta.demos
+          ? '<span class="card-demo-flag">' + meta.demos + ' live demo' + (meta.demos > 1 ? 's' : '') + '</span>'
+          : '') +
+      '</div>' +
       '<div class="article-card-body">' +
-        '<div class="article-card-top">' +
-          '<span class="tag-cat" style="background:' + a.tagBg + ';color:' + a.tagColor + '">' + esc(a.tag) + '</span>' +
-          '<span class="article-date">' + esc(a.date || '') + '</span>' +
-        '</div>' +
+        '<div class="article-card-meta">' + facts.join('<span class="dot">·</span>') + '</div>' +
         '<h3 class="article-card-title">' + esc(a.title) + '</h3>' +
         '<div class="article-card-excerpt">' + esc(a.excerpt || '') + '</div>' +
-        '<div class="article-card-read" style="color:' + a.tagColor + '">Read →</div>' +
       '</div>';
     return card;
   }

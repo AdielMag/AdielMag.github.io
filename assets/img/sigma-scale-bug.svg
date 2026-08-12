@@ -12,7 +12,7 @@
 
   <rect width="940" height="480" fill="#0f1419"/>
   <text x="40" y="44" class="ttl">The same $5 floor, at two different scales</text>
-  <text x="40" y="68" class="sub">A volatility clamp hand-tuned in dollars for BTC quietly became a wall for SOL — the fix is a percentage of price.</text>
+  <text x="40" y="68" class="sub">A volatility clamp hand-tuned in dollars for BTC quietly became a wall for SOL - the fix is a percentage of price.</text>
 
   <!-- BTC panel -->
   <rect x="40" y="96" width="420" height="230" rx="12" fill="#131a22" stroke="#20344a"/>
@@ -22,7 +22,7 @@
   <!-- BTC price bar -->
   <rect x="64" y="170" width="360" height="26" rx="6" fill="#1a212b" stroke="#2b3947"/>
   <rect x="64" y="170" width="2" height="26" rx="1" fill="#ffd23f"/>
-  <text x="76" y="188" class="s">the floor is that sliver — a harmless backstop</text>
+  <text x="76" y="188" class="s">the floor is that sliver - a harmless backstop</text>
 
   <text x="64" y="232" class="mono" fill="#56c96a" font-size="12">z-score gate: passes on a routine drift</text>
   <rect x="64" y="248" width="360" height="48" rx="10" fill="#16231a" stroke="#3fb950"/>
@@ -46,5 +46,5 @@
   <rect x="40" y="356" width="866" height="96" rx="12" fill="#15212e" stroke="#4da3ff" stroke-width="2"/>
   <text x="64" y="388" class="t" fill="#79c0ff">The fix: constants that scale with the asset</text>
   <text x="64" y="414" class="mono" fill="#79c0ff" font-size="12">sigmaFloor = openPrice × 0.00006   (≈ $5 at BTC $80k, ≈ $0.006 at SOL $100)</text>
-  <text x="64" y="436" class="s">identical behavior for the profitable BTC bot — and the SOL bot made its first trade within the hour</text>
+  <text x="64" y="436" class="s">identical behavior for the profitable BTC bot - and the SOL bot made its first trade within the hour</text>
 </svg>

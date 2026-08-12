@@ -13,7 +13,7 @@
 
   <rect width="900" height="450" fill="#0f1419"/>
   <text x="40" y="46" class="ttl">One vault, three ways in</text>
-  <text x="40" y="70" class="sub">The memory lives in the repo — so it's readable by the AI, browsable by me, and versioned by git.</text>
+  <text x="40" y="70" class="sub">The memory lives in the repo - so it's readable by the AI, browsable by me, and versioned by git.</text>
 
   <!-- center: the vault -->
   <rect x="330" y="120" width="240" height="230" rx="14" fill="#16231a" stroke="#3fb950" stroke-width="1.5"/>
@@ -25,7 +25,7 @@
   <text x="366" y="238" class="mono">├ abilities/</text>
   <text x="366" y="256" class="mono">├ gameplay/ · ops/ …</text>
   <text x="366" y="278" class="mono">└ MEMORY.md  <tspan fill="#56c96a">(index)</tspan></text>
-  <text x="352" y="308" class="s">rules/ — conventions that</text>
+  <text x="352" y="308" class="s">rules/ - conventions that</text>
   <text x="352" y="324" class="s">load when I edit matching files</text>
 
   <!-- left top: AI -->
@@ -44,13 +44,13 @@
   <rect x="650" y="190" width="210" height="90" rx="12" fill="#191a12" stroke="#d29922"/>
   <text x="755" y="220" class="t" text-anchor="middle" fill="#e3b341">🌱 Git history</text>
   <text x="755" y="242" class="s" text-anchor="middle">every memory change is a</text>
-  <text x="755" y="258" class="s" text-anchor="middle">commit — diffable, revertable</text>
+  <text x="755" y="258" class="s" text-anchor="middle">commit - diffable, revertable</text>
 
   <!-- connectors -->
   <path d="M250,165 C 290,175 300,200 328,205" stroke="#a371f7" stroke-width="1.8" fill="none"/>
   <path d="M250,305 C 290,290 300,270 328,262" stroke="#4da3ff" stroke-width="1.8" fill="none"/>
   <path d="M570,235 L646,235" stroke="#d29922" stroke-width="1.8" fill="none"/>
 
-  <text x="40" y="410" class="s">Because it's in-repo, a memory the AI writes shows up as a git change I can review — the knowledge base</text>
+  <text x="40" y="410" class="s">Because it's in-repo, a memory the AI writes shows up as a git change I can review - the knowledge base</text>
   <text x="40" y="428" class="s">and the code evolve together, in the same history.</text>
 </svg>

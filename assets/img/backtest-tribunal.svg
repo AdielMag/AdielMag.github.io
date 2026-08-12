@@ -24,7 +24,7 @@
   <text x="76" y="200" class="mono" fill="#79c0ff" font-size="11">ticks.jsonl.gz</text>
   <text x="184" y="200" class="s">every tick</text>
   <text x="60" y="228" class="s">6 observer bots on unfunded wallets</text>
-  <text x="60" y="243" class="s">record markets nobody trades yet —</text>
+  <text x="60" y="243" class="s">record markets nobody trades yet -</text>
   <text x="60" y="258" class="s">BTC · SOL · ETH × 5m · 15m</text>
   <text x="60" y="278" class="mono" fill="#ffd23f" font-size="11">data first, dollars later</text>
 
@@ -35,7 +35,7 @@
   <text x="368" y="140" class="t" fill="#79c0ff">⚖ The tribunal</text>
   <text x="368" y="164" class="s">replays the exact entry, stop-loss</text>
   <text x="368" y="179" class="s">and exit code over each recorded</text>
-  <text x="368" y="194" class="s">market — thousands of parameter</text>
+  <text x="368" y="194" class="s">market - thousands of parameter</text>
   <text x="368" y="209" class="s">combos per sweep</text>
   <text x="368" y="236" class="mono" fill="#79c0ff" font-size="11">2,592 combos × 163 trades</text>
   <text x="368" y="254" class="mono" fill="#79c0ff" font-size="11">448 combos × entry grid</text>
@@ -50,9 +50,9 @@
   <text x="676" y="186" class="s">· 5m and 15m want opposite settings</text>
   <text x="676" y="206" class="s">· zero volatility = broken feed,</text>
   <text x="690" y="221" class="s">not a calm market</text>
-  <text x="676" y="241" class="s">· the exit signal nets +$13.66 — keep</text>
+  <text x="676" y="241" class="s">· the exit signal nets +$13.66 - keep</text>
   <text x="676" y="261" class="s">· the clever index loses to a z-score</text>
-  <text x="676" y="281" class="s">· the scoreboard flattered me — fixed</text>
+  <text x="676" y="281" class="s">· the scoreboard flattered me - fixed</text>
 
   <!-- intuition strip -->
   <rect x="40" y="322" width="866" height="64" rx="12" fill="#231616" stroke="#f85149"/>
@@ -60,6 +60,6 @@
   <text x="64" y="371" class="s">"safer prices are safer" · "a timeframe is just a parameter" · "no movement means no risk" · "elegant signals deserve to stay"</text>
 
   <rect x="40" y="398" width="866" height="56" rx="12" fill="#131a22" stroke="#20344a"/>
-  <text x="64" y="424" class="s">Every row above lost to the recordings. The replay has the losses memorized —</text>
+  <text x="64" y="424" class="s">Every row above lost to the recordings. The replay has the losses memorized -</text>
   <text x="64" y="441" class="mono" fill="#79c0ff" font-size="12">when intuition and the tape disagree, update the intuition.</text>
 </svg>

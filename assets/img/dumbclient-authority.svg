@@ -37,19 +37,19 @@
   <text x="725" y="234" class="lbl" text-anchor="middle">simulation</text>
   <text x="725" y="262" class="lbl" text-anchor="middle">Owns movement, hits,</text>
   <text x="725" y="280" class="lbl" text-anchor="middle">scores, win / lose</text>
-  <text x="725" y="322" class="s" text-anchor="middle">the single source of truth —</text>
+  <text x="725" y="322" class="s" text-anchor="middle">the single source of truth -</text>
   <text x="725" y="338" class="s" text-anchor="middle">everyone renders what it says</text>
 
   <!-- arrows -->
   <path d="M292,220 L606,220" stroke="#a371f7" stroke-width="2" fill="none" marker-end="url(#dcPurple)"/>
-  <text x="449" y="208" class="lbl" text-anchor="middle" fill="#c4b1ee">inputs — "what I pressed"</text>
+  <text x="449" y="208" class="lbl" text-anchor="middle" fill="#c4b1ee">inputs - "what I pressed"</text>
 
   <path d="M606,272 L294,272" stroke="#4da3ff" stroke-width="2" fill="none" marker-end="url(#dcBlue)"/>
-  <text x="449" y="292" class="lbl" text-anchor="middle" fill="#79c0ff">snapshots — "what is actually true"</text>
+  <text x="449" y="292" class="lbl" text-anchor="middle" fill="#79c0ff">snapshots - "what is actually true"</text>
 
   <!-- cheater blocked -->
   <text x="175" y="404" class="s" text-anchor="middle" fill="#f0857c">✕ a hacked client can lie about inputs…</text>
   <text x="725" y="404" class="s" text-anchor="middle" fill="#56c96a">…but can't change what the server decides ✓</text>
 
-  <text x="40" y="440" class="s">The rule: if it decides an outcome, it lives on the server — never on the phone.</text>
+  <text x="40" y="440" class="s">The rule: if it decides an outcome, it lives on the server - never on the phone.</text>
 </svg>

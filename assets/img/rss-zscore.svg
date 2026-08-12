@@ -28,11 +28,11 @@
 
   <!-- strike line -->
   <line x1="80" y1="330" x2="610" y2="330" stroke="#f85149" stroke-dasharray="6 4"/>
-  <text x="88" y="348" class="mono" fill="#ff7b72" font-size="11">strike — the window's open price</text>
+  <text x="88" y="348" class="mono" fill="#ff7b72" font-size="11">strike - the window's open price</text>
 
   <!-- volatility cone from current price -->
   <path d="M180,200 L560,148 L560,252 Z" fill="url(#cone)" stroke="#a78bfa" stroke-opacity="0.5"/>
-  <text x="370" y="176" class="mono" fill="#a78bfa" font-size="11">σ√T — expected wander</text>
+  <text x="370" y="176" class="mono" fill="#a78bfa" font-size="11">σ√T - expected wander</text>
   <text x="370" y="191" class="mono" fill="#a78bfa" font-size="11">in the time remaining</text>
 
   <!-- BTC path so far -->

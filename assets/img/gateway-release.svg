@@ -14,7 +14,7 @@
 
   <rect width="940" height="470" fill="#0f1419"/>
   <text x="40" y="44" class="ttl">Shipping a new version without kicking anyone off</text>
-  <text x="40" y="68" class="sub">No maintenance window, no forced update — old and new builds simply run side-by-side.</text>
+  <text x="40" y="68" class="sub">No maintenance window, no forced update - old and new builds simply run side-by-side.</text>
 
   <!-- three stacked stages -->
   <!-- Stage 1 -->
@@ -57,8 +57,8 @@
   <text x="734" y="312" class="t" fill="#79c0ff">Rollback = free</text>
   <text x="734" y="334" class="s">A bad build? Clients on</text>
   <text x="734" y="350" class="s">the old version were</text>
-  <text x="734" y="366" class="s">never migrated — nothing</text>
+  <text x="734" y="366" class="s">never migrated - nothing</text>
   <text x="734" y="382" class="s">to roll back.</text>
 
-  <text x="40" y="450" class="s">The registry is the deploy. Old players ride out their session on the old backend; new players get the new one — no downtime either way.</text>
+  <text x="40" y="450" class="s">The registry is the deploy. Old players ride out their session on the old backend; new players get the new one - no downtime either way.</text>
 </svg>

@@ -24,7 +24,8 @@
   --violet: #a78bfa;
   --blue:   #6cb6ff;
 
-  --line:   rgba(255,255,255,0.07);
+  --line:        rgba(255,255,255,0.07);
+  --line-strong: rgba(255,255,255,0.16);
 
   /* Per-page accent. The article pages set --accent to the post's tag colour,
      so the whole page reads in its category. Everything else falls back to gold. */
@@ -187,11 +188,22 @@ a:hover { color: var(--gold); }
 /* =========================================================================
    Sections
    ========================================================================= */
-.section { padding: 90px 48px; border-top: 1px solid var(--line); }
-.section-alt { background: var(--bg-2); }
+/* Asymmetric by design: projects is the denser, shorter section; articles is
+   the long one you're meant to settle into. */
+.section { padding: 76px 48px 96px; border-top: 1px solid var(--line); }
+.section-alt { background: var(--bg-2); padding-bottom: 76px; }
 .section-inner { max-width: 1080px; margin: 0 auto; }
+/* The eyebrow rides a hairline that runs the width of the column, so the two
+   sections read as parts of one ruled page instead of two stacked slabs. */
 .eyebrow {
-  font-family: var(--mono); font-size: var(--text-sm); letter-spacing: 0.08em; margin-bottom: 12px;
+  display: flex; align-items: center; gap: 16px;
+  font-family: var(--mono); font-size: var(--text-sm); letter-spacing: 0.12em;
+  margin-bottom: 18px;
+}
+.eyebrow::after {
+  content: ''; flex: 1; height: 1px;
+  background: linear-gradient(to right, currentColor, transparent);
+  opacity: 0.35;
 }
 .eyebrow.coral  { color: var(--coral); }
 .eyebrow.violet { color: var(--violet); }
@@ -243,22 +255,57 @@ a:hover { color: var(--gold); }
 .proj-grid {
   display: grid; grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); gap: 22px;
 }
+/* These are store listings, not documents: the icon breaks the screenshot's
+   bottom edge the way it does on a product page, and the status badge sits on
+   the art. Nothing here shares a shape with .article-card. */
 .proj-card {
   display: flex; flex-direction: column; cursor: pointer;
-  border-radius: 16px; overflow: hidden;
+  border-radius: 18px; overflow: hidden;
   border: 1px solid rgba(255,255,255,0.09); background: var(--bg-card); color: var(--ink);
   transition: transform 0.18s ease, border-color 0.18s ease;
 }
 .proj-card:hover, .proj-card:focus-visible { transform: translateY(-4px); border-color: rgba(255,107,74,0.5); }
 .proj-feat:focus-visible { border-color: rgba(255,107,74,0.5); }
-.proj-card-shot { height: 170px; background-size: cover; background-position: center top; background-repeat: no-repeat; background-color: #232028; }
-.proj-card-body { padding: 20px 22px 22px; display: flex; flex-direction: column; gap: 9px; flex: 1; }
-.proj-card-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-.proj-card-pub { font-family: var(--mono); font-size: var(--text-2xs); color: var(--ink-40); }
-.proj-card-name { margin: 0; font-size: var(--text-lg); font-weight: 700; letter-spacing: -0.01em; }
-.proj-card-tag { font-size: var(--text-md); line-height: 1.55; color: var(--ink-62); flex: 1; }
-.proj-card-link { font-family: var(--mono); font-size: var(--text-xs); color: var(--coral); margin-top: 4px; }
-.pill-status.mini { font-size: var(--text-2xs); padding: 4px 10px; }
+.proj-card-shot {
+  position: relative;
+  height: 168px; background-size: cover; background-position: center top; background-repeat: no-repeat;
+  background-color: #232028;
+}
+.proj-card-shot::after {
+  content: ''; position: absolute; inset: auto 0 0 0; height: 52px;
+  background: linear-gradient(to top, var(--bg-card), transparent);
+}
+/* Only the icon breaks the artwork's edge. The name and publisher stay on
+   solid background - text over key art is unreadable, and every one of these
+   screenshots is busy. */
+.proj-card-body {
+  position: relative; z-index: 1;
+  padding: 10px 20px 0;
+  display: flex; align-items: flex-start; gap: 13px;
+}
+.proj-card-icon {
+  width: 54px; height: 54px; border-radius: 14px; display: block; flex-shrink: 0;
+  margin-top: -34px;
+  border: 2px solid var(--bg-card);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+  background: var(--bg-3);
+}
+.proj-card-text { min-width: 0; padding-top: 2px; }
+.proj-card-pub { font-family: var(--mono); font-size: var(--text-2xs); color: var(--ink-45); }
+.proj-card-name {
+  margin: 0 0 1px; font-family: var(--display);
+  font-size: var(--text-lg); font-weight: 800; letter-spacing: -0.01em;
+}
+.proj-card-tag {
+  padding: 12px 20px 20px;
+  font-size: var(--text-md); line-height: 1.55; color: var(--ink-62); flex: 1;
+}
+.proj-card-shot .pill-status.mini { position: absolute; top: 12px; left: 12px; }
+.pill-status.mini {
+  font-size: var(--text-2xs); padding: 5px 11px;
+  background: rgba(12,10,16,0.78); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+}
+.pill-status.mini.live { color: var(--green); border: 1px solid rgba(124,242,156,0.4); }
 
 /* =========================================================================
    Articles
@@ -275,17 +322,44 @@ a:hover { color: var(--gold); }
 .article-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr)); gap: 22px; }
 .article-card {
   display: flex; flex-direction: column; overflow: hidden;
-  border-radius: 16px; border: 1px solid rgba(255,255,255,0.09);
+  border-radius: 4px 16px 16px 4px;
+  border: 1px solid rgba(255,255,255,0.09);
+  border-left: 3px solid var(--tc, var(--line-strong));
   background: var(--bg-3); color: var(--ink);
-  transition: transform 0.18s ease, border-color 0.18s ease;
+  transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
 }
-.article-card:hover { transform: translateY(-4px); border-color: var(--tc, rgba(255,107,74,0.5)); }
+.article-card:hover, .article-card:focus-visible {
+  transform: translateY(-4px);
+  border-color: rgba(255,255,255,0.18);
+  border-left-width: 6px;
+  box-shadow: 0 14px 34px rgba(0,0,0,0.28);
+}
 .article-card-media {
-  height: 160px; background-size: cover; background-position: center; background-repeat: no-repeat;
+  position: relative;
+  height: 150px; background-size: cover; background-position: center; background-repeat: no-repeat;
   background-color: #232028; border-bottom: 1px solid var(--line);
 }
-.article-card-body { padding: 22px 24px 24px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
-.article-card-top { display: flex; align-items: center; gap: 10px; }
+/* Three of eleven posts are playable. Nothing used to say so. */
+.card-demo-flag {
+  position: absolute; left: 12px; bottom: 12px;
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 5px 10px; border-radius: 999px;
+  background: rgba(12,10,16,0.82); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+  border: 1px solid var(--tc, rgba(255,255,255,0.2));
+  font-family: var(--mono); font-size: var(--text-2xs); font-weight: 600;
+  letter-spacing: 0.04em; color: var(--tc, var(--ink));
+}
+.card-demo-flag::before {
+  content: ''; width: 6px; height: 6px; border-radius: 50%; background: currentColor;
+}
+.article-card-body { padding: 20px 22px 24px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
+.article-card-meta {
+  display: flex; align-items: center; gap: 9px; flex-wrap: wrap;
+  font-family: var(--mono); font-size: var(--text-2xs); letter-spacing: 0.06em;
+  color: var(--ink-45);
+}
+.article-card-meta > :first-child { color: var(--tc, var(--ink)); font-weight: 600; }
+.article-card-meta .dot { opacity: 0.4; }
 .tag-cat {
   font-family: var(--mono); font-size: var(--text-2xs); font-weight: 600;
   padding: 4px 11px; border-radius: 999px;
@@ -293,7 +367,6 @@ a:hover { color: var(--gold); }
 .article-date { font-family: var(--mono); font-size: var(--text-2xs); color: var(--ink-40); }
 .article-card-title { margin: 0; font-size: var(--text-lg); font-weight: 600; line-height: 1.32; letter-spacing: -0.01em; }
 .article-card-excerpt { font-size: var(--text-md); line-height: 1.58; color: var(--ink-62); flex: 1; }
-.article-card-read { font-family: var(--mono); font-size: var(--text-xs); margin-top: 2px; }
 
 .article-more { display: flex; justify-content: center; margin-top: 40px; }
 .article-more:empty { display: none; }

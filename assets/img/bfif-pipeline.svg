@@ -14,7 +14,7 @@
 
   <rect width="900" height="420" fill="#0f1419"/>
   <text x="40" y="46" class="ttl">Borrowed binary, streamed results, safe fallback</text>
-  <text x="40" y="70" class="sub">The extension ships no search engine — it finds the ripgrep VS Code already installed, and degrades if it can't.</text>
+  <text x="40" y="70" class="sub">The extension ships no search engine - it finds the ripgrep VS Code already installed, and degrades if it can't.</text>
 
   <!-- detect -->
   <rect x="40" y="104" width="230" height="120" rx="12" fill="#1a212b" stroke="#a371f7"/>
@@ -65,6 +65,6 @@
   <text x="58" y="354" class="s">escaped literals · \b for whole word</text>
   <text x="58" y="372" class="s">slower, but always available</text>
 
-  <text x="330" y="356" class="s">Same options object, same SearchHit shape — the panel never learns which engine answered.</text>
+  <text x="330" y="356" class="s">Same options object, same SearchHit shape - the panel never learns which engine answered.</text>
   <text x="330" y="376" class="s">Degrading beats breaking: an odd VS Code install loses speed, not search.</text>
 </svg>
