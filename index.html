@@ -45,27 +45,26 @@
 
 <!-- HERO -->
 <header id="top" class="hero">
+  <canvas class="hero-scene-canvas" aria-hidden="true"></canvas>
+  <div class="hero-scene-fade" aria-hidden="true"></div>
   <div class="hero-inner">
     <div class="hero-copy">
+      <div class="hero-badge">
+        <span class="hero-badge-dot"></span>
+        <span>GAME DEVELOPER</span>
+      </div>
       <h1 class="hero-title">
-        I build multiplayer games solo. The hard part is that
-        <span class="accent">nobody agrees where anything is.</span>
+        Hi, I'm Adiel - game dev,<br>
+        <span class="accent">mostly mobile, increasingly AI.</span>
       </h1>
-      <p class="hero-sub">
-        Six years of mobile game dev, now building ClashUp on my own - client, server,
-        deterministic physics, the lot - with AI doing more of the typing every month.
-        I write down what breaks.
-      </p>
+    </div>
+    <div class="hero-bottom">
+      <p class="hero-sub">I build games alone and write about the bugs that deserve it.</p>
       <div class="hero-cta">
         <a href="#articles" class="btn btn-primary">Read the devlog <span class="arrow">→</span></a>
         <a href="#projects" class="btn btn-ghost">See what I've shipped</a>
       </div>
-    </div>
-    <div class="hero-demo">
-      <div class="hero-demo-label">LIVE · CLIENT-SIDE PREDICTION</div>
-      <div id="heroDemo"></div>
-      <noscript><p class="hero-demo-fallback">The live netcode demo needs JavaScript. The
-        <a href="posts/dumb-client-manifesto.html">post it comes from</a> explains it either way.</p></noscript>
+      <div class="hero-hint">DRAG TO ORBIT &middot; CLICK TO PULSE</div>
     </div>
   </div>
 </header>
@@ -120,8 +119,7 @@
 <script src="assets/js/articles.js"></script>
 <script src="assets/js/article-meta.js"></script>
 <script src="assets/js/projects.js"></script>
-<script src="assets/js/demo-kit.js"></script>
-<script src="assets/js/netcode-demos.js"></script>
+<script src="assets/js/hero-scene.js"></script>
 <script src="assets/js/main.js"></script>
 </body>
 </html>

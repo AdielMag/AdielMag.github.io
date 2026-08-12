@@ -326,18 +326,16 @@
     document.addEventListener('keydown', trapFocus);
   }
 
-  // ---- hero demo ----------------------------------------------------------
-  // The site's one genuinely distinctive thing is that the netcode is playable.
-  // It has no business being buried two thirds of the way down one article.
-  function renderHeroDemo() {
-    var host = document.getElementById('heroDemo');
-    if (!host || !window.ArticleDemos || !window.ArticleDemos.prediction) return;
-    try { window.ArticleDemos.prediction(host); }
-    catch (e) { host.remove(); }
+  // ---- hero scene -----------------------------------------------------
+  function renderHeroScene() {
+    var host = document.getElementById('top');
+    if (!host || !window.initHeroScene) return;
+    try { window.initHeroScene(host); }
+    catch (e) { /* the hero still works as a static header without it */ }
   }
 
   // ---- boot ---------------------------------------------------------------
-  renderHeroDemo();
+  renderHeroScene();
   renderFeatured();
   renderProjectGrid();
   renderFilters();
