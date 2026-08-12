@@ -8,5 +8,11 @@ desktop.ini
 
 # agent skill scaffolding (installed via `npx skills add`)
 .agents/
-.claude/skills/
 skills-lock.json
+
+# installed skills are ignored, but hand-written project skills are tracked.
+# `.claude/skills/*` rather than `.claude/skills/` so git still descends into
+# the directory - it will not look inside an excluded one, so the negation
+# below would never match.
+.claude/skills/*
+!.claude/skills/blog-post/
