@@ -141,6 +141,82 @@
     stripDuplicateHero(body);
     setupLightbox(body);
     mountDemos(body);
+    buildToc(body);
+    trackReading();
+  }
+
+  // ---- section index ------------------------------------------------------
+  // The generated pages ship this already. On the article.html?slug= route the
+  // body is rendered at runtime, so it gets built here from the same headings.
+  function buildToc(body) {
+    var existing = document.querySelector('.art-toc');
+    var heads = body.querySelectorAll('h2');
+    if (!existing) {
+      if (heads.length < 3) return;
+      Array.prototype.forEach.call(heads, function (h, i) {
+        if (!h.id) {
+          h.id = 'sec-' + (h.textContent || '').toLowerCase()
+            .replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 60);
+        }
+        void i;
+      });
+      var nav = document.createElement('nav');
+      nav.className = 'art-toc';
+      nav.setAttribute('aria-label', 'Sections');
+      nav.innerHTML =
+        '<div class="art-toc-inner"><div class="art-toc-head">Sections</div><ol class="art-toc-list">' +
+        Array.prototype.map.call(heads, function (h, i) {
+          return '<li><a href="#' + h.id + '"><span class="art-toc-n">' +
+            (i < 9 ? '0' : '') + (i + 1) + '</span>' + esc(h.textContent || '') + '</a></li>';
+        }).join('') + '</ol></div>';
+      var wrap = document.querySelector('.art-body-wrap');
+      if (wrap) wrap.insertBefore(nav, wrap.firstChild);
+      existing = nav;
+    }
+    spyOn(existing, heads);
+  }
+
+  // Mark the section you're currently reading. Falls back to no highlight
+  // where IntersectionObserver isn't available - the links still work.
+  function spyOn(nav, heads) {
+    if (typeof IntersectionObserver !== 'function' || !heads.length) return;
+    var links = {};
+    Array.prototype.forEach.call(nav.querySelectorAll('a'), function (a) {
+      links[a.getAttribute('href').slice(1)] = a;
+    });
+    var visible = {};
+    var obs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { visible[e.target.id] = e.isIntersecting; });
+      var current = null;
+      Array.prototype.forEach.call(heads, function (h) { if (visible[h.id]) current = current || h.id; });
+      if (!current) return;
+      Object.keys(links).forEach(function (id) {
+        links[id].classList.toggle('is-current', id === current);
+      });
+    }, { rootMargin: '-80px 0px -65% 0px' });
+    Array.prototype.forEach.call(heads, function (h) { if (h.id) obs.observe(h); });
+  }
+
+  // ---- reading progress ---------------------------------------------------
+  function trackReading() {
+    var bar = document.getElementById('readProgress');
+    var article = document.querySelector('.art-body-wrap');
+    if (!bar || !article) return;
+    var ticking = false;
+    function update() {
+      ticking = false;
+      var top = article.offsetTop;
+      var span = article.offsetHeight - window.innerHeight;
+      var p = span > 0 ? (window.scrollY - top) / span : 0;
+      bar.style.transform = 'scaleX(' + Math.min(1, Math.max(0, p)) + ')';
+    }
+    window.addEventListener('scroll', function () {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(update);
+    }, { passive: true });
+    window.addEventListener('resize', update, { passive: true });
+    update();
   }
 
   // ---- read time ----------------------------------------------------------

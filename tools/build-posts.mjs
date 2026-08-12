@@ -78,8 +78,20 @@ function bodyFor(a) {
       `</figure>`
   );
 
+  // Give every section a stable id and collect them for the margin index.
+  // Done here rather than in the browser so the anchors work without JS and
+  // the index is in the document a crawler sees.
+  const sections = [];
+  const withIds = (html) => html.replace(/<h2>(.*?)<\/h2>/g, (_, inner) => {
+    const text = inner.replace(/<[^>]+>/g, '');
+    const id = 'sec-' + text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 60);
+    sections.push({ id, text });
+    return `<h2 id="${id}">${inner}</h2>`;
+  });
+
   return {
-    html: figures(mountDemos(renderMarkdown(stripLeadingH1(md)))),
+    sections,
+    html: withIds(figures(mountDemos(renderMarkdown(stripLeadingH1(md))))),
     minutes: Math.max(1, Math.round(prose.trim().split(/\s+/).length / 200)),
     scripts: DEMO_FILES.filter((f) => used.has(f)),
     demoCount: (md.match(/^\[demo:[a-z]+\]$/gm) || []).length,
@@ -140,6 +152,7 @@ const page = (a, body) => `<!DOCTYPE html>
 </head>
 <body data-slug="${a.slug}">
 
+<div class="read-progress" id="readProgress" aria-hidden="true"></div>
 <nav class="nav">
   <a href="index.html" class="brand">
     <span class="brand-mark">&gt;_</span>
@@ -172,7 +185,15 @@ const page = (a, body) => `<!DOCTYPE html>
 </div>
 
 <article class="art-body-wrap">
-  <div class="art-body-inner">
+${body.sections.length >= 3 ? `  <nav class="art-toc" aria-label="Sections">
+    <div class="art-toc-inner">
+      <div class="art-toc-head">Sections</div>
+      <ol class="art-toc-list">
+${body.sections.map((x, i) => `        <li><a href="#${x.id}"><span class="art-toc-n">${String(i + 1).padStart(2, '0')}</span>${esc(x.text)}</a></li>`).join('\n')}
+      </ol>
+    </div>
+  </nav>
+` : ''}  <div class="art-body-inner">
     <div id="aContent"><div class="a-body">${body.html}</div></div>
   </div>
 </article>
