@@ -73,7 +73,7 @@ body {
   color: var(--ink);
   font-family: var(--sans);
   -webkit-font-smoothing: antialiased;
-}
+}}
 a { color: var(--coral); text-decoration: none; }
 
 /* One focus ring for the whole site. Keyboard users get it; mouse users don't. */
@@ -145,28 +145,32 @@ a:hover { color: var(--gold); }
 .nav-back:hover { color: var(--accent); }
 
 /* =========================================================================
-   Hero (landing) - a full-height stage. A hand-rolled 3D torus knot orbits
-   toward the pointer on a canvas behind the copy; assets/js/hero-scene.js
-   drives it. Ported from a Claude Design handoff (hero-section-redesign).
+   Hero (landing) - a full-height stage. The 3D background lives site-wide
+   now (assets/js/space-scene.js on the fixed #spaceCanvas); the hero only
+   adds a soft left-side vignette so the copy stays readable over planets.
    ========================================================================= */
 @keyframes heroBlink { 0%, 55% { opacity: 1; } 56%, 100% { opacity: 0.15; } }
 
+/* Fixed full-page canvas behind everything: negative z-index paints above
+   the root background but below all content, so sections show the space
+   through their own translucent tints. */
+.space-canvas {
+  position: fixed; inset: 0; z-index: -1;
+  width: 100%; height: 100%; display: block;
+}
 .hero {
   position: relative; overflow: hidden;
   min-height: calc(100vh - 75px);
   display: flex; flex-direction: column;
   padding: 0 48px 40px;
-  background: radial-gradient(120% 100% at 70% 55%, #1b1722 0%, #131118 45%, var(--bg) 100%);
-  cursor: crosshair;
 }
-.hero-scene-canvas {
-  position: absolute; inset: 0; width: 100%; height: 100%; display: block;
-}
-.hero-scene-fade {
-  position: absolute; inset: 0; pointer-events: none;
-  background: linear-gradient(96deg,
-    rgba(14,13,17,0.94) 0%, rgba(14,13,17,0.78) 30%,
-    rgba(14,13,17,0.05) 58%, rgba(14,13,17,0.35) 100%);
+.hero::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background:
+    radial-gradient(120% 100% at 70% 55%, rgba(27,23,34,0.35) 0%, rgba(19,17,24,0) 55%),
+    linear-gradient(96deg,
+      rgba(14,13,17,0.82) 0%, rgba(14,13,17,0.55) 30%,
+      rgba(14,13,17,0) 58%, rgba(14,13,17,0.25) 100%);
 }
 .hero-inner {
   position: relative; flex: 1;
@@ -224,7 +228,8 @@ a:hover { color: var(--gold); }
 /* Asymmetric by design: projects is the denser, shorter section; articles is
    the long one you're meant to settle into. */
 .section { padding: 76px 48px 96px; border-top: 1px solid var(--line); }
-.section-alt { background: var(--bg-2); padding-bottom: 76px; }
+/* Translucent so the fixed 3D space background reads through the page */
+.section-alt { background: rgba(26,23,31,0.55); padding-bottom: 76px; }
 .section-inner { max-width: 1080px; margin: 0 auto; }
 /* The eyebrow rides a hairline that runs the width of the column, so the two
    sections read as parts of one ruled page instead of two stacked slabs. */
@@ -416,7 +421,7 @@ a:hover { color: var(--gold); }
 /* =========================================================================
    Footer
    ========================================================================= */
-.footer { padding: 54px 48px; border-top: 1px solid rgba(255,255,255,0.08); background: var(--bg-foot); }
+.footer { padding: 54px 48px; border-top: 1px solid rgba(255,255,255,0.08); background: rgba(18,16,22,0.88); }
 .footer-inner {
   max-width: 1080px; margin: 0 auto;
   display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 20px;
